@@ -9,7 +9,7 @@ spec:
               value: '-Xms512m -Xmx1024m'
           envFrom:
             - configMapRef:
-                name: mod-customer-configmap
+                name: jpat-transfer-logs-configmap
 
           readinessProbe:
             httpGet:

@@ -13,16 +13,15 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.itausoap2json.transformations;
+package com.itau.esb.jpathtransferlogs.transformations;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.http.HttpStatus;
 
-import com.itau.esb.itausoap2json.interfaces.Headers;
-import com.itau.esb.itausoap2json.model.Response;
-import com.itau.esb.itausoap2json.model.Status;
-import com.itau.esb.itausoap2json.model.TrnInfoList;
+import com.itau.esb.jpathtransferlogs.model.Response;
+import com.itau.esb.jpathtransferlogs.model.Status;
+import com.itau.esb.jpathtransferlogs.model.TrnInfoList;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {

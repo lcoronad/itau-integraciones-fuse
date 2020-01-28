@@ -1,6 +1,6 @@
-package com.itau.esb.itausoap2json.model;
+package com.itau.esb.jpathtransferlogs.model;
 
-public class Status {
+public class AdditionalStatus {
 	private String statusCode;
 	private String serverStatusCode;
 	private String severity;
@@ -40,8 +40,8 @@ public class Status {
 
 	@Override
 	public String toString() {
-		return "Status [statusCode=" + statusCode + ", serverStatusCode=" + serverStatusCode + ", severity=" + severity
-				+ ", statusDesc=" + statusDesc + "]";
+		return "AdditionalStatus [statusCode=" + statusCode + ", serverStatusCode=" + serverStatusCode + ", severity="
+				+ severity + ", statusDesc=" + statusDesc + "]";
 	}
 
 }

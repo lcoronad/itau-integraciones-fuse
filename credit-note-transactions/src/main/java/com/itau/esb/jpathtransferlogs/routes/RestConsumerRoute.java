@@ -13,21 +13,20 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.itausoap2json.routes;
+package com.itau.esb.jpathtransferlogs.routes;
 
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.itausoap2json.configurator.ConfigurationRoute;
-import com.itau.esb.itausoap2json.model.Response;
-import com.itau.esb.itausoap2json.properties.RestConsumer;
-import com.itau.esb.itausoap2json.transformations.FailureErrorProcessor;
+import com.itau.esb.jpathtransferlogs.configurator.ConfigurationRoute;
+import com.itau.esb.jpathtransferlogs.model.Response;
+import com.itau.esb.jpathtransferlogs.properties.RestConsumer;
+import com.itau.esb.jpathtransferlogs.transformations.FailureErrorProcessor;
 
 
 @Component
@@ -35,9 +34,6 @@ public class RestConsumerRoute extends ConfigurationRoute {
     
 	@Autowired
 	private RestConsumer restConfig;
-	
-	@Autowired
-    private Environment env;
 	
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
 	
@@ -79,7 +75,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
         		.endResponseMessage()
         		.route().from("direct:health").setBody(constant("OK")).endRest()
             
-        	.put(restConfig.getServiceName())
+        	.post(restConfig.getServiceName())
             	.to("direct:transformationRoute");
     }
 }

@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.itausoap2json.routes;
+package com.itau.esb.jpathtransferlogs.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
@@ -26,20 +26,17 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.itausoap2json.configurator.ConfigurationRoute;
-import com.itau.esb.itausoap2json.exceptions.CustomException;
-import com.itau.esb.itausoap2json.interfaces.Headers;
-import com.itau.esb.itausoap2json.model.Contact;
-import com.itau.esb.itausoap2json.model.Response;
-import com.itau.esb.itausoap2json.properties.RestConsumer;
-import com.itau.esb.itausoap2json.transformations.FailureErrorProcessor;
+import com.itau.esb.jpathtransferlogs.configurator.ConfigurationRoute;
+import com.itau.esb.jpathtransferlogs.exceptions.CustomException;
+import com.itau.esb.jpathtransferlogs.interfaces.Headers;
+import com.itau.esb.jpathtransferlogs.model.Response;
+import com.itau.esb.jpathtransferlogs.properties.RestConsumer;
+import com.itau.esb.jpathtransferlogs.transformations.FailureErrorProcessor;
 
 @Component
 public class TransformationRoute extends ConfigurationRoute {
-
-	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v3/schemas");
+	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v2/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
-	JacksonDataFormat contacts = new JacksonDataFormat(Contact.class);
 
 	@Autowired
 	private RestConsumer restConfig;
@@ -91,17 +88,17 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log("Error capturado: " + exceptionMessage());
 		
-		from("direct:transformationRoute").routeId("itausoap2json_transformation")
+		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
 			.log("Inicio de operacion")
-			.setHeader("issuedIdentType").jsonpath("$.IssuedIdent.issuedIdentType", String.class)
-			.setHeader("issuedIdentValue").jsonpath("$.IssuedIdent.issuedIdentValue", String.class)
-			.setHeader("contacts").jsonpath("$.ContactList")
-			.to("direct:loadContactList")
-			.setHeader("userName", constant(env.getProperty("vm.userName")))
-			.setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
+			.setHeader("acctType").jsonpath("$.AccounRecord.acctType")
+			.setHeader("amt").jsonpath("$.AccounRecord.PaidCurAmt.amt")
+			.setHeader("curCode").jsonpath("$.AccounRecord.PaidCurAmt.curCode")
+			.setHeader("chargeCode").jsonpath("$.AccounRecord.chargeCode")
+			.setHeader("trnCategory").jsonpath("$.AccounRecord.trnCategory")
+			.setHeader("desc").jsonpath("$.AccounRecord.desc")
+			.setHeader("branchId").jsonpath("$.AccounRecord.branchId")
 			.to("velocity:templates/request.vm")
-			.bean("transformationComponent", "deleteEmptyNodes")
-			.log("body: ${body}")
+			.log("plantilla cargada -> body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
 			.setHeader("Content-Type", constant(restConfig.getItauServiceContentType()))
@@ -109,15 +106,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.to("http4://SOAPService?throwExceptionOnFailure=false")	
 			.log("WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
-			.log("headers: ${headers}")
 			.log("End process")
-		.end();
-		
-		from("direct:loadContactList").routeId("ROUTE_LOAD_CONTACT_LIST")
-			.log("Inicio de carga de lista de contactos")
-			.setBody(simple("${headers.contacts}"))
-			.marshal(contacts)
-			.bean("transformationComponent", "loadContactList")
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
@@ -128,6 +117,11 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:serverStatusCode/text()", String.class, sch)
 			.setProperty(Headers.SEVERITY).xpath("/*/*/*/*/*/sch:severity/text()", String.class, sch)
 			.setProperty(Headers.STATUS_DESC).xpath("/*/*/*/*/*/sch:statusDesc/text()", String.class, sch)
+			// Aditional Status
+//			.setProperty(Headers.AD_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusCode/text()", String.class, sch)
+//			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:serverStatusCode/text()", String.class, sch)
+//			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:severity/text()", String.class, sch)
+//			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
 			.bean("transformationComponent", "mappingSuccessResponse")
 			.log("Fin de mapeo de los datos... retornando respuesta")
 			.removeHeaders("*")

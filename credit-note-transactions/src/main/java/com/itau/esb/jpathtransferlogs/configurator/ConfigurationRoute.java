@@ -15,7 +15,7 @@
  * 
  * 
  */
-package com.itau.esb.itausoap2json.configurator;
+package com.itau.esb.jpathtransferlogs.configurator;
 
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;

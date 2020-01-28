@@ -1,4 +1,4 @@
-package com.itau.esb.itausoap2json.model;
+package com.itau.esb.jpathtransferlogs.model;
 
 public class TrnInfoList {
 	private String trnCode;

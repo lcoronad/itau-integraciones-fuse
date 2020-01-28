@@ -1,24 +1,10 @@
-package com.itau.esb.itausoap2json;
+package com.itau.esb.jpathtransferlogs;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.itau.esb.itausoap2json.model.ContactList;
+//import com.itau.esb.jpathtransferlogs.model.ContactList;
 
 public class TestXML {
 
@@ -37,14 +23,13 @@ public class TestXML {
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
+//		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
 
 		JacksonXmlModule module = new JacksonXmlModule();
 		module.setDefaultUseWrapper(false);
 		ObjectMapper objectMapper = new XmlMapper(module);
 
-		String xml = objectMapper.writeValueAsString(cl);
-		System.out.println(xml);
+//		String xml = objectMapper.writeValueAsString(cl);
 		assertTrue(true);
 	}
 
@@ -55,14 +40,13 @@ public class TestXML {
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
+//		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
 
 		JacksonXmlModule module = new JacksonXmlModule();
 		module.setDefaultUseWrapper(false);
 		ObjectMapper objectMapper = new XmlMapper(module);
 
-		String xml = objectMapper.writeValueAsString(cl);
-		System.out.println(xml);
+//		String xml = objectMapper.writeValueAsString(cl);
 		assertTrue(true);
 	}
 
