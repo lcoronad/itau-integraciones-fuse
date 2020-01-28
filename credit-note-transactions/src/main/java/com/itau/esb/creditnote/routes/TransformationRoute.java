@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.itausoap2json.routes;
+package com.itau.esb.creditnote.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
@@ -26,26 +26,20 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.itausoap2json.configurator.ConfigurationRoute;
-import com.itau.esb.itausoap2json.exceptions.CustomException;
-import com.itau.esb.itausoap2json.interfaces.Headers;
-import com.itau.esb.itausoap2json.model.Contact;
-import com.itau.esb.itausoap2json.model.Response;
-import com.itau.esb.itausoap2json.properties.RestConsumer;
-import com.itau.esb.itausoap2json.transformations.FailureErrorProcessor;
+import com.itau.esb.creditnote.configurator.ConfigurationRoute;
+import com.itau.esb.creditnote.exceptions.CustomException;
+import com.itau.esb.creditnote.interfaces.Headers;
+import com.itau.esb.creditnote.model.Response;
+import com.itau.esb.creditnote.properties.RestConsumer;
+import com.itau.esb.creditnote.transformations.FailureErrorProcessor;
 
 @Component
 public class TransformationRoute extends ConfigurationRoute {
-
-	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v3/schemas");
+	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v2/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
-	JacksonDataFormat contacts = new JacksonDataFormat(Contact.class);
 
 	@Autowired
 	private RestConsumer restConfig;
-
-	@Autowired
-	private Environment env;
 
 	@Override
 	public void configure() throws Exception {
@@ -62,6 +56,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.handled(true)
 	        .setHeader("CamelHttpResponseCode", simple("200"))
 	        .process(new FailureErrorProcessor())
+	        .marshal(response)
 	        .removeHeaders("*")
 	        .log("Error capturado: " + exceptionMessage());
 		
@@ -88,23 +83,17 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log("Error capturado: " + exceptionMessage());
 		
-		from("direct:transformationRoute").routeId("itausoap2json_transformation")
-			.process(e -> {
-				String idData = e.getIn().getHeader("id_data", String.class);
-				if(idData.split("_").length == 2) {					
-					e.getIn().setHeader("issuedIdentValue", idData.split("_")[0]);
-					e.getIn().setHeader("issuedIdentType", idData.split("_")[1]);
-				} else {
-					throw new CustomException("Debe proporcionar los datos de identificación");
-				}
-			})
-			.setHeader("contacts").jsonpath("$.ContactList")
-			.to("direct:loadContactList")
-			.setHeader("userName", constant(env.getProperty("vm.userName")))
-			.setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
+		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
+			.log("Inicio de operacion")
+			.setHeader("acctType").jsonpath("$.AccounRecord.acctType")
+			.setHeader("amt").jsonpath("$.AccounRecord.PaidCurAmt.amt")
+			.setHeader("curCode").jsonpath("$.AccounRecord.PaidCurAmt.curCode")
+			.setHeader("chargeCode").jsonpath("$.AccounRecord.chargeCode")
+			.setHeader("trnCategory").jsonpath("$.AccounRecord.trnCategory")
+			.setHeader("desc").jsonpath("$.AccounRecord.desc")
+			.setHeader("branchId").jsonpath("$.AccounRecord.branchId")
 			.to("velocity:templates/request.vm")
-			.bean("transformationComponent", "deleteEmptyNodes")
-			.log("body: ${body}")
+			.log("plantilla cargada -> body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
 			.setHeader("Content-Type", constant(restConfig.getItauServiceContentType()))
@@ -113,13 +102,6 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log("WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
 			.log("End process")
-		.end();
-		
-		from("direct:loadContactList").routeId("ROUTE_LOAD_CONTACT_LIST")
-			.log("Inicio de carga de lista de contactos")
-			.setBody(simple("${headers.contacts}"))
-			.marshal(contacts)
-			.bean("transformationComponent", "loadContactList")
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")

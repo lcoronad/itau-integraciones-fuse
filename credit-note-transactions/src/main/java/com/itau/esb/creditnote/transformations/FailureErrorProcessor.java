@@ -13,17 +13,17 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.jpathtransferlogs.transformations;
+package com.itau.esb.creditnote.transformations;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.http.HttpStatus;
 
-import com.itau.esb.jpathtransferlogs.interfaces.Headers;
-import com.itau.esb.jpathtransferlogs.model.AdditionalStatus;
-import com.itau.esb.jpathtransferlogs.model.Response;
-import com.itau.esb.jpathtransferlogs.model.Status;
-import com.itau.esb.jpathtransferlogs.model.TrnInfoList;
+import com.itau.esb.creditnote.interfaces.Headers;
+import com.itau.esb.creditnote.model.AdditionalStatus;
+import com.itau.esb.creditnote.model.Response;
+import com.itau.esb.creditnote.model.Status;
+import com.itau.esb.creditnote.model.TrnInfoList;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {

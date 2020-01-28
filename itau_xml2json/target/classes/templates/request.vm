@@ -1,0 +1,31 @@
+<soapenv:Envelope 	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Header 	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	</soap:Header>
+	<soapenv:Body>
+		<sch2:modCustomerContactListRq 	xmlns:log="http://itau.com.co/services/common/auditory/v2/schemas" xmlns:sch2="http://itau.com.co/services/customer/customer/v1/schemas" xmlns:sch="http://itau.com.co/commoncannonical/v3/schemas" xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pc="http://xmlns.oracle.com/pcbpel/" xmlns:ns0="http://itau.com.co/services/common/auditory/v2/schemas" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/jms/Auditory/RegisterAuditory/JmsAuditRequestTRX">
+			<sch:HeaderRequest>
+				<sch:MessageHeader>
+					<sch:MessageKey>
+						<sch:requestUUID>${headers.requestUUID}</sch:requestUUID>
+					</sch:MessageKey>
+					<sch:MessageInfo>
+						<sch:dateTime>${headers.dateTime}</sch:dateTime>
+						<sch:systemId>141</sch:systemId>
+						<sch:originatorName>APP Unica</sch:originatorName>
+						<sch:originatorType>${headers.originatorType}</sch:originatorType>
+						<sch:terminalId>${headers.terminalId}</sch:terminalId>
+					</sch:MessageInfo>
+				</sch:MessageHeader>
+				<sch:User>
+					<sch:userName>${headers.userName}</sch:userName>
+					<sch:employeeIdentlNum>${headers.employeeIdentlNum}</sch:employeeIdentlNum>
+				</sch:User>
+			</sch:HeaderRequest>
+			<sch:IssuedIdent>
+				<sch:issuedIdentType>${headers.issuedIdentType}</sch:issuedIdentType>
+				<sch:issuedIdentValue>${headers.issuedIdentValue}</sch:issuedIdentValue>
+			</sch:IssuedIdent>
+			${body}
+		</sch2:modCustomerContactListRq>
+	</soapenv:Body>
+</soapenv:Envelope>

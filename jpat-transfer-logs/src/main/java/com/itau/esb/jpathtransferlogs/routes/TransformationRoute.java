@@ -52,8 +52,6 @@ public class TransformationRoute extends ConfigurationRoute {
 			.handled(true)
 	        .setHeader("CamelHttpResponseCode", simple("200"))
 	        .process(new FailureErrorProcessor())
-	        .log("${body}")
-	        .marshal(response)
 	        .removeHeaders("*")
 	        .log("Error capturado: " + exceptionMessage());
 		
