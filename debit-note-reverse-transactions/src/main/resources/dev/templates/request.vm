@@ -1,0 +1,41 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Header xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	</soap:Header>
+	<soapenv:Body>
+		<doDebitAccountRevRq xmlns:ns2="http://itau.com.co/services/common/auditory/v2/schemas" 
+			xmlns="http://itau.com.co/services/accounts/debitaccount/v1/schemas" 
+			xmlns:ns1="http://itau.com.co/commoncannonical/v2/schemas">
+			<HeaderRequest>
+				<MessageHeader xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+					<MessageKey>
+						<requestVersion/>
+						<requestUUID>$!{headers.requestUUID}</requestUUID>
+					</MessageKey>
+					<MessageInfo>
+						<dateTime>$!{headers.dateTime}</dateTime>
+						<systemId>$!{headers.systemId}</systemId>
+						<originatorName>$!{headers.originatorName}</originatorName>
+						<originatorType>$!{headers.originatorType}</originatorType>
+						<terminalId>$!{headers.terminalId}</terminalId>
+					</MessageInfo>
+					<TrnInfoList>
+						<sch:TrnInfo xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
+							<sch:trnCode>$!{headers.transaction_id}</sch:trnCode>	
+							<sch:trnSrc>$!{headers.trnSrc}</sch:trnSrc>
+						</sch:TrnInfo>
+					</TrnInfoList>
+				</MessageHeader>
+			</HeaderRequest>
+			<AccounRecordRev>
+				<acctType>$!{headers.acctType}</acctType>
+				<acctSubType/>
+				<acctId>$!{headers.acct_id}</acctId>
+				<PaidCurAmt>
+					<ns3:amt xmlns:ns3="http://itau.com.co/commoncannonical/v2/schemas">$!{headers.amt}</ns3:amt>
+					<ns4:curCode xmlns:ns4="http://itau.com.co/commoncannonical/v2/schemas">$!{headers.curCode}</ns4:curCode>
+				</PaidCurAmt>
+				<branchId>-1</branchId>
+			</AccounRecordRev>
+		</doDebitAccountRevRq>
+	</soapenv:Body>
+</soapenv:Envelope>

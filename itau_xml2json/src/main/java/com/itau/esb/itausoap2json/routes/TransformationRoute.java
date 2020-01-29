@@ -40,6 +40,8 @@ public class TransformationRoute extends ConfigurationRoute {
 	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v3/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
 	JacksonDataFormat contacts = new JacksonDataFormat(Contact.class);
+	private static final String ERROR_LABEL = "Error capturado: ";
+	private static final String TRANSFORMARTION = "transformationComponent";
 
 	@Autowired
 	private RestConsumer restConfig;
@@ -53,40 +55,39 @@ public class TransformationRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
-	        .removeHeaders("*")
-	        .to("log:ERROR-CAPTURADO");
+	        .removeHeaders("*");
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("itausoap2json_transformation")
 			.process(e -> {
@@ -103,7 +104,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setHeader("userName", constant(env.getProperty("vm.userName")))
 			.setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
 			.to("velocity:templates/request.vm")
-			.bean("transformationComponent", "deleteEmptyNodes")
+			.bean(TRANSFORMARTION, "deleteEmptyNodes")
 			.log("body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
@@ -119,7 +120,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log("Inicio de carga de lista de contactos")
 			.setBody(simple("${headers.contacts}"))
 			.marshal(contacts)
-			.bean("transformationComponent", "loadContactList")
+			.bean(TRANSFORMARTION, "loadContactList")
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
@@ -135,7 +136,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:serverStatusCode/text()", String.class, sch)
 			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:severity/text()", String.class, sch)
 			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
-			.bean("transformationComponent", "mappingSuccessResponse")
+			.bean(TRANSFORMARTION, "mappingSuccessResponse")
 			.log("Fin de mapeo de los datos... retornando respuesta")
 			.removeHeaders("*")
 		.end();

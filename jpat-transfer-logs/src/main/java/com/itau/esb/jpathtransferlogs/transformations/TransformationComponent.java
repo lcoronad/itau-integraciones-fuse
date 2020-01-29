@@ -18,7 +18,6 @@ package com.itau.esb.jpathtransferlogs.transformations;
 import org.apache.camel.Exchange;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itau.esb.jpathtransferlogs.interfaces.Headers;
 import com.itau.esb.jpathtransferlogs.model.AdditionalStatus;
@@ -35,7 +34,7 @@ public class TransformationComponent {
 		return body;
 	}
 
-	public void mappingSuccessResponse(Exchange ex) throws JsonProcessingException {
+	public void mappingSuccessResponse(Exchange ex) {
 		Status status = new Status();
 		status.setServerStatusCode(ex.getProperty(Headers.SERVER_STATUS_CODE, String.class));
 		status.setSeverity(ex.getProperty(Headers.SEVERITY, String.class));

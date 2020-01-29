@@ -21,7 +21,6 @@ import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.http.conn.HttpHostConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -37,7 +36,8 @@ import com.itau.esb.creditnote.transformations.FailureErrorProcessor;
 public class TransformationRoute extends ConfigurationRoute {
 	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v2/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
-
+	private static final String ERROR_LABEL = "Error capturado: ";
+	
 	@Autowired
 	private RestConsumer restConfig;
 
@@ -47,30 +47,30 @@ public class TransformationRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -78,10 +78,10 @@ public class TransformationRoute extends ConfigurationRoute {
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader("CamelHttpResponseCode", simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log("Error capturado: " + exceptionMessage());
+	        .log(ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
 			.log("Inicio de operacion")
