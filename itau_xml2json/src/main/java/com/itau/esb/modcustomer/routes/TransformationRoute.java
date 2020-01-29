@@ -42,6 +42,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	JacksonDataFormat contacts = new JacksonDataFormat(Contact.class);
 	private static final String ERROR_LABEL = "Error capturado: ";
 	private static final String TRANSFORMARTION = "transformationComponent";
+	
 
 	@Autowired
 	private RestConsumer restConfig;

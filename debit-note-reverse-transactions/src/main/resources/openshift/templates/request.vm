@@ -9,30 +9,30 @@
 				<MessageHeader xmlns="http://itau.com.co/commoncannonical/v2/schemas">
 					<MessageKey>
 						<requestVersion/>
-						<requestUUID>${headers.requestUUID}</requestUUID>
+						<requestUUID>$!{headers.requestUUID}</requestUUID>
 					</MessageKey>
 					<MessageInfo>
-						<dateTime>${headers.dateTime}</dateTime>
-						<systemId>${headers.systemId}</systemId>
-						<originatorName>${headers.originatorName}</originatorName>
-						<originatorType>${headers.originatorType}</originatorType>
-						<terminalId>${headers.terminalId}</terminalId>
+						<dateTime>$!{headers.dateTime}</dateTime>
+						<systemId>$!{headers.systemId}</systemId>
+						<originatorName>$!{headers.originatorName}</originatorName>
+						<originatorType>$!{headers.originatorType}</originatorType>
+						<terminalId>$!{headers.terminalId}</terminalId>
 					</MessageInfo>
 					<TrnInfoList>
 						<sch:TrnInfo xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
-							<sch:trnCode>${headers.transaction_id}</sch:trnCode>
-							<sch:trnSrc>${headers.trnSrc}</sch:trnSrc>
+							<sch:trnCode>$!{headers.transaction_id}</sch:trnCode>	
+							<sch:trnSrc>$!{headers.trnSrc}</sch:trnSrc>
 						</sch:TrnInfo>
 					</TrnInfoList>
 				</MessageHeader>
 			</HeaderRequest>
 			<AccounRecordRev>
-				<acctType>${headers.acctType}</acctType>
+				<acctType>$!{headers.acctType}</acctType>
 				<acctSubType/>
-				<acctId>${headers.acct_id}</acctId>
+				<acctId>$!{headers.acct_id}</acctId>
 				<PaidCurAmt>
-					<ns3:amt xmlns:ns3="http://itau.com.co/commoncannonical/v2/schemas">${headers.amt}</ns3:amt>
-					<ns4:curCode xmlns:ns4="http://itau.com.co/commoncannonical/v2/schemas">${headers.curCode}</ns4:curCode>
+					<ns3:amt xmlns:ns3="http://itau.com.co/commoncannonical/v2/schemas">$!{headers.amt}</ns3:amt>
+					<ns4:curCode xmlns:ns4="http://itau.com.co/commoncannonical/v2/schemas">$!{headers.curCode}</ns4:curCode>
 				</PaidCurAmt>
 				<branchId>-1</branchId>
 			</AccounRecordRev>

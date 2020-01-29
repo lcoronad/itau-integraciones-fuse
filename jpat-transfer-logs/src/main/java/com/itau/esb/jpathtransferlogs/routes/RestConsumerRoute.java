@@ -41,6 +41,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
     public void configure() throws Exception {
 	   super.configure();
 	   
+	   
 	   onException(JsonParseException.class)
 			.handled(true)
 			.setHeader("CamelHttpResponseCode", simple("200"))

@@ -52,9 +52,6 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log(ERROR_LABEL + exceptionMessage());
 		
-		
-		
-		
 		onException(CustomException.class)
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))

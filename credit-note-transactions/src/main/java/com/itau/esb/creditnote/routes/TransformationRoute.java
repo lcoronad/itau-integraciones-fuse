@@ -67,6 +67,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .marshal(response)
 	        .removeHeaders("*")
 	        .log(ERROR_LABEL + exceptionMessage());
+		
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
