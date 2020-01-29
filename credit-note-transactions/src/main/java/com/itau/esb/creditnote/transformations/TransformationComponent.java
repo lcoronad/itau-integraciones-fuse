@@ -46,10 +46,10 @@ public class TransformationComponent {
 		list.setTrnSrc(ex.getProperty(Headers.TRN_SRC, String.class));
 		
 		AdditionalStatus as = new AdditionalStatus();
-		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class));
-		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class));
-		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class));
-		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class));
+		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) : "");
+		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null ? ex.getProperty(Headers.AD_SEVERITY, String.class) : "");
+		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_STATUS_CODE, String.class) : "");
+		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null ? ex.getProperty(Headers.AD_STATUS_DESC, String.class) : "");
 
 		Response res = new Response();
 		res.setStatus(status);

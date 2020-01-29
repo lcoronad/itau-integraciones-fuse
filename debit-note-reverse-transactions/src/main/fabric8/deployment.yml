@@ -9,7 +9,7 @@ spec:
               value: '-Xms512m -Xmx1024m'
           envFrom:
             - configMapRef:
-                name: jpat-transfer-logs-configmap
+                name: debit-note-reverse-transactions-configmap
 
           readinessProbe:
             httpGet:
