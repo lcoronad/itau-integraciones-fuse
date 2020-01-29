@@ -1,0 +1,9 @@
+/credit-note-transactions/target
+/debit-note-reverse-transactions/target
+/itau_xml2json/target
+/jpat-transfer-logs/target
+
+/credit-note-transactions/.*
+/debit-note-reverse-transactions/.*
+/itau_xml2json/.*
+/jpat-transfer-logs/.*
