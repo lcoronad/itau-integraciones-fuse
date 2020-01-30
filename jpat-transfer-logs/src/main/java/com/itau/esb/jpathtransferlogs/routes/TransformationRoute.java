@@ -41,7 +41,7 @@ public class TransformationRoute extends ConfigurationRoute {
 
 	@Autowired
 	private RestConsumer restConfig;
-
+	
 	@Autowired
 	private Environment env;
 
@@ -89,22 +89,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		
 		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
 			.log("Inicio de operacion")
-			.setHeader("trnDt").jsonpath("$.trnDt")
-			.setHeader("trnId").jsonpath("$.Trn.trnId")
-			.setHeader("trnCode").jsonpath("$.Trn.trnCode")
-			.setHeader("trnCodeRev").jsonpath("$.Trn.trnCodeRev")
-			.setHeader("trnStatusDesc").jsonpath("$.Trn.TrnStatus.trnStatusDesc")
-			.setHeader("effDt").jsonpath("$.Trn.effDt")
-			.setHeader("custType").jsonpath("$.CustId.custType")
-			.setHeader("fullName").jsonpath("$.BenefitName.fullName")
-			.setHeader("acctId").jsonpath("$.Acct.acctId")
-			.setHeader("acctType").jsonpath("$.Acct.acctType")
-			.setHeader("fromPhone").jsonpath("$.FromPhoneNum.phone")
-			.setHeader("toPhone").jsonpath("$.ToPhoneNum.phone")
-			.setHeader("amt").jsonpath("$.amt")
-			.setHeader("country").jsonpath("$.Device.country")
-			.setHeader("userName", constant(env.getProperty("vm.userName")))
-			.setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
+			.to("direct:loadInfo")
 			.to("velocity:templates/request.vm")
 			.log("body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
@@ -115,6 +100,39 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log("WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
 			.log("End process")
+		.end();
+		
+		from("direct:loadInfo").routeId("REIUTE_LOAD_INFO")
+		    .setHeader("trnDt").jsonpath("$.trnDt")
+		    .setHeader("trnId").jsonpath("$.Trn.trnId")
+		    .setHeader("trnType").jsonpath("$.Trn.trnType")
+		    .setHeader("trnSubType").jsonpath("$.Trn.trnSubType")
+		    .setHeader("trnCode").jsonpath("$.Trn.trnCode")
+		    .setHeader("trnCodeRev").jsonpath("$.Trn.trnCodeRev")
+		    .setHeader("trnStatusCode").jsonpath("$.Trn.TrnStatus.trnStatusCode")
+		    .setHeader("trnStatusDesc").jsonpath("$.Trn.TrnStatus.trnStatusDesc")
+		    .setHeader("trnStatusReason").jsonpath("$.Trn.TrnStatus.trnStatusReason")
+		    .setHeader("effDt").jsonpath("$.Trn.effDt")
+		    .setHeader("custPermId").jsonpath("$.CustId.custPermId")
+		    .setHeader("custType").jsonpath("$.CustId.custType")
+		    .setHeader("fullName").jsonpath("$.BenefitName.fullName")
+		    .setHeader("acctId").jsonpath("$.Acct.acctId")
+		    .setHeader("acctType").jsonpath("$.Acct.acctType")
+		    .setHeader("fromPhoneType").jsonpath("$.FromPhoneNum.phoneType")
+		    .setHeader("fromPhone").jsonpath("$.FromPhoneNum.phone")
+		    .setHeader("toPhoneType").jsonpath("$.ToPhoneNum.phoneType")
+		    .setHeader("toPhone").jsonpath("$.ToPhoneNum.phone")
+		    .setHeader("amt").jsonpath("$.amt")
+		    .setHeader("hash").jsonpath("$.Device.hash")
+		    .setHeader("brand").jsonpath("$.Device.brand")
+		    .setHeader("country").jsonpath("$.Device.country")
+		    .setHeader("city").jsonpath("$.Device.city")
+		    .setHeader("model").jsonpath("$.Device.model")
+		    .setHeader("imsi").jsonpath("$.Device.imsi")
+		    .setHeader("geolocation").jsonpath("$.Device.geolocation")
+		    .setHeader("carrierName").jsonpath("$.Device.carrierName")
+		    .setHeader("userName", constant(env.getProperty("vm.userName")))
+		    .setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
