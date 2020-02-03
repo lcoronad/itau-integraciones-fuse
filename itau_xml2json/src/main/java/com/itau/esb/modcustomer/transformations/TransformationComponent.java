@@ -18,6 +18,7 @@ package com.itau.esb.modcustomer.transformations;
 import java.io.IOException;
 
 import org.apache.camel.Exchange;
+import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -50,18 +51,46 @@ public class TransformationComponent {
 		TrnInfoList list = new TrnInfoList();
 		list.setTrnCode(ex.getProperty(Headers.TRN_CODE, String.class));
 		list.setTrnSrc(ex.getProperty(Headers.TRN_SRC, String.class));
-		
+
 		AdditionalStatus as = new AdditionalStatus();
-		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) : "");
-		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null ? ex.getProperty(Headers.AD_SEVERITY, String.class) : "");
-		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_STATUS_CODE, String.class) : "");
-		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null ? ex.getProperty(Headers.AD_STATUS_DESC, String.class) : "");
+		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null
+				? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class)
+				: "");
+		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null
+				? ex.getProperty(Headers.AD_SEVERITY, String.class)
+				: "");
+		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null
+				? ex.getProperty(Headers.AD_STATUS_CODE, String.class)
+				: "");
+		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null
+				? ex.getProperty(Headers.AD_STATUS_DESC, String.class)
+				: "");
 
 		Response res = new Response();
 		res.setStatus(status);
 		res.setTrnInfoList(list);
 		res.setAdditionalStatus(as);
 		ex.getIn().setBody(res);
+		setResponseStatusCode(ex, status);
+	}
+
+	private void setResponseStatusCode(Exchange ex, Status status) {
+		// Set the response code according to response data
+		if (status.getStatusCode().equals("000")) {
+			if (status.getSeverity().equalsIgnoreCase("Info")) {
+				// 200 ok
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_OK);
+			} else if (status.getSeverity().equalsIgnoreCase("Warning")) {
+				// 422
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_UNPROCESSABLE_ENTITY);
+			}
+		} else if (status.getStatusCode().equals("120")) {
+			// 400
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
+		} else if (status.getStatusCode().equals("150")) {
+			// 500
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	public void loadContactList(Exchange ex) throws IOException {
@@ -78,7 +107,7 @@ public class TransformationComponent {
 
 		ex.getIn().setBody(objectMapper.writeValueAsString(cl));
 	}
-	
+
 	public String deleteEmptyNodes(String body) {
 		body = body.replaceAll(" *<\\w*:\\w* *\\/>", "");
 		body = body.replaceAll(" *<\\w*:\\w*>\\n* *<\\/\\w*:\\w*>", "");

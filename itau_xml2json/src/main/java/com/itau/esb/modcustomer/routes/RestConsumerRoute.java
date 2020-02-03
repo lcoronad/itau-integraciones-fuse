@@ -17,8 +17,8 @@ package com.itau.esb.modcustomer.routes;
 
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +36,6 @@ public class RestConsumerRoute extends ConfigurationRoute {
 	@Autowired
 	private RestConsumer restConfig;
 	
-	@Autowired
-    private Environment env;
-	
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
 	
    @Override
@@ -47,13 +44,13 @@ public class RestConsumerRoute extends ConfigurationRoute {
 	   
 	   onException(JsonParseException.class)
 			.handled(true)
-			.setHeader("CamelHttpResponseCode", simple("200"))
+			.setHeader("CamelHttpResponseCode", constant(HttpStatus.SC_OK))
 			.process(new FailureErrorProcessor())
 			.to("log:ERROR-CAPTURADO");
    
 	   onException(JsonMappingException.class)
 			.handled(true)
-	       .setHeader("CamelHttpResponseCode", simple("200"))
+	       .setHeader("CamelHttpResponseCode", constant(HttpStatus.SC_OK))
 	       .process(new FailureErrorProcessor())
 	       .marshal(response)
 	       .log("Error capturado: " + exceptionMessage());
@@ -75,7 +72,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
         	
         	.get(restConfig.getHealthcheck()).description("Test de OCP")
         		.outType(String.class)
-        		.responseMessage().code(200).message("All users successfully returned")
+        		.responseMessage().code(HttpStatus.SC_OK).message("All users successfully returned")
         		.endResponseMessage()
         		.route().from("direct:health").setBody(constant("OK")).endRest()
             

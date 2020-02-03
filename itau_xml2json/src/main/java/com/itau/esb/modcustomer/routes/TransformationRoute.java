@@ -17,9 +17,13 @@ package com.itau.esb.modcustomer.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.component.jackson.JacksonDataFormat;
+import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -42,7 +46,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	JacksonDataFormat contacts = new JacksonDataFormat(Contact.class);
 	private static final String ERROR_LABEL = "Error capturado: ";
 	private static final String TRANSFORMARTION = "transformationComponent";
-	
+	private Logger logger = LoggerFactory.getLogger(TransformationRoute.class);
 
 	@Autowired
 	private RestConsumer restConfig;
@@ -56,39 +60,39 @@ public class TransformationRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log(ERROR_LABEL + exceptionMessage());
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log(ERROR_LABEL + exceptionMessage());
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
-	        .log(ERROR_LABEL + exceptionMessage());
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*");
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("200"))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
-	        .log(ERROR_LABEL + exceptionMessage());
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("modcustomer_transformation")
 			.process(e -> {
@@ -106,26 +110,26 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
 			.to("velocity:templates/request.vm")
 			.bean(TRANSFORMARTION, "deleteEmptyNodes")
-			.log("body: ${body}")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
 			.setHeader("Content-Type", constant(restConfig.getItauServiceContentType()))
-			.log("Invoking ITAU SOAP ws")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
 			.to("http4://SOAPService?throwExceptionOnFailure=false")	
-			.log("WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
-			.log("End process")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
 		.end();
 		
 		from("direct:loadContactList").routeId("ROUTE_LOAD_CONTACT_LIST")
-			.log("Inicio de carga de lista de contactos")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de carga de lista de contactos")
 			.setBody(simple("${headers.contacts}"))
 			.marshal(contacts)
 			.bean(TRANSFORMARTION, "loadContactList")
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
-			.log("Carga de datos a propiedades del exchange (Success Response)")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Carga de datos a propiedades del exchange (Success Response)")
 			.setProperty(Headers.TRN_CODE).xpath("/*/*/*/*/*/*/*/sch:trnCode/text()", String.class, sch)
 			.setProperty(Headers.TRN_SRC).xpath("/*/*/*/*/*/*/*/sch:trnSrc/text()", String.class, sch)
 			.setProperty(Headers.STATUS_CODE).xpath("/*/*/*/*/*/sch:statusCode/text()", String.class, sch)
@@ -137,9 +141,10 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:serverStatusCode/text()", String.class, sch)
 			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:severity/text()", String.class, sch)
 			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
-			.bean(TRANSFORMARTION, "mappingSuccessResponse")
-			.log("Fin de mapeo de los datos... retornando respuesta")
 			.removeHeaders("*")
+			.bean(TRANSFORMARTION, "mappingSuccessResponse")
+			.marshal(response)
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Fin de mapeo de los datos... retornando respuesta")
 		.end();
 		
 		

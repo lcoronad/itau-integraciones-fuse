@@ -16,6 +16,7 @@
 package com.itau.esb.creditnotereverse.transformations;
 
 import org.apache.camel.Exchange;
+import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,5 +57,25 @@ public class TransformationComponent {
 		res.setTrnInfoList(list);
 		res.setAdditionalStatus(as);
 		ex.getIn().setBody(res);
+		setResponseStatusCode(ex, status);
+	}
+
+	private void setResponseStatusCode(Exchange ex, Status status) {
+		// Set the response code according to response data
+		if (status.getStatusCode().equals("000")) {
+			if (status.getSeverity().equalsIgnoreCase("Info")) {
+				// 200 ok
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_OK);
+			} else if (status.getSeverity().equalsIgnoreCase("Warning")) {
+				// 422
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_UNPROCESSABLE_ENTITY);
+			}
+		} else if (status.getStatusCode().equals("120")) {
+			// 400
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
+		} else if (status.getStatusCode().equals("150")) {
+			// 500
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		}
 	}
 }
