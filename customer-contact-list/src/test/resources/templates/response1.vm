@@ -1,0 +1,45 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <Header xmlns:sch="http://itau.com.co/services/customer/customerinformation/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v3/schemas" xmlns="http://schemas.xmlsoap.org/soap/envelope/"/>
+   <soapenv:Body xmlns:sch="http://itau.com.co/services/customer/customerinformation/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v3/schemas">
+      <val:getCustomerContactListRs xmlns:val="http://itau.com.co/services/customer/customerinformation/v1/schemas">
+         <com:HeaderResponse xmlns:com="http://itau.com.co/commoncannonical/v3/schemas">
+            <com:MessageHeader>
+               <com:MessageKey>
+                  <com:integrationId>?</com:integrationId>
+                  <com:requestVersion>?</com:requestVersion>
+                  <com:requestUUID>?</com:requestUUID>
+               </com:MessageKey>
+               <com:MessageInfo>
+                  <com:dateTime>?</com:dateTime>
+                  <com:systemId>?</com:systemId>
+                  <com:originatorName>?</com:originatorName>
+                  <com:originatorType>?</com:originatorType>
+                  <com:terminalId>?</com:terminalId>
+                  <com:terminalType>?</com:terminalType>
+                  <com:bankIdType>?</com:bankIdType>
+                  <com:bankId>?</com:bankId>
+                  <com:trnType>?</com:trnType>
+               </com:MessageInfo>
+               <com:TrnInfoList>
+                  <com:TrnInfo>
+                     <com:trnCode/>
+                     <com:trnSrc>0020</com:trnSrc>
+                  </com:TrnInfo>
+               </com:TrnInfoList>
+            </com:MessageHeader>
+            <com:Status>
+               <com:statusCode>120</com:statusCode>
+               <com:serverStatusCode>382505</com:serverStatusCode>
+               <com:severity>Error</com:severity>
+               <com:statusDesc>Error en en la validación de de datos de entrada</com:statusDesc>
+               <com:AdditionalStatus>
+                  <com:statusCode>382505</com:statusCode>
+                  <com:serverStatusCode/>
+                  <com:severity>Error</com:severity>
+                  <com:statusDesc>REASON: OSB Validate action failed validation - DEATIL: string value '?' does not match pattern for UUID_Type in namespace http://itau.com.co/commoncannonical/v3/schemas?Invalid date value: ??Invalid decimal value: unexpected char '63'?</com:statusDesc>
+               </com:AdditionalStatus>
+            </com:Status>
+         </com:HeaderResponse>
+      </val:getCustomerContactListRs>
+   </soapenv:Body>
+</soapenv:Envelope>

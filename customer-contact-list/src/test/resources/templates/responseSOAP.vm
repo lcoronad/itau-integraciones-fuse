@@ -1,0 +1,128 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <Header xmlns="http://schemas.xmlsoap.org/soap/envelope/"/>
+   <Body xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+      <ns1:getCustomerContactListRs xmlns:ns1="http://itau.com.co/services/customer/customerinformation/v1/schemas">
+         <sch:HeaderResponse xmlns:sch="http://itau.com.co/commoncannonical/v3/schemas">
+            <sch:MessageHeader>
+               <sch:MessageKey>
+                  <sch:integrationId>f13cc21c-c187-429e-8f26-e96f4ef7798b</sch:integrationId>
+                  <sch:requestUUID>a8b4e504-824d-4c27-b7e6-4c7af022d250</sch:requestUUID>
+               </sch:MessageKey>
+               <sch:MessageInfo>
+                  <sch:dateTime>2019-12-30T18:33:11</sch:dateTime>
+                  <sch:systemId>ITAU</sch:systemId>
+                  <sch:originatorName>BancaMovil - APP PN</sch:originatorName>
+                  <sch:originatorType>41</sch:originatorType>
+                  <sch:terminalId>127.0.0.1</sch:terminalId>
+               </sch:MessageInfo>
+               <sch:TrnInfoList>
+                  <sch:TrnInfo>
+                     <sch:trnCode/>
+                     <sch:trnSrc>0020</sch:trnSrc>
+                  </sch:TrnInfo>
+               </sch:TrnInfoList>
+            </sch:MessageHeader>
+            <sch:Status>
+               <sch:statusCode>000</sch:statusCode>
+               <sch:serverStatusCode>0</sch:serverStatusCode>
+               <sch:severity>Info</sch:severity>
+               <sch:statusDesc>Transaccion Exitosa</sch:statusDesc>
+            </sch:Status>
+         </sch:HeaderResponse>
+         <sch:ContactList xmlns:sch="http://itau.com.co/commoncannonical/v3/schemas">
+            <sch:Contact>
+               <sch:contactType>1</sch:contactType>
+               <sch:contactIdent>1</sch:contactIdent>
+               <sch:PhoneNum>
+                  <sch:phone>3002082940</sch:phone>
+                  <sch:phoneType>Mobile</sch:phoneType>
+               </sch:PhoneNum>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>1</sch:contactType>
+               <sch:contactIdent>1</sch:contactIdent>
+               <sch:PhoneNum>
+                  <sch:phone>5165208</sch:phone>
+                  <sch:phoneType>Phone1</sch:phoneType>
+                  <sch:phoneDesc/>
+               </sch:PhoneNum>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>1</sch:contactType>
+               <sch:contactIdent>1</sch:contactIdent>
+               <sch:PhoneNum>
+                  <sch:phone>5181818</sch:phone>
+                  <sch:phoneType>Phone2</sch:phoneType>
+                  <sch:phoneDesc/>
+               </sch:PhoneNum>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>1</sch:contactType>
+               <sch:contactIdent>1</sch:contactIdent>
+               <sch:PostAddr>
+                  <sch:addr1>CL KR 7 71 52 PI 69</sch:addr1>
+                  <sch:stateProv>11</sch:stateProv>
+                  <sch:city>BOGOTA D.C.</sch:city>
+                  <sch:cityCode>001</sch:cityCode>
+                  <sch:countyDistrict/>
+                  <sch:countyDistrictCode/>
+                  <sch:postalCode/>
+                  <sch:Country>
+                     <sch:countryCode>COL</sch:countryCode>
+                  </sch:Country>
+                  <sch:addrDesc>Permanente</sch:addrDesc>
+               </sch:PostAddr>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>11</sch:contactType>
+               <sch:contactIdent>2</sch:contactIdent>
+               <sch:Email>
+                  <sch:emailAddr>edwinagc28@gmail.com</sch:emailAddr>
+               </sch:Email>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>11</sch:contactType>
+               <sch:contactIdent>2</sch:contactIdent>
+               <sch:PostAddr>
+                  <sch:stateProv>11</sch:stateProv>
+                  <sch:city>BOGOTA D.C.</sch:city>
+                  <sch:cityCode>001</sch:cityCode>
+                  <sch:countyDistrict/>
+                  <sch:countyDistrictCode/>
+                  <sch:postalCode/>
+                  <sch:Country>
+                     <sch:countryCode>COL</sch:countryCode>
+                  </sch:Country>
+                  <sch:addrDesc/>
+               </sch:PostAddr>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>3</sch:contactType>
+               <sch:contactIdent>3</sch:contactIdent>
+               <sch:PhoneNum>
+                  <sch:phone>5181818</sch:phone>
+                  <sch:phoneType>Phone1</sch:phoneType>
+                  <sch:phoneDesc/>
+               </sch:PhoneNum>
+            </sch:Contact>
+            <sch:Contact>
+               <sch:contactType>3</sch:contactType>
+               <sch:contactIdent>3</sch:contactIdent>
+               <sch:PostAddr>
+                  <sch:addr1>EMPRESA CL 74 83 52</sch:addr1>
+                  <sch:stateProv>11</sch:stateProv>
+                  <sch:city>BOGOTA D.C.</sch:city>
+                  <sch:cityCode>001</sch:cityCode>
+                  <sch:countyDistrict/>
+                  <sch:countyDistrictCode/>
+                  <sch:postalCode/>
+                  <sch:Country>
+                     <sch:countryCode>COL</sch:countryCode>
+                  </sch:Country>
+                  <sch:addrDesc/>
+               </sch:PostAddr>
+            </sch:Contact>
+         </sch:ContactList>
+      </ns1:getCustomerContactListRs>
+   </Body>
+</soapenv:Envelope>

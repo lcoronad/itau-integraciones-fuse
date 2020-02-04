@@ -1,0 +1,30 @@
+<soapenv:Envelope 	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Header 	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	</soap:Header>
+	<soapenv:Body>
+		<ns2:getCustomerContactListRq 	xmlns:ns1="http://itau.com.co/services/common/auditory/v2/schemas" xmlns="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://itau.com.co/services/customer/customerinformation/v1/schemas">
+			<sch:HeaderRequest 	xmlns:sch="http://itau.com.co/commoncannonical/v3/schemas">
+				<sch:MessageHeader>
+					<sch:MessageKey>
+						<sch:integrationId>f13cc21c-c187-429e-8f26-e96f4ef7798b</sch:integrationId>
+						<sch:requestUUID>${headers.requestUUID}</sch:requestUUID>
+					</sch:MessageKey>
+					<sch:MessageInfo>
+						<sch:dateTime>${headers.dateTime}</sch:dateTime>
+						<sch:systemId>ITAU</sch:systemId>
+						<sch:originatorName>${headers.originatorName}</sch:originatorName>
+						<sch:originatorType>${headers.originatorType}</sch:originatorType>
+						<sch:terminalId>${headers.terminalId}</sch:terminalId>
+					</sch:MessageInfo>
+				</sch:MessageHeader>
+				<sch:User>
+					<sch:userName>FP446215</sch:userName>
+				</sch:User>
+			</sch:HeaderRequest>
+			<sch:ContactListSel 	xmlns:sch="http://itau.com.co/commoncannonical/v3/schemas">
+				<sch:issuedIdentType>${headers.issuedIdentType}</sch:issuedIdentType>
+				<sch:issuedIdentValue>${headers.issuedIdentValue}</sch:issuedIdentValue>
+			</sch:ContactListSel>
+		</ns2:getCustomerContactListRq>
+	</soapenv:Body>
+</soapenv:Envelope>

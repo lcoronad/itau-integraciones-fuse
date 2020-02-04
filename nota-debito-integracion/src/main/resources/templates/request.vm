@@ -1,0 +1,34 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/accounts/debitaccount/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sch:doDebitAccountRq>
+         <sch:HeaderRequest>
+            <!--Optional:-->
+            <sch1:MessageHeader>
+               <!--Optional:-->
+               <sch1:MessageKey>
+                  <!--Optional:-->
+                 
+                  <sch1:requestUUID>$!{headers.requestUUID}</sch1:requestUUID>
+               </sch1:MessageKey>
+               <!--Optional:-->
+               <sch1:MessageInfo>
+                  <sch1:dateTime>$!{headers.dateTime}</sch1:dateTime>
+                  <sch1:systemId></sch1:systemId>
+                  <!--Optional:-->
+                  <sch1:originatorName>$!{headers.originatorName}</sch1:originatorName>
+                  <sch1:originatorType>$!{headers.originatorType}</sch1:originatorType>
+                  <sch1:terminalId>$!{headers.terminalId}</sch1:terminalId>
+                  <!--Optional:-->
+                 
+               </sch1:MessageInfo>
+               <!--Optional:-->
+               
+            </sch1:MessageHeader>
+            <!--Optional:-->
+           
+         </sch:HeaderRequest>
+         ${body}
+      </sch:doDebitAccountRq>
+   </soapenv:Body>
+</soapenv:Envelope>
