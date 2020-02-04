@@ -108,6 +108,12 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
+			.choice()
+				.when(simple("${headers.CamelHttpResponseCode} == 200"))
+					.unmarshal(response)
+				.otherwise()
+					.log("Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio")
+			.endChoice()
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
