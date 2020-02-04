@@ -76,7 +76,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
         		.endResponseMessage()
         		.route().from("direct:health").setBody(constant("OK")).endRest()
             
-        	.post(restConfig.getServiceName())
+        	.delete(restConfig.getServiceName())
             	.to("direct:transformationRoute");
     }
 }
