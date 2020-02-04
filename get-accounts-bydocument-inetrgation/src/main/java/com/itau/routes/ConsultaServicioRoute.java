@@ -24,6 +24,7 @@ import com.itau.beans.ResponseHandler;
 import com.itau.dto.ResponseSOAP;
 import com.itau.exception.DataException;
 import com.itau.exception.JsonMapperException;
+import com.itau.exception.ValidateException;
 import com.itau.util.Constants;
 
 @Component
@@ -60,6 +61,15 @@ public class ConsultaServicioRoute extends RouteBuilder{
  			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
  			.end();
 		
+		onException(ValidateException.class)
+			.handled(true)
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception general: ${exception.message}")
+			.bean(ResponseHandler.class, "responseErrorValidate")
+			.marshal().json(JsonLibrary.Jackson)
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+			.end();
+		
 		from(Constants.ROUTE_CONSULTA_DATOS).routeId("ROUTE_CONSULTA_SOAP").streamCaching()
 			.onException(HttpOperationFailedException.class , HttpHostConnectException.class, ConnectTimeoutException.class)
 				.handled(true)
@@ -86,6 +96,14 @@ public class ConsultaServicioRoute extends RouteBuilder{
 		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 		 	.end()
+		 	.onException(ValidateException.class)
+	 			.handled(true)
+	 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception general: ${exception.message}")
+				.bean(ResponseHandler.class, "responseErrorValidate")
+	 			.marshal().json(JsonLibrary.Jackson)
+	 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+	 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+	 		.end()
 		 	.onException(Exception.class)
 				.handled(true)
 				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
@@ -96,17 +114,27 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.setProperty(Constants.PROCESO_ID, simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta principal")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos del cliente ${headers.id_cedula}")
+			.setProperty("validateParam", simple("{{api.mandatory.params}}"))
 			.process(x->{
 				Map<String,Object> headers = x.getIn().getHeaders();
 				String[] dataClient = x.getIn().getHeader("id_cedula", String.class).split("_");
-				headers.put(Constants.HEADERS[0], dataClient[0]);
-				headers.put(Constants.HEADERS[1], dataClient[1]);
+				String exception = (String)x.getProperty("validateParam");
+				try {
+					headers.put(Constants.HEADERS[0], dataClient[0]);
+					headers.put(Constants.HEADERS[1], dataClient[1]);
+				} catch (Exception e) {
+					logger.error("Error Obteniendo parametros de identificación");
+					x.getIn().removeHeaders("*");
+					x.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+					x.setProperty(Constants.RESPONSE_STATUS, "400");
+					x.setProperty(Constants.RESPONSE_TRNINFOLIST, exception);
+					throw new ValidateException(exception);
+				}
 				for (int i = 0; i < Constants.HEADERS.length; i++) {
 					if(!headers.containsKey(Constants.HEADERS[i]) || headers.get(Constants.HEADERS[i]) == null) {
-						x.getIn().setHeader(Constants.HEADERS[i], "");
-					}
+							x.getIn().setHeader(Constants.HEADERS[i], "");
+						}
 				}
-				
 			})
 			.to("velocity:templates/request.vm?propertiesFile=velocity.properties")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Cargo la platilla \n ${body}")

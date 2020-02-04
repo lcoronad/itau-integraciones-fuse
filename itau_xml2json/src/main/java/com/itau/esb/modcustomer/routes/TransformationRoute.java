@@ -101,7 +101,7 @@ public class TransformationRoute extends ConfigurationRoute {
 					e.getIn().setHeader("issuedIdentValue", idData.split("_")[0]);
 					e.getIn().setHeader("issuedIdentType", idData.split("_")[1]);
 				} else {
-					throw new CustomException("Debe proporcionar los datos de identificación");
+					throw new CustomException(env.getProperty("msgBasicDataError"));
 				}
 			})
 			.setHeader("contacts").jsonpath("$.ContactList")
@@ -119,6 +119,12 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
+			.choice()
+				.when(simple("${headers.CamelHttpResponseCode} == 200"))
+					.unmarshal(response)
+				.otherwise()
+					.log("Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio")
+			.endChoice()
 		.end();
 		
 		from("direct:loadContactList").routeId("ROUTE_LOAD_CONTACT_LIST")

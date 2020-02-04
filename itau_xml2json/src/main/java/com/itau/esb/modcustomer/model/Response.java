@@ -1,5 +1,8 @@
 package com.itau.esb.modcustomer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
 	private TrnInfoList trnInfoList;
 	private Status status;

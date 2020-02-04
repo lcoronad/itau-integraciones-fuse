@@ -10,6 +10,7 @@ import com.itau.dto.Response;
 import com.itau.dto.ResponseList;
 import com.itau.exception.JsonMapperException;
 import com.itau.util.Constants;
+import com.jayway.jsonpath.internal.filter.ValueNode.JsonNode;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -42,6 +43,25 @@ public class ResponseHandler {
 			dto.trnInfoList = mapper.readTree(e.getProperty(Constants.RESPONSE_TRNINFOLIST, String.class));
 			dto.accountsDetailList = mapper.readTree(e.getProperty(Constants.RESPONSE_ACCOUNTS_CONTAC, String.class));
 			dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
+		} catch (Exception e2) {
+			throw new JsonMapperException(e2);
+		}
+	
+		return dto;
+	}
+	
+	public ResponseList responseErrorValidate(Exchange e)  throws JsonMapperException {
+		ResponseList dto = new ResponseList();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			
+			String jsontrnInfoList = "{ \"trnCode\" : \"\", \"trnSrc\" : \"\"  } ";
+			String jsonstatus = "{ \"statusCode\" : \""+e.getProperty(Constants.RESPONSE_STATUS, String.class)+
+					"\", \"serverStatusCode\" : \"\", \"severity\" : \"\", \"statusDesc\" : "+e.getProperty(Constants.RESPONSE_TRNINFOLIST, String.class)+" } ";
+			ObjectMapper objectMapper = new ObjectMapper();
+						
+			dto.trnInfoList = objectMapper.readTree(jsontrnInfoList);
+			dto.status = mapper.readTree(jsonstatus);
 		} catch (Exception e2) {
 			throw new JsonMapperException(e2);
 		}
