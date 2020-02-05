@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse;
+package com.itau.esb.custacctvalidaterelation;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 
 public class TestXML {
 

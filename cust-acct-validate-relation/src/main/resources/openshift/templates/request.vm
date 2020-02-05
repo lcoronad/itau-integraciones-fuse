@@ -1,0 +1,35 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  </soap:Header>
+  <soapenv:Body>
+    <sch:doValidateCustomerAcctRelRq xmlns:ns1="http://itau.com.co/services/common/auditory/v2/schemas" 
+      xmlns="http://schemas.xmlsoap.org/soap/envelope/" 
+      xmlns:sch="http://itau.com.co/services/accounts/validatecustomeracctrel/v1/schemas">
+      <sch1:HeaderRequest xmlns:sch1="http://itau.com.co/commoncannonical/v3/schemas">
+        <sch1:MessageHeader>
+          <sch1:MessageKey>
+            <sch1:integrationId>$!{headers.integrationId}</sch1:integrationId>
+            <sch1:requestVersion>$!{headers.requestVersion}</sch1:requestVersion>
+            <sch1:requestUUID>$!{headers.requestUUID}</sch1:requestUUID>
+          </sch1:MessageKey>
+          <sch1:MessageInfo>
+            <sch1:dateTime>$!{headers.dateTime}</sch1:dateTime>
+            <sch1:systemId>$!{headers.systemId}</sch1:systemId>
+            <sch1:originatorName>$!{headers.originatorName}</sch1:originatorName>
+            <sch1:originatorType>$!{headers.originatorType}</sch1:originatorType>
+            <sch1:terminalId>$!{headers.terminalId}</sch1:terminalId>
+            <sch1:trnType>$!{headers.trnType}</sch1:trnType>
+          </sch1:MessageInfo>
+        </sch1:MessageHeader>
+      </sch1:HeaderRequest>
+      <sch1:ValidatePartyAcctRel xmlns:sch1="http://itau.com.co/commoncannonical/v3/schemas">
+        <sch1:issuedIdentType>$!{headers.issuedIdentType}</sch1:issuedIdentType>
+        <sch1:issuedIdentValue>$!{headers.issuedIdentValue}</sch1:issuedIdentValue>
+        <sch1:AcctKey>
+          <sch1:acctIdent>$!{headers.acct_id}</sch1:acctIdent>
+          <sch1:acctType>$!{headers.acctType}</sch1:acctType>
+        </sch1:AcctKey>
+      </sch1:ValidatePartyAcctRel>
+    </sch:doValidateCustomerAcctRelRq>
+  </soapenv:Body>
+</soapenv:Envelope>

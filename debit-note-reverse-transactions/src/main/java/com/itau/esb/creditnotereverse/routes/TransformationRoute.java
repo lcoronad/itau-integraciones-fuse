@@ -88,7 +88,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
-		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
+		from("direct:transformationRoute").routeId("debitnoterevers_transformation")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.setHeader("acctType").jsonpath("$.AccounRecordRev.acctType")
 //			.setHeader("trnSrc", constant("0020_TrnCode"))
