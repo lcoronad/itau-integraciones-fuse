@@ -110,47 +110,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
 			.setHeader("Content-Type", constant(restConfig.getItauServiceContentType()))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
-			//.to("http4://SOAPService?throwExceptionOnFailure=false")
-			.setBody(constant("<soapenv:Envelope 	xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n" + 
-					"	<Header 	xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\"/>\r\n" + 
-					"	<Body 	xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n" + 
-					"		<sch:doValidateCustomerAcctRelRs 	xmlns:sch=\"http://itau.com.co/services/accounts/validatecustomeracctrel/v1/schemas\">\r\n" + 
-					"			<sch1:HeaderResponse 	xmlns:sch1=\"http://itau.com.co/commoncannonical/v3/schemas\">\r\n" + 
-					"				<sch1:MessageHeader>\r\n" + 
-					"					<sch1:MessageKey>\r\n" + 
-					"						<sch1:integrationId/>\r\n" + 
-					"						<sch1:requestVersion/>\r\n" + 
-					"						<sch1:requestUUID>b5473bcf-9c0d-ba1d-6aa9-5804c260ecf1</sch1:requestUUID>\r\n" + 
-					"					</sch1:MessageKey>\r\n" + 
-					"					<sch1:MessageInfo>\r\n" + 
-					"						<sch1:dateTime>2020-01-31T14:29:09</sch1:dateTime>\r\n" + 
-					"						<sch1:systemId/>\r\n" + 
-					"						<sch1:originatorName>Portal</sch1:originatorName>\r\n" + 
-					"						<sch1:originatorType>41</sch1:originatorType>\r\n" + 
-					"						<sch1:terminalId>10.186.17.24</sch1:terminalId>\r\n" + 
-					"						<sch1:trnType/>\r\n" + 
-					"					</sch1:MessageInfo>\r\n" + 
-					"					<sch1:TrnInfoList>\r\n" + 
-					"						<sch1:TrnInfo>\r\n" + 
-					"							<sch1:trnCode/>\r\n" + 
-					"							<sch1:trnSrc>0020</sch1:trnSrc>\r\n" + 
-					"						</sch1:TrnInfo>\r\n" + 
-					"					</sch1:TrnInfoList>\r\n" + 
-					"				</sch1:MessageHeader>\r\n" + 
-					"				<sch1:Status>\r\n" + 
-					"					<sch1:statusCode>000</sch1:statusCode>\r\n" + 
-					"					<sch1:serverStatusCode>0</sch1:serverStatusCode>\r\n" + 
-					"					<sch1:severity>Info</sch1:severity>\r\n" + 
-					"					<sch1:statusDesc>Transacción exitosa</sch1:statusDesc>\r\n" + 
-					"				</sch1:Status>\r\n" + 
-					"			</sch1:HeaderResponse>\r\n" + 
-					"			<sch1:AcctKey 	xmlns:sch1=\"http://itau.com.co/commoncannonical/v3/schemas\">\r\n" + 
-					"				<sch1:acctType>CTE</sch1:acctType>\r\n" + 
-					"			</sch1:AcctKey>\r\n" + 
-					"		</sch:doValidateCustomerAcctRelRs>\r\n" + 
-					"	</Body>\r\n" + 
-					"</soapenv:Envelope>"))
-			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+			.to("http4://SOAPService?throwExceptionOnFailure=false")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.to("direct:manageSuccessResponse")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
