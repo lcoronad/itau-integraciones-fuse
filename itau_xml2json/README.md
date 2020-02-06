@@ -1,6 +1,6 @@
-# Spring Boot Camel itaú
+# Spring Boot Camel Itau
 
-This project is generate with archetype for itaú, the same allow you to create diferents options
+This project is generate with archetype for Itau, the same allow you to create diferents options
 the general architecture will be describe in the next paragraphs.
 
 Configurador:  Contain the classes for configuration purposes.
