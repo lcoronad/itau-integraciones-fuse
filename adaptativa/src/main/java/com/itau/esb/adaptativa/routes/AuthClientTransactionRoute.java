@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.jpathtransferlogs.routes;
+package com.itau.esb.adaptativa.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
@@ -30,19 +30,18 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.jpathtransferlogs.configurator.ConfigurationRoute;
-import com.itau.esb.jpathtransferlogs.exceptions.CustomException;
-import com.itau.esb.jpathtransferlogs.interfaces.Headers;
-import com.itau.esb.jpathtransferlogs.model.Response;
-import com.itau.esb.jpathtransferlogs.properties.RestConsumer;
-import com.itau.esb.jpathtransferlogs.transformations.FailureErrorProcessor;
+import com.itau.esb.adaptativa.configurator.ConfigurationRoute;
+import com.itau.esb.adaptativa.exceptions.CustomException;
+import com.itau.esb.adaptativa.model.Response;
+import com.itau.esb.adaptativa.properties.RestConsumer;
+import com.itau.esb.adaptativa.transformations.FailureErrorProcessor;
 
 @Component
-public class TransformationRoute extends ConfigurationRoute {
+public class AuthClientTransactionRoute extends ConfigurationRoute {
 	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v2/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
 	private static final String ERROR_LABEL = "Error capturado: ";
-	private Logger logger = LoggerFactory.getLogger(TransformationRoute.class);
+	private Logger logger = LoggerFactory.getLogger(AuthClientTransactionRoute.class);
 
 	@Autowired
 	private RestConsumer restConfig;
@@ -92,14 +91,14 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
-		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
+		from("direct:authClientTransactionRoute").routeId("ACT_act_adaptativa_transformation")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.to("direct:loadInfo")
 			.to("velocity:templates/request.vm")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: body: ${body}")
-			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getItauServiceMethod()))
-			.setHeader(Exchange.HTTP_URI, constant(restConfig.getItauService()))
-			.setHeader("Content-Type", constant(restConfig.getItauServiceContentType()))
+			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getOSBAutenticarClienteTransaccionMethod()))
+			.setHeader(Exchange.HTTP_URI, constant(restConfig.getOSBAutenticarClienteTransaccion()))
+			.setHeader("Content-Type", constant(restConfig.getOSBAutenticarClienteTransaccionContentType()))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
 			.to("http4://SOAPService?throwExceptionOnFailure=false")	
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
@@ -107,7 +106,7 @@ public class TransformationRoute extends ConfigurationRoute {
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
 		.end();
 		
-		from("direct:loadInfo").routeId("ROUTE_LOAD_INFO")
+		from("direct:loadInfo").routeId("ACT_ACT_ROUTE_LOAD_INFO")
 		    .setHeader("trnDt").jsonpath("$.trnDt")
 		    .setHeader("trnId").jsonpath("$.Trn.trnId")
 		    .setHeader("trnType").jsonpath("$.Trn.trnType")
@@ -140,19 +139,8 @@ public class TransformationRoute extends ConfigurationRoute {
 		    .setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
 		.end();
 		
-		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
+		from("direct:manageSuccessResponse").routeId("ACT_ROUTE_SUCCESS_RESPONSE")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Carga de datos a propiedades del exchange (Success Response)")
-			.setProperty(Headers.TRN_CODE).xpath("/*/*/*/*/*/*/*/sch:trnCode/text()", String.class, sch)
-			.setProperty(Headers.TRN_SRC).xpath("/*/*/*/*/*/*/*/sch:trnSrc/text()", String.class, sch)
-			.setProperty(Headers.STATUS_CODE).xpath("/*/*/*/*/*/sch:statusCode/text()", String.class, sch)
-			.setProperty(Headers.SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:serverStatusCode/text()", String.class, sch)
-			.setProperty(Headers.SEVERITY).xpath("/*/*/*/*/*/sch:severity/text()", String.class, sch)
-			.setProperty(Headers.STATUS_DESC).xpath("/*/*/*/*/*/sch:statusDesc/text()", String.class, sch)
-			// Aditional Status
-			.setProperty(Headers.AD_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusCode/text()", String.class, sch)
-			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:serverStatusCode/text()", String.class, sch)
-			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:severity/text()", String.class, sch)
-			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
 			.removeHeaders("*")
 			.bean("transformationComponent", "mappingSuccessResponse")
 			.marshal(response)

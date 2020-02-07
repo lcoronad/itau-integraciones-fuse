@@ -1,0 +1,45 @@
+Request:
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.autenticacionadaptativa.intersoft.com.co" xmlns:vo="http://vo.commons.autenticacionadaptativa.intersoft.com.co">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:autenticarClienteTransaccion>
+         <ws:tipoAutenticacion>Reto-Respuesta</ws:tipoAutenticacion>
+         <ws:tipoIdCliente>1</ws:tipoIdCliente>
+         <ws:idCliente>80418339</ws:idCliente>
+         <ws:canalId>7</ws:canalId>
+         <ws:fechaTx>2019-01-09 06:22:15.33</ws:fechaTx>
+         <ws:ip>127.0.0.1</ws:ip>
+         <ws:deviceCookie>PMV57pyyrqkuGNmvd8vZexLdq5gX5maVbN8KhXkM5WGcv4Hk%2Bwv0E2RJSipslduCmc5uGdEEkrD7WN%2FKmNprOAroH7Dw%3D%3D</ws:deviceCookie>
+         <!--1 or more repetitions:-->
+         <ws:respuestasWS>
+            <vo:codigo>Q3.31</vo:codigo>
+            <vo:respuesta>12</vo:respuesta>
+            <vo:texto>¿Qué deporte te gusta seguir?</vo:texto>
+            <vo:tipo></vo:tipo>
+         </ws:respuestasWS>
+         <ws:OTP>NOT_DEFINED</ws:OTP>
+         <ws:telefono></ws:telefono>
+         <ws:movil></ws:movil>
+         <ws:sessionId>3b099cb8:16f19e821ed:-571d</ws:sessionId>
+         <ws:transactionId>TRX_3b099cb8:16f19e821ed:-571c</ws:transactionId>
+      </ws:autenticarClienteTransaccion>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+Response: 
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soapenv:Body>
+      <autenticarClienteTransaccionResponse xmlns="http://ws.autenticacionadaptativa.intersoft.com.co">
+         <autenticarClienteTransaccionReturn>
+            <deviceTokenCookie xsi:nil="true"/>
+            <genericResponse>
+               <codigoError>00</codigoError>
+               <descripcion>Consumo del webservice authenticate de RSA OK</descripcion>
+            </genericResponse>
+            <recomendedActionAA>Negar</recomendedActionAA>
+         </autenticarClienteTransaccionReturn>
+      </autenticarClienteTransaccionResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

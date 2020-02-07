@@ -1,0 +1,59 @@
+Request:
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.autenticacionadaptativa.intersoft.com.co">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:evaluarRiesgoTransaccion>
+         <ws:idClientType>1</ws:idClientType>
+         <ws:idClient>79805128</ws:idClient>
+         <ws:chanellId>6</ws:chanellId>
+         <ws:dateTx>2019-01-09 05:44:25.33</ws:dateTx>
+         <ws:ip>127.0.0.1</ws:ip>
+         <ws:devicePrint>laksjdlahsdljahskdjhasiug</ws:devicePrint>
+         <ws:deviceCookie>laksjdlahsdljahskdjhasiug</ws:deviceCookie>
+         <ws:idTx>7</ws:idTx>
+         <ws:referer>/validacion</ws:referer>
+         <ws:myAccountNumber></ws:myAccountNumber>
+         <ws:currency>COP</ws:currency>
+         <ws:otherAccountType>PERSONAL_ACOUNT</ws:otherAccountType>
+         <ws:otherAccountBankType>SAME_BANK</ws:otherAccountBankType>
+         <ws:transferMediumType>INTL_WIRE</ws:transferMediumType>
+         <ws:otherAccountOwnershipType>ME_TO_YOU</ws:otherAccountOwnershipType>
+         <ws:schedule></ws:schedule>
+         <ws:executionSpeed>REAL_TIME</ws:executionSpeed>
+         <ws:otherAccountRoutingCode>014</ws:otherAccountRoutingCode>
+         <ws:otherAccountNumber>79777889</ws:otherAccountNumber>
+         <ws:otherAccountCountry>COL</ws:otherAccountCountry>
+         <ws:otherAccountReferenceCode>Juan</ws:otherAccountReferenceCode>
+         <ws:idioma>E</ws:idioma>
+      </ws:evaluarRiesgoTransaccion>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+Response: 
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soapenv:Body>
+      <evaluarRiesgoTransaccionResponse xmlns="http://ws.autenticacionadaptativa.intersoft.com.co">
+         <evaluarRiesgoTransaccionReturn>
+            <OTP>NOT_DEFINED</OTP>
+            <deviceCookie>PMV57qVi8UDAO1HaHi697Tw%2BIKWveUP3z8nUR%2FUiIKVVjablkMxapNFQNpjQU6So5OXcT2Hx2uS5ckhLabV6BeIIU%2F%2BQ%3D%3D</deviceCookie>
+            <estadoCliente>Activo</estadoCliente>
+            <genericResponse>
+               <codigoError>00</codigoError>
+               <descripcion>Consulta de Riesgo Exitosa</descripcion>
+            </genericResponse>
+            <preguntas>
+               <preguntas>
+                  <codigo>Q3.31</codigo>
+                  <respuesta xsi:nil="true"/>
+                  <texto>¿Qué deporte te gusta seguir?</texto>
+                  <tipo xsi:nil="true"/>
+               </preguntas>
+            </preguntas>
+            <recomendedActionAA>Reto-Respuesta</recomendedActionAA>
+            <sessionId>-5fbe47df:16fc3e3c858:-75af</sessionId>
+            <transactionId>TRX_-5fbe47df:16fc3e3c858:-75ae</transactionId>
+         </evaluarRiesgoTransaccionReturn>
+      </evaluarRiesgoTransaccionResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

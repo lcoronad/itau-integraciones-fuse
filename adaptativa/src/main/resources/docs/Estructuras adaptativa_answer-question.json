@@ -1,0 +1,94 @@
+POST /security/v1/mfa/adaptativa/evaluate_transactional_risk
+Request:
+
+{
+   "idClientType":"1",
+   "idClient":"79805128",
+   "chanellId":"6",
+   "dateTx":"2019-01-09 05:44:25.33",
+   "ip":"127.0.0.1",
+   "devicePrint":"laksjdlahsdljahskdjhasiug",
+   "deviceCookie":"laksjdlahsdljahskdjhasiug",
+   "idTx":"7",
+   "referer":"/validacion",
+   "myAccountNumber":"",
+   "currency":"COP",
+   "otherAccountType":"PERSONAL_ACOUNT",
+   "otherAccountBankType":"SAME_BANK",
+   "transferMediumType":"INTL_WIRE",
+   "otherAccountOwnershipType":"ME_TO_YOU",
+   "schedule":"",
+   "executionSpeed":"REAL_TIME",
+   "otherAccountRoutingCode":"014",
+   "otherAccountNumber":"79777889",
+   "otherAccountCountry":"COL",
+   "otherAccountReferenceCode":"Juan",
+   "idioma":"E"
+}
+
+Response:
+
+{
+   "evaluarRiesgoTransaccionReturn":{
+      "OTP":"NOT_DEFINED",
+      "deviceCookie":"PMV57qVi8UDAO1HaHi697Tw%2BIKWveUP3z8nUR%2FUiIKVVjablkMxapNFQNpjQU6So5OXcT2Hx2uS5ckhLabV6BeIIU%2F%2BQ%3D%3D",
+      "estadoCliente":"Activo",
+      "genericResponse":{
+         "codigoError":"00",
+         "descripcion":"Consulta de Riesgo Exitosa"
+      },
+      "preguntas":[
+         {
+            "codigo":"Q3.31",
+            "respuesta":null,
+            "texto":"¿Qué deporte te gusta seguir?",
+            "tipo":null
+         }
+      ],
+      "recomendedActionAA":"Reto-Respuesta",
+      "sessionId":"-5fbe47df:16fc3e3c858:-75af",
+      "transactionId":"TRX_-5fbe47df:16fc3e3c858:-75ae"
+   }
+}
+
+
+
+POST /security/v1/mfa/adaptativa/authenticate_customer_transaction
+
+Request:
+
+{
+   "tipoAutenticacion":"Reto-Respuesta",
+   "tipoIdCliente":"1",
+   "idCliente":"80418339",
+   "canalId":"7",
+   "fechaTx":"2019-01-09 06:22:15.33",
+   "ip":"127.0.0.1",
+   "deviceCookie":"PMV57pyyrqkuGNmvd8vZexLdq5gX5maVbN8KhXkM5WGcv4Hk%2Bwv0E2RJSipslduCmc5uGdEEkrD7WN%2FKmNprOAroH7Dw%3D%3D",
+   "respuestasWS":[
+      {
+         "codigo":"Q3.31",
+         "respuesta":"12",
+         "texto":"¿Qué deporte te gusta seguir?",
+         "tipo":""
+      }
+   ],
+   "OTP":"NOT_DEFINED",
+   "telefono":"",
+   "movil":"",
+   "sessionId":"3b099cb8:16f19e821ed:-571d",
+   "transactionId":"TRX_3b099cb8:16f19e821ed:-571c"
+}
+
+
+Response
+{
+   "autenticarClienteTransaccionReturn":{
+      "deviceTokenCookie":null,
+      "genericResponse":{
+         "codigoError":"00",
+         "descripcion":"Consumo del webservice authenticate de RSA OK"
+      },
+      "recomendedActionAA":"Negar"
+   }
+}
