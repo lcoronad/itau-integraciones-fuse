@@ -26,6 +26,8 @@ import com.itau.esb.creditnotereverse.model.Response;
 import com.itau.esb.creditnotereverse.model.Status;
 import com.itau.esb.creditnotereverse.model.TrnInfoList;
 
+import java.util.Arrays;
+
 @Component("transformationComponent")
 public class TransformationComponent {
 
@@ -54,7 +56,7 @@ public class TransformationComponent {
 
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(list);
+		res.setTrnInfoList(Arrays.asList(list));
 		res.setAdditionalStatus(as);
 		ex.getIn().setBody(res);
 		setResponseStatusCode(ex, status);

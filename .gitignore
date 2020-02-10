@@ -26,6 +26,7 @@ local.properties
 # CDT- autotools
 .autotools
 
+
 # Java annotation processor (APT)
 .factorypath
 
@@ -163,3 +164,6 @@ buildNumber.properties
 /*/.flattened-pom.xml
 
 # End of https://www.gitignore.io/api/maven,eclipse
+
+*.iml
+*/.idea
