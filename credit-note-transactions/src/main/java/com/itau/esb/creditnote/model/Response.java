@@ -1,15 +1,17 @@
 package com.itau.esb.creditnote.model;
 
+import java.util.List;
+
 public class Response {
-	private TrnInfoList trnInfoList;
+	private List<TrnInfoList> trnInfoList;
 	private Status status;
 	private AdditionalStatus additionalStatus;
 
-	public TrnInfoList getTrnInfoList() {
+	public List<TrnInfoList> getTrnInfoList() {
 		return trnInfoList;
 	}
 
-	public void setTrnInfoList(TrnInfoList trnInfoList) {
+	public void setTrnInfoList(List<TrnInfoList> trnInfoList) {
 		this.trnInfoList = trnInfoList;
 	}
 

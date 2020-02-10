@@ -14,15 +14,12 @@ import com.itau.dto.Request;
 import com.itau.dto.Response;
 import com.itau.util.Constants;
 
-import io.swagger.annotations.Api;
-
 /**
  * 
  * @author 
  *
  */
 @Component
-@Api(value = "Initial Proyect Camel-REST", description = "Estrucutura Basica Proyecto Rest Y Camel")
 public class RestDslMainRoute extends RouteBuilder {
 
     @Value("${camel.component.servlet.mapping.context-path}")
@@ -54,7 +51,7 @@ public class RestDslMainRoute extends RouteBuilder {
         .get(env.getProperty("endpoint.healtcheck")).description(env.getProperty("endpoint.description.service")).outType(String.class)
             .responseMessage().code(200).message("All users successfully returned").endResponseMessage()
             .route().setBody(constant("OK")).endRest()
-         .post(env.getProperty("endpoint.nota.debito")).description(env.getProperty("api.description.service")).type(Request.class).description(
+         .delete(env.getProperty("endpoint.nota.credito.reverso")).description(env.getProperty("endpoint.nota.credito.reverso.description.service")).type(Request.class).description(
                  env.getProperty("endpoint.nota.debito.description.service")).outType(Response.class) 
              .responseMessage().code(200).message("All users successfully created").endResponseMessage()
              .to(Constants.ROUTE_CONSULTA_DATOS);
@@ -62,7 +59,7 @@ public class RestDslMainRoute extends RouteBuilder {
         onException(Exception.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, "RestDslMain", "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
-			.setBody(simple("\"Status\": {\"statusCode\": \"150\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"Error No Identificado\"}"))
+			.setBody(simple("{\"error\": \"Error interno\" , \"detalle\":\"${exception.message}\"}"))
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();

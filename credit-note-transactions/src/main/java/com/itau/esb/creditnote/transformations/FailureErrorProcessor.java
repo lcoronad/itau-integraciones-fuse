@@ -25,6 +25,8 @@ import com.itau.esb.creditnote.model.Response;
 import com.itau.esb.creditnote.model.Status;
 import com.itau.esb.creditnote.model.TrnInfoList;
 
+import java.util.Arrays;
+
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
 		Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
@@ -54,7 +56,7 @@ public class FailureErrorProcessor implements Processor {
 
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(list);
+		res.setTrnInfoList(Arrays.asList(list));
 		res.setAdditionalStatus(as);
 		ex.getIn().setBody(res);
 
