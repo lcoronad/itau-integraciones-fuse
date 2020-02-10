@@ -1,0 +1,21 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.autenticacionadaptativa.intersoft.com.co" xmlns:vo="http://vo.commons.autenticacionadaptativa.intersoft.com.co">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:autenticarClienteTransaccion>
+         <ws:tipoAutenticacion>$!{headers.tipoAutenticacion}</ws:tipoAutenticacion>
+         <ws:tipoIdCliente>$!{headers.tipoIdCliente}</ws:tipoIdCliente>
+         <ws:idCliente>$!{headers.idCliente}</ws:idCliente>
+         <ws:canalId>$!{headers.canalId}</ws:canalId>
+         <ws:fechaTx>$!{headers.fechaTx}</ws:fechaTx>
+         <ws:ip>$!{headers.ip}</ws:ip>
+         <ws:deviceCookie>$!{headers.deviceCookie}</ws:deviceCookie>
+         <!--1 or more repetitions:-->
+         ${body}
+         <ws:OTP>$!{headers.OTP}</ws:OTP>
+         <ws:telefono>$!{headers.telefono}</ws:telefono>
+         <ws:movil>$!{headers.movil}</ws:movil>
+         <ws:sessionId>$!{headers.sessionId}</ws:sessionId>
+         <ws:transactionId>$!{headers.transactionId}</ws:transactionId>
+      </ws:autenticarClienteTransaccion>
+   </soapenv:Body>
+</soapenv:Envelope>

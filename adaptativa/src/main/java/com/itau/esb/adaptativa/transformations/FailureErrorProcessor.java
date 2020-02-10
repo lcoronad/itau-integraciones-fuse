@@ -24,6 +24,7 @@ public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
 		Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 		Response res = new Response();
+		// Por definir
 		ex.getIn().setBody(res);
 
 	}

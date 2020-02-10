@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.itau.esb.adaptativa.configurator.ConfigurationRoute;
 import com.itau.esb.adaptativa.exceptions.CustomException;
 import com.itau.esb.adaptativa.model.Response;
+import com.itau.esb.adaptativa.model.Respuesta;
 import com.itau.esb.adaptativa.properties.RestConsumer;
 import com.itau.esb.adaptativa.transformations.FailureErrorProcessor;
 
@@ -40,6 +42,7 @@ import com.itau.esb.adaptativa.transformations.FailureErrorProcessor;
 public class AuthClientTransactionRoute extends ConfigurationRoute {
 	Namespaces sch = new Namespaces("sch", "http://itau.com.co/commoncannonical/v2/schemas");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
+	JacksonDataFormat respuestas = new JacksonDataFormat(Respuesta.class);
 	private static final String ERROR_LABEL = "Error capturado: ";
 	private Logger logger = LoggerFactory.getLogger(AuthClientTransactionRoute.class);
 
@@ -94,11 +97,14 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 		from("direct:authClientTransactionRoute").routeId("ACT_act_adaptativa_transformation")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.to("direct:loadInfo")
-			.to("velocity:templates/request.vm")
+			.setHeader("respuestasWS").jsonpath("$.respuestasWS")
+			.to("direct:loadResponsesList")
+			.to("velocity:templates/AuthClientTrxRq.vm")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getOSBAutenticarClienteTransaccionMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getOSBAutenticarClienteTransaccion()))
 			.setHeader("Content-Type", constant(restConfig.getOSBAutenticarClienteTransaccionContentType()))
+			.setHeader("SOAPAction", constant(""))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
 			.to("http4://SOAPService?throwExceptionOnFailure=false")	
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
@@ -106,44 +112,46 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
 		.end();
 		
-		from("direct:loadInfo").routeId("ACT_ACT_ROUTE_LOAD_INFO")
-		    .setHeader("trnDt").jsonpath("$.trnDt")
-		    .setHeader("trnId").jsonpath("$.Trn.trnId")
-		    .setHeader("trnType").jsonpath("$.Trn.trnType")
-		    .setHeader("trnSubType").jsonpath("$.Trn.trnSubType")
-		    .setHeader("trnCode").jsonpath("$.Trn.trnCode")
-		    .setHeader("trnCodeRev").jsonpath("$.Trn.trnCodeRev")
-		    .setHeader("trnStatusCode").jsonpath("$.Trn.TrnStatus.trnStatusCode")
-		    .setHeader("trnStatusDesc").jsonpath("$.Trn.TrnStatus.trnStatusDesc")
-		    .setHeader("trnStatusReason").jsonpath("$.Trn.TrnStatus.trnStatusReason")
-		    .setHeader("effDt").jsonpath("$.Trn.effDt")
-		    .setHeader("custPermId").jsonpath("$.CustId.custPermId")
-		    .setHeader("custType").jsonpath("$.CustId.custType")
-		    .setHeader("fullName").jsonpath("$.BenefitName.fullName")
-		    .setHeader("acctId").jsonpath("$.Acct.acctId")
-		    .setHeader("acctType").jsonpath("$.Acct.acctType")
-		    .setHeader("fromPhoneType").jsonpath("$.FromPhoneNum.phoneType")
-		    .setHeader("fromPhone").jsonpath("$.FromPhoneNum.phone")
-		    .setHeader("toPhoneType").jsonpath("$.ToPhoneNum.phoneType")
-		    .setHeader("toPhone").jsonpath("$.ToPhoneNum.phone")
-		    .setHeader("amt").jsonpath("$.amt")
-		    .setHeader("hash").jsonpath("$.Device.hash")
-		    .setHeader("brand").jsonpath("$.Device.brand")
-		    .setHeader("country").jsonpath("$.Device.country")
-		    .setHeader("city").jsonpath("$.Device.city")
-		    .setHeader("model").jsonpath("$.Device.model")
-		    .setHeader("imsi").jsonpath("$.Device.imsi")
-		    .setHeader("geolocation").jsonpath("$.Device.geolocation")
-		    .setHeader("carrierName").jsonpath("$.Device.carrierName")
-		    .setHeader("userName", constant(env.getProperty("vm.userName")))
-		    .setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
+		from("direct:loadResponsesList").routeId("ROUTE_LOAD_RESPONSES_LIST")
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de carga de lista de respuestas")
+			.setBody(simple("${headers.respuestasWS}"))
+			.marshal(respuestas)
+			.bean("transformationComponent", "loadResponsesList")
 		.end();
+		
+		from("direct:loadInfo").routeId("ACT_ACT_ROUTE_LOAD_INFO")
+			.setHeader("tipoAutenticacion").jsonpath("$.tipoAutenticacion")
+			.setHeader("tipoIdCliente").jsonpath("$.tipoIdCliente")
+			.setHeader("idCliente").jsonpath("$.idCliente")
+			.setHeader("canalId").jsonpath("$.canalId")
+			.setHeader("fechaTx").jsonpath("$.fechaTx")
+			.setHeader("ip").jsonpath("$.ip")
+			.setHeader("deviceCookie").jsonpath("$.deviceCookie")
+//			
+//			.setHeader("codigo").jsonpath("$.respuestasWS.codigo")
+//			.setHeader("respuesta").jsonpath("$.respuestasWS.respuesta")
+//			.setHeader("texto").jsonpath("$.respuestasWS.texto")
+//			.setHeader("tipo").jsonpath("$.respuestasWS.tipo")
+			// --------------------------
+			.setHeader("OTP").jsonpath("$.OTP")
+			.setHeader("telefono").jsonpath("$.telefono")
+			.setHeader("movil").jsonpath("$.movil")
+			.setHeader("sessionId").jsonpath("$.sessionId")
+			.setHeader("transactionId").jsonpath("$.transactionId")
+		.end();
+		
+		
 		
 		from("direct:manageSuccessResponse").routeId("ACT_ROUTE_SUCCESS_RESPONSE")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Carga de datos a propiedades del exchange (Success Response)")
 			.removeHeaders("*")
-			.bean("transformationComponent", "mappingSuccessResponse")
-			.marshal(response)
+			.setHeader("deviceTokenCookie").xpath("//*[local-name()='deviceTokenCookie']/text()")
+			.setHeader("codigoError").xpath("//*[local-name()='codigoError']/text()")
+			.setHeader("descripcion").xpath("//*[local-name()='descripcion']/text()")
+			.setHeader("recomendedActionAA").xpath("//*[local-name()='recomendedActionAA']/text()")
+			.bean("transformationComponent", "mappingSuccessResponseACT")
+			.removeHeaders("*")
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Fin de mapeo de los datos... retornando respuesta")
 		.end();
 		

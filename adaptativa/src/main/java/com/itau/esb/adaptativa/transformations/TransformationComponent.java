@@ -15,47 +15,80 @@
  */
 package com.itau.esb.adaptativa.transformations;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Handler;
+import org.apache.camel.StringSource;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itau.esb.adaptativa.interfaces.Properties;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.itau.esb.adaptativa.model.AutenticarClienteTransaccionReturn;
 import com.itau.esb.adaptativa.model.EvaluarRiesgoTransaccionReturn;
 import com.itau.esb.adaptativa.model.GenericResponse;
-import com.itau.esb.adaptativa.model.Pregunta;
 import com.itau.esb.adaptativa.model.Response;
+import com.itau.esb.adaptativa.model.ResponseACTR;
+import com.itau.esb.adaptativa.model.ResponseList;
 
 @Component("transformationComponent")
 public class TransformationComponent {
-
+	
 	ObjectMapper mapper = new ObjectMapper();
-
-	public static String transformation(String body) {
-		return body;
+	
+	@Handler
+	public static void transformation(Exchange ex) throws JAXBException {
+		String ERTR = ex.getProperty("ERTR", String.class);
+		JAXBContext jc = JAXBContext.newInstance(EvaluarRiesgoTransaccionReturn.class);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		EvaluarRiesgoTransaccionReturn obj = (EvaluarRiesgoTransaccionReturn)unmarshaller.unmarshal(new StringSource(ERTR));
+		ex.setProperty("ERTR", obj);
 	}
 
-	public void mappingSuccessResponse(Exchange ex) {
-		List<Pregunta> preguntas = new ArrayList<Pregunta>();
-		
-		GenericResponse GR = new GenericResponse();
-		GR.setCodigoError(ex.getProperty(Properties.CODIGO_ERROR, String.class));
-		GR.setDescripcion(ex.getProperty(Properties.DESCRIPCION, String.class));
-
-		EvaluarRiesgoTransaccionReturn ERTR = new EvaluarRiesgoTransaccionReturn();
-		ERTR.setDeviceCookie(ex.getProperty(Properties.DEVICE_COOKIE, String.class));
-		ERTR.setEstadoCliente(ex.getProperty(Properties.ESTADO_CLIENTE, String.class));
-		ERTR.setGenericResponse(GR);
-		ERTR.setOTP(ex.getProperty(Properties.OTP, String.class));
-		ERTR.setPreguntas(preguntas);
-		ERTR.setRecomendedActionAA(ex.getProperty(Properties.RECOMENDED_ACTION_AA, String.class));
-		ERTR.setSessionId(ex.getProperty(Properties.SESSION_ID, String.class));
-		ERTR.setTransactionId(ex.getProperty(Properties.TRANSACTION_ID, String.class));
+	public static void mappingSuccessResponse(Exchange ex) throws JsonProcessingException {
+		EvaluarRiesgoTransaccionReturn ob = ex.getProperty("ERTR", EvaluarRiesgoTransaccionReturn.class);
 		Response res = new Response();
-		res.setEvaluarRiesgoTransaccionReturn(ERTR);
-		
+		res.setEvaluarRiesgoTransaccionReturn(ob);
 		ex.getIn().setBody(res);
+	}
+	
+	public static void mappingSuccessResponseACT(Exchange ex) throws JsonProcessingException {
+		AutenticarClienteTransaccionReturn ACTR = new AutenticarClienteTransaccionReturn();
+		GenericResponse GR = new GenericResponse();
+		
+		GR.setCodigoError(ex.getIn().getHeader("codigoError", String.class));
+		GR.setDescripcion(ex.getIn().getHeader("descripcion", String.class));
+		
+		ACTR.setDeviceTokenCookie(ex.getIn().getHeader("deviceTokenCookie", String.class));
+		ACTR.setRecomendedActionAA(ex.getIn().getHeader("recomendedActionAA", String.class));
+		ACTR.setGenericResponse(GR);
+		
+		ResponseACTR res = new ResponseACTR();
+		res.setAutenticarClienteTransaccionReturn(ACTR);
+		ex.getIn().setBody(res);
+	}
+	
+	public void loadResponsesList(Exchange ex) throws JsonParseException, JsonMappingException, IOException {
+		Object cont = ex.getIn().getHeader("respuestasWS", Object.class);
+		String str = "{ \"Response\":" + mapper.writeValueAsString(cont) + " }";
+		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+		ResponseList cl = mapper.readValue(str.getBytes(), ResponseList.class);
+
+		JacksonXmlModule module = new JacksonXmlModule();
+		module.setDefaultUseWrapper(false);
+		ObjectMapper objectMapper = new XmlMapper(module);
+
+		ex.getIn().setBody(objectMapper.writeValueAsString(cl).replaceAll("<ResponseList>", "").replaceAll("</ResponseList>", ""));
 	}
 }

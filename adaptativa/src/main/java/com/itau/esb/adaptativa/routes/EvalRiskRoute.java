@@ -18,26 +18,32 @@ package com.itau.esb.adaptativa.routes;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.itau.esb.adaptativa.configurator.ConfigurationRoute;
 import com.itau.esb.adaptativa.exceptions.CustomException;
-import com.itau.esb.adaptativa.interfaces.Properties;
 import com.itau.esb.adaptativa.model.Response;
 import com.itau.esb.adaptativa.properties.RestConsumer;
 import com.itau.esb.adaptativa.transformations.FailureErrorProcessor;
+import com.itau.esb.adaptativa.transformations.TransformationComponent;
 
 @Component
 public class EvalRiskRoute extends ConfigurationRoute {
+	
+	Namespaces ns = new Namespaces("test", "http://ws.autenticacionadaptativa.intersoft.com.co");
 	JacksonDataFormat response = new JacksonDataFormat(Response.class);
+	
 	private static final String ERROR_LABEL = "Error capturado: ";
 	private Logger logger = LoggerFactory.getLogger(EvalRiskRoute.class);
 
@@ -47,14 +53,16 @@ public class EvalRiskRoute extends ConfigurationRoute {
 	@Override
 	public void configure() throws Exception {
 		super.configure();
-				
+		response.setInclude("NON_NULL");
+		response.disableFeature(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		
 		onException(HttpHostConnectException.class)
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-		
+//		
 		onException(CustomException.class)
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
@@ -62,23 +70,23 @@ public class EvalRiskRoute extends ConfigurationRoute {
 	        .marshal(response)
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-		
-		onException(JsonParseException.class)
-			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
-	        .process(new FailureErrorProcessor())
-	        .marshal(response)
-	        .removeHeaders("*")
-	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-
-		 onException(JsonMappingException.class)
-	        .handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
-	        .process(new FailureErrorProcessor())
-	        .marshal(response)
-	        .removeHeaders("*")
-	        .to("log:ERROR-CAPTURADO");
-		 
+//		
+//		onException(JsonParseException.class)
+//			.handled(true)
+//	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+//	        .process(new FailureErrorProcessor())
+//	        .marshal(response)
+//	        .removeHeaders("*")
+//	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
+//
+//		 onException(JsonMappingException.class)
+//	        .handled(true)
+//	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+//	        .process(new FailureErrorProcessor())
+//	        .marshal(response)
+//	        .removeHeaders("*")
+//	        .to("log:ERROR-CAPTURADO");
+//		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
@@ -86,22 +94,29 @@ public class EvalRiskRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
-		from("direct:evalRiskRoute").routeId("ER_ROUTE_ADAPTATIVA")
+		from("direct:evalRiskRoute").routeId("ER_ROUTE_ADAPTATIVA").streamCaching()
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
-			.to("direct:loadInfo")
-			.to("velocity:templates/EvRiesgoRq.vm")
+			.to("direct:loadInfoER")
+			.to("velocity:templates/evRiesgoRq.vm")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: body: ${body}")
 			.setHeader(Exchange.HTTP_METHOD, constant(restConfig.getOSBEvaluarRiesgoTransaccionMethod()))
 			.setHeader(Exchange.HTTP_URI, constant(restConfig.getOSBEvaluarRiesgoTransaccion()))
-			.setHeader("Content-Type", constant(restConfig.getOSBEvaluarRiesgoTransaccionContentType()))
+			.setHeader("SOAPAction", constant(""))
+			.setHeader(Exchange.CONTENT_TYPE, constant(restConfig.getOSBEvaluarRiesgoTransaccionContentType()))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
-			.to("http4://SOAPService?throwExceptionOnFailure=false")	
+//			.to("http4://SOAPService?throwExceptionOnFailure=false")
+			.to("velocity:templates/response.vm")
+			.setHeader("CamelHttpResponseCode", constant(200))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
-			.to("direct:manageSuccessResponse")
+			// Modificar segun respuesta
+			.setProperty("ERTR").xpath("//*[local-name()='evaluarRiesgoTransaccionReturn']", ns)
+			.setProperty("Preguntas").xpath("(//*[local-name()='preguntas'])[1]", ns)   // /*/*/*/*/*/*    //*[local-name()='preguntas']
+			.to("direct:manageSuccessResponseER")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
 		.end();
 		
-		from("direct:loadInfo").routeId("ER_ROUTE_LOAD_INFO")
+		from("direct:loadInfoER").routeId("ER_ROUTE_LOAD_INFO")
 			.setHeader("idClientType").jsonpath("$.idClientType")
 			.setHeader("idClient").jsonpath("$.idClient")
 			.setHeader("chanellId").jsonpath("$.chanellId")
@@ -126,20 +141,13 @@ public class EvalRiskRoute extends ConfigurationRoute {
 			.setHeader("idioma").jsonpath("$.idioma")
 		.end();
 		
-		from("direct:manageSuccessResponse").routeId("ER_ROUTE_SUCCESS_RESPONSE")
+		from("direct:manageSuccessResponseER").routeId("ER_ROUTE_SUCCESS_RESPONSE")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Carga de datos a propiedades del exchange (Success Response)")
-			.setProperty(Properties.OTP).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/OTP/text()", String.class)
-			.setProperty(Properties.DEVICE_COOKIE).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/deviceCookie/text()", String.class)
-			.setProperty(Properties.ESTADO_CLIENTE).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/estadoCliente/text()", String.class)
-			.setProperty(Properties.CODIGO_ERROR).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/genericResponse/codigoError/text()", String.class)
-			.setProperty(Properties.DESCRIPCION).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/genericResponse/descripcion/text()", String.class)
-			.setProperty(Properties.RECOMENDED_ACTION_AA).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/recomendedActionAA/text()", String.class)
-			.setProperty(Properties.SESSION_ID).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/sessionId/text()", String.class)
-			.setProperty(Properties.TRANSACTION_ID).xpath("/*/*/evaluarRiesgoTransaccionResponse/evaluarRiesgoTransaccionReturn/transactionId/text()", String.class)
-			.removeHeaders("*")
+			.bean(TransformationComponent.class)
 			.bean("transformationComponent", "mappingSuccessResponse")
-			.marshal(response)
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Fin de mapeo de los datos... retornando respuesta")
+			.removeHeaders("*")
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
 		.end();
 		
 		

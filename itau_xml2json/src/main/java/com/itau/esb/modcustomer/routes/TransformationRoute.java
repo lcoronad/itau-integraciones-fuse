@@ -94,7 +94,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
-		from("direct:transformationRoute").routeId("modcustomer_transformation")
+		from("direct:transformationRoute").routeId("modcustomer_transformation").streamCaching()
 			.process(e -> {
 				String idData = e.getIn().getHeader("id_data", String.class);
 				if(idData.split("_").length == 2) {					
