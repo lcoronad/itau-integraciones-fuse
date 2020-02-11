@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1b0326e1-51ed-4b6d-a701-93ccf3d7dc7e",
+		"_postman_id": "1f5e6f3f-c90e-4f5d-ac70-f2c35b7caa9e",
 		"name": "nota-credito-reverso",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,7 +25,72 @@
 			"response": []
 		},
 		{
-			"name": "Delete Credito (Reverso)",
+			"name": "Delete Credito (Reverso) local",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/javascript"
+					},
+					{
+						"key": "requestUUID",
+						"type": "text",
+						"value": "fdeb335c-b074-4be4-9aa2-7b7f7674df72"
+					},
+					{
+						"key": "dateTime",
+						"type": "text",
+						"value": "2020-01-23T11:37:14"
+					},
+					{
+						"key": "originatorName",
+						"type": "text",
+						"value": "App Unica"
+					},
+					{
+						"key": "originatorType",
+						"type": "text",
+						"value": "141"
+					},
+					{
+						"key": "terminalId",
+						"type": "text",
+						"value": "127.0.0.1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"AccounRecordRev\":{\r\n      \"acctType\":\"AHO_\",\r\n      \"acctId\":\"051000635\",\r\n      \"PaidCurAmt\":{\r\n         \"amt\":\"100\",\r\n         \"curCode\":\"COP\"\r\n      }\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8087/accounts/v1/accounts/651016053/credit_transactions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"accounts",
+						"v1",
+						"accounts",
+						"651016053",
+						"credit_transactions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Credito (Reverso) ocp",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -71,12 +136,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8087/accounts/v1/accounts/651016053/credit_transactions/1",
+					"raw": "http://nota-credito-reverso-itau-co-transferenciasya.appsdev.itauco.col/accounts/v1/accounts/651016053/credit_transactions/1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"nota-credito-reverso-itau-co-transferenciasya",
+						"appsdev",
+						"itauco",
+						"col"
 					],
-					"port": "8087",
 					"path": [
 						"accounts",
 						"v1",

@@ -22,7 +22,7 @@ public class Request {
 	@JsonProperty("AccounRecordRev")
 	public AccounRecordRev accounRecordRev = new AccounRecordRev();
 	
-	@JacksonXmlRootElement(localName = "sch:AccounRecord")
+	@JacksonXmlRootElement(localName = "sch:AccounRecordRev")
 	public class AccounRecordRev {
 		public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 		

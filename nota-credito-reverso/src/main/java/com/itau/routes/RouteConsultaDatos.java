@@ -23,6 +23,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.itau.beans.ResponseHandler;
 import com.itau.dto.Request;
 import com.itau.dto.ResponseSOAP;
+import com.itau.exception.BusException;
 import com.itau.exception.DataException;
 import com.itau.exception.JsonMapperException;
 import com.itau.util.Constants;
@@ -76,7 +77,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		 		.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 		 	.end()
-		    .onException(DataException.class)
+		    .onException(BusException.class)
 		 		.handled(true)
 		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception general: ${exception.message}")
 		 		.bean(ResponseHandler.class)
@@ -87,7 +88,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		 	.end()
 		 	.onException(Exception.class)
 				.handled(true)
-				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
+				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception generica: ${exception.message}")
 				.setBody(simple("{\"error\":\"Error interno\",\"message\": \"${exception.message}\"}"))
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
@@ -164,6 +165,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 				.endChoice()	
 				.when(PredicateBuilder.and(exchangeProperty("status").isEqualTo("000"), exchangeProperty("severity").isEqualTo("Warning")))
 					.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
+					.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} |Mensaje: Error bus warning")
 					.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
 				.endChoice()	
 				.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("120")))
@@ -180,8 +182,11 @@ public class RouteConsultaDatos extends RouteBuilder{
 				.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
 				.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.doCreditAccountRevRs.*.Status")
 				.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.doCreditAccountRevRs.*.*.TrnInfoList.TrnInfo")
-				.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")				
-				.throwException(DataException.class, "Error en info")
+				.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")
+				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+				.bean(ResponseHandler.class)
+		 		.marshal().json(JsonLibrary.Jackson)
+		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
 			.end()
 			
 		.end();
