@@ -41,7 +41,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		onException(Exception.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
-			.setBody(simple("{\"error\": \"Error interno\" , \"detalle\":\"${exception.message}\"}"))
+			.setBody(simple("{\"Status\":{\"statusCode\": \"500\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"${exception.message}\"} }"))
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
@@ -58,7 +58,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		onException(JsonMapperException.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception en mapeo json= ${exception.message}")
-			.setBody(simple("{\"error\": \"Error interno\" , \"detalle\":\"${exception.message}\"}"))
+			.setBody(simple("{\"Status\": {\"statusCode\": \"500\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"${exception.message}\"} }"))
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
@@ -67,7 +67,8 @@ public class RouteConsultaDatos extends RouteBuilder{
 			.onException(HttpOperationFailedException.class , HttpHostConnectException.class, ConnectTimeoutException.class)
 				.handled(true)
 				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
-				.setBody(simple("{\"statusCode\": \"500\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"${exception.message}\"}"))
+				.setHeader("error", simple("${exception.message}"))
+				.to("velocity:templates/response.json")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end()
@@ -92,7 +93,8 @@ public class RouteConsultaDatos extends RouteBuilder{
 		 	.onException(Exception.class)
 				.handled(true)
 				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
-				.setBody(simple("{\"Status\": {\"statusCode\": \"150\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"Error No Identificado\"}"))
+				.setHeader("error", simple("${exception.message}"))
+				.to("velocity:templates/response.json")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end()
@@ -177,13 +179,13 @@ public class RouteConsultaDatos extends RouteBuilder{
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
 				.removeHeaders("*")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-				.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
+				.inOnly(Constants.ROUTE_ERROR_120_150)
 			.endChoice()	
 			.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("150")))
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 500")
 				.removeHeaders("*")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
-				.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
+				.inOnly(Constants.ROUTE_ERROR_120_150)
 			.endChoice()	
 		.end();
 		
@@ -195,6 +197,17 @@ public class RouteConsultaDatos extends RouteBuilder{
 			.throwException(DataException.class, "Error en info")
 		.end()
 			.end();
+
+        from(Constants.ROUTE_ERROR_120_150).routeId("ROUTE_ERROR_120_150").streamCaching()
+            .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
+            .setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.doDebitAccountRs.*.Status")
+            .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")
+            .bean(ResponseHandler.class, "responseError120150")
+            .marshal().json(JsonLibrary.Jackson)
+            .log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+            .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+        .end()
+            .end();
 		
 	}
 	
