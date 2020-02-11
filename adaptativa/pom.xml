@@ -77,7 +77,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -120,6 +119,10 @@
 			<artifactId>camel-test-spring</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.camel</groupId> -->
+		<!-- <artifactId>camel-jaxb-starter</artifactId> -->
+		<!-- </dependency> -->
 		<!-- Swagger -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -143,15 +146,9 @@
 				<directory>src/main/resources/${ambiente}</directory>
 				<includes>
 					<include>application.properties</include>
-					<include>templates/EvRiesgoRq.vm.vm</include>
+					<include>templates/evRiesgoRq.vm</include>
+					<include>templates/response.vm</include>
 					<include>templates/AuthClientTrxRq.vm</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources/</directory>
-				<includes>
-					<include>velocity.properties</include>
 				</includes>
 			</resource>
 		</resources>
@@ -296,7 +293,6 @@
 								</config>
 							</generator>
 						</configuration>
-
 					</plugin>
 				</plugins>
 			</build>

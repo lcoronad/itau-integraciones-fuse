@@ -38,7 +38,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		onException(MyException.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Ah ocurrido una excepcion = ${exception.message}")
-			.setBody(simple("{\"error\":\"Servicio no disponible\",\"message\": \"${exception.message}\"}"))
+			.bean(ResponseHandler.class)
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
