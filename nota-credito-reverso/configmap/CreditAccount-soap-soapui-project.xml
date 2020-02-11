@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1b77e79a-8e0e-4c65-9b7b-f995ef611ad5" activeEnvironment="Default" name="CreditAccount_soap" resourceRoot="" soapui-version="5.5.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="f9d2f21b-8e64-4777-878e-4c30285105e9" wsaVersion="NONE" name="CreditAccountBinding" type="wsdl" bindingName="{http://itau.com.co/services/accounts/creditaccount/v1/definitions}CreditAccountBinding" soapVersion="1_1" anonymous="optional" definition="file:/D:/git-repo/temp_diego/wsdl/CreditAccountPS_HTTP_wsdl/CreditAccount_soap.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CreditAccount_soap.wsdl"><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CreditAccount_soap.wsdl</con:url><con:content><![CDATA[<WL5G3N0:definitions name="CreditAccount_soap" targetNamespace="http://itau.com.co/services/accounts/creditaccount/v1/definitions" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://itau.com.co/services/accounts/creditaccount/v1/definitions" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:import namespace="http://itau.com.co/services/accounts/creditaccount/v1/definitions" location="CreditAccount.wsdl"/>
+  <WL5G3N0:binding name="CreditAccountBinding" type="WL5G3N1:CreditAccountPortType">
+    <WL5G3N2:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <WL5G3N0:operation name="doCreditAccount">
+      <WL5G3N2:operation soapAction="doCreditAccount"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="doCreditAccountRev">
+      <WL5G3N2:operation soapAction="doCreditAccountRev"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="CreditAccountBindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port name="CreditAccountBindingQSPort" binding="WL5G3N1:CreditAccountBinding">
+      <WL5G3N2:address location="http://wldosb12cserver2:24200/services/account/CreditAccount"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CreditAccount.wsdl</con:url><con:content><![CDATA[<WL5G3N0:definitions name="CreditAccount" targetNamespace="http://itau.com.co/services/accounts/creditaccount/v1/definitions" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:WL5G3N2="http://itau.com.co/services/accounts/creditaccount/v1/definitions">
+  <WL5G3N0:types>
+    <xsd:schema targetNamespace="http://itau.com.co/services/accounts/creditaccount/v1/definitions" xmlns:xsd1="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://itau.com.co/services/accounts/creditaccount/v1/definitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+      <xsd:import namespace="http://itau.com.co/services/accounts/creditaccount/v1/schemas" schemaLocation="CreditAccount.xsd"/>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="doCreditAccountInMsg">
+    <WL5G3N0:part name="Request" element="WL5G3N1:doCreditAccountRq"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="doCreditAccountOutMsg">
+    <WL5G3N0:part name="Response" element="WL5G3N1:doCreditAccountRs"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="doCreditAccountRevInMsg">
+    <WL5G3N0:part name="Request" element="WL5G3N1:doCreditAccountRevRq"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="doCreditAccountRevOutMsg">
+    <WL5G3N0:part name="Response" element="WL5G3N1:doCreditAccountRevRs"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="CreditAccountPortType">
+    <WL5G3N0:operation name="doCreditAccount">
+      <WL5G3N0:input message="WL5G3N2:doCreditAccountInMsg"/>
+      <WL5G3N0:output message="WL5G3N2:doCreditAccountOutMsg"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="doCreditAccountRev">
+      <WL5G3N0:input message="WL5G3N2:doCreditAccountRevInMsg"/>
+      <WL5G3N0:output message="WL5G3N2:doCreditAccountRevOutMsg"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+</WL5G3N0:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CreditAccount.xsd</con:url><con:content><![CDATA[<schema targetNamespace="http://itau.com.co/services/accounts/creditaccount/v1/schemas" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:comm2="http://itau.com.co/commoncannonical/v2/schemas">
+  <import schemaLocation="HeaderRequest_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="HeaderResponse_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="AcctId_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="AcctType_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="AcctSubType_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="AcctType_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="PaidCurAmt_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="TrnCategory_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="Desc_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="ReferenceInfo_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="AddInfo_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="EffDt_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="CreatedDt_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <import schemaLocation="Reference_Type.xsd" namespace="http://itau.com.co/commoncannonical/v2/schemas"/>
+  <complexType name="AccountRecord">
+    <sequence>
+      <element name="createDt" type="comm2:CreateDt_Type" minOccurs="0" nillable="true"/>
+      <element name="effDt" type="comm2:EffDt_Type" minOccurs="0" nillable="true"/>
+      <element name="acctType" type="comm2:AcctType_Type" minOccurs="0" nillable="true"/>
+      <element name="acctSubType" type="comm2:AcctSubType_Type" minOccurs="0" nillable="true"/>
+      <element name="acctId" type="comm2:AcctId_Type" minOccurs="0" nillable="true"/>
+      <element name="PaidCurAmt" type="comm2:CurrencyAmount_Type" minOccurs="0" nillable="true"/>
+      <element name="chargeCode" type="comm2:Decimal_Type" minOccurs="0" nillable="true"/>
+      <element name="trnCategory" type="comm2:TrnCategory_Type" minOccurs="0" nillable="true"/>
+      <element name="desc" type="comm2:Desc_Type" minOccurs="0" nillable="true"/>
+      <element name="branchId" type="comm2:BankId_Type" minOccurs="0" nillable="true"/>
+      <element name="acctInfo" type="comm2:Desc_Type" minOccurs="0" nillable="true"/>
+      <element name="reference" type="comm2:Reference_Type" minOccurs="0" nillable="true"/>
+      <element name="causalMultiCash" type="comm2:TrnCategory_Type" minOccurs="0" nillable="true"/>
+      <element name="NitMultiCash" type="comm2:AddInfo_Type" minOccurs="0" nillable="true"/>
+    </sequence>
+  </complexType>
+  <complexType name="AccountRecordRev">
+    <sequence>
+      <element name="createDt" type="comm2:CreateDt_Type" minOccurs="0" nillable="true"/>
+      <element name="effDt" type="comm2:EffDt_Type" minOccurs="0" nillable="true"/>
+      <element name="acctType" type="comm2:AcctType_Type" minOccurs="0" nillable="true"/>
+      <element name="acctSubType" type="comm2:AcctSubType_Type" minOccurs="0" nillable="true"/>
+      <element name="acctId" type="comm2:AcctId_Type" minOccurs="0" nillable="true"/>
+      <element name="PaidCurAmt" type="comm2:CurrencyAmount_Type" minOccurs="0" nillable="true"/>
+      <element name="branchId" type="comm2:BankId_Type" minOccurs="0" nillable="true"/>
+    </sequence>
+  </complexType>
+  <complexType name="CreditAccountRq_Type">
+    <sequence>
+      <element name="HeaderRequest" type="comm2:HeaderRequest_Type"/>
+      <element name="AccounRecord" type="tns:AccountRecord"/>
+    </sequence>
+  </complexType>
+  <complexType name="CreditAccountRevRq_Type">
+    <sequence>
+      <element name="HeaderRequest" type="comm2:HeaderRequest_Type"/>
+      <element name="AccounRecordRev" type="tns:AccountRecordRev"/>
+    </sequence>
+  </complexType>
+  <complexType name="CreditAccountRs_Type">
+    <sequence>
+      <element name="HeaderResponse" type="comm2:HeaderResponse_Type"/>
+    </sequence>
+  </complexType>
+  <complexType name="CreditAccountRevRs_Type">
+    <sequence>
+      <element name="HeaderResponse" type="comm2:HeaderResponse_Type"/>
+    </sequence>
+  </complexType>
+  <element name="doCreditAccountRq" type="tns:CreditAccountRq_Type"/>
+  <element name="doCreditAccountRs" type="tns:CreditAccountRs_Type"/>
+  <element name="doCreditAccountRevRq" type="tns:CreditAccountRevRq_Type"/>
+  <element name="doCreditAccountRevRs" type="tns:CreditAccountRs_Type"/>
+</schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\HeaderRequest_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="MessageHeader_Type.xsd"/>
+  <xsd:include schemaLocation="User_Type.xsd"/>
+  <xsd:complexType name="HeaderRequest_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="MessageHeader" type="MessageHeader_Type"/>
+      <xsd:element minOccurs="0" name="User" type="User_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\MessageHeader_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="MessageKey_Type.xsd"/>
+  <xsd:include schemaLocation="MessageInfo_Type.xsd"/>
+  <xsd:include schemaLocation="TrnInfo_Type.xsd"/>
+  <xsd:complexType name="MessageHeader_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="MessageKey" type="MessageKey_Type"/>
+      <xsd:element minOccurs="0" name="MessageInfo" type="MessageInfo_Type"/>
+      <xsd:element minOccurs="0" name="TrnInfoList" type="TrnInfoList_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TrnInfoList_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="TrnInfo" type="TrnInfo_Type" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\MessageKey_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:include schemaLocation="UUID_Type.xsd"/>
+  <xsd:include schemaLocation="Version_Type.xsd"/>
+  <xsd:complexType name="MessageKey_Type">
+    <xsd:sequence>
+      <xsd:element name="integrationId" type="C" minOccurs="0"/>
+      <xsd:element name="requestVersion" type="Version_Type" minOccurs="0"/>
+      <xsd:element name="requestUUID" type="UUID_Type" minOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\C.xsd</con:url><con:content>&lt;xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  &lt;xsd:simpleType name="C">
+    &lt;xsd:restriction base="xsd:string"/>
+  &lt;/xsd:simpleType>
+&lt;/xsd:schema></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\UUID_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="UUID_Type">
+    <xsd:annotation>
+      <xsd:documentation>UUID elements are Narrow Character with a maximum length of 36.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="C">
+      <xsd:maxLength value="36"/>
+      <xsd:pattern value="([0-9]|[a-f]|[A-F]){8}(-([0-9]|[a-f]|[A-F]){4})(-([0-9]|[a-f]|[A-F]){4})(-([0-9]|[a-f]|[A-F]){4})(-([0-9]|[a-f]|[A-F]){12})"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Version_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="Version_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\MessageInfo_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="DateTime_Type.xsd"/>
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:include schemaLocation="OriginatorName_Type.xsd"/>
+  <xsd:include schemaLocation="OriginatorType_Type.xsd"/>
+  <xsd:include schemaLocation="TerminalId_Type.xsd"/>
+  <xsd:include schemaLocation="TerminalType_Type.xsd"/>
+  <xsd:include schemaLocation="BankId_Type.xsd"/>
+  <xsd:include schemaLocation="OriginatorType_Type.xsd"/>
+  <xsd:include schemaLocation="TrnType_Type.xsd"/>
+  <xsd:complexType name="MessageInfo_Type">
+    <xsd:sequence>
+      <xsd:element name="dateTime" type="DateTime_Type" minOccurs="1"/>
+      <xsd:element name="systemId" type="C" minOccurs="1"/>
+      <xsd:element name="originatorName" type="OriginatorName_Type" minOccurs="0"/>
+      <xsd:element name="originatorType" type="OriginatorType_Type" minOccurs="1"/>
+      <xsd:element name="terminalId" type="TerminalId_Type" minOccurs="1"/>
+      <xsd:element name="terminalType" type="TerminalType_Type" minOccurs="0"/>
+      <xsd:element name="bankIdType" minOccurs="0" type="BankId_Type"/>
+      <xsd:element name="bankId" type="BankId_Type" minOccurs="0"/>
+      <xsd:element minOccurs="0" name="trnType" type="TrnType_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\DateTime_Type.xsd</con:url><con:content>&lt;xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  &lt;xsd:simpleType name="DateTime_Type">
+    &lt;xsd:restriction base="xsd:dateTime"/>
+  &lt;/xsd:simpleType>
+&lt;/xsd:schema></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\OriginatorName_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="OriginatorName_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="40"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\OriginatorType_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Long_Type.xsd"/>
+  <xsd:simpleType name="OriginatorType_Type">
+    <xsd:restriction base="Long_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Long_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="Long_Type">
+    <xsd:annotation>
+      <xsd:documentation>Long is an integer value, which may be positive,
+				negative, or zero, with values ranging from -2147483648
+				to
+				2147483647.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:long"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TerminalId_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Identifier_Type.xsd"/>
+  <xsd:simpleType name="TerminalId_Type">
+    <xsd:restriction base="Identifier_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Identifier_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="Identifier_Type">
+    <xsd:annotation>
+      <xsd:documentation>Object identifiers in the IFX Specification are of
+				the data type "Identifier." This is a Narrow Character data type with
+				a maximum length of 255.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="C">
+      <xsd:maxLength value="255"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TerminalType_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="TerminalType_Type">
+    <xsd:restriction base="OpenEnum_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\OpenEnum_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="OpenEnum_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="80"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\BankId_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="BankId_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="34"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TrnType_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="TrnType_Type">
+    <xsd:restriction base="OpenEnum_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TrnInfo_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="TrnCode_Type.xsd"/>
+  <xsd:include schemaLocation="TrnSrc_Type.xsd"/>
+  <xsd:complexType name="TrnInfo_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="trnCode" type="TrnCode_Type"/>
+      <xsd:element minOccurs="0" name="trnSrc" type="TrnSrc_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TrnCode_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Identifier_Type.xsd"/>
+  <xsd:simpleType name="TrnCode_Type">
+    <xsd:restriction base="Identifier_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TrnSrc_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="TrnSrc_Type">
+    <xsd:restriction base="OpenEnum_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\User_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:include schemaLocation="EmployeeIdentlNum_Type.xsd"/>
+  <xsd:complexType name="User_Type">
+    <xsd:sequence>
+      <xsd:element name="userName" type="C" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="userToken" type="C" maxOccurs="1" minOccurs="0"/>
+      <xsd:element name="employeeIdentlNum" type="EmployeeIdentlNum_Type" minOccurs="0" nillable="true"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\EmployeeIdentlNum_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="EmployeeIdentlNum_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="32"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\HeaderResponse_Type.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="MessageHeader_Type.xsd"/>
+  <xsd:include schemaLocation="Status_Type.xsd"/>
+  <xsd:complexType name="HeaderResponse_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="MessageHeader" type="MessageHeader_Type"/>
+      <xsd:element minOccurs="0" name="Status" type="Status_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Status_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="StatusCode_Type.xsd"/>
+  <xsd:include schemaLocation="ServerStatusCode_Type.xsd"/>
+  <xsd:include schemaLocation="Severity_Type.xsd"/>
+  <xsd:include schemaLocation="StatusDesc_Type.xsd"/>
+  <xsd:include schemaLocation="AdditionalStatus_Type.xsd"/>
+  <xsd:complexType name="Status_Type">
+    <xsd:sequence>
+      <xsd:element name="statusCode" type="StatusCode_Type"/>
+      <xsd:element name="serverStatusCode" type="ServerStatusCode_Type" minOccurs="0"/>
+      <xsd:element name="severity" type="Severity_Type"/>
+      <xsd:element name="statusDesc" type="StatusDesc_Type" minOccurs="0"/>
+      <xsd:element name="AdditionalStatus" type="AdditionalStatus_Type" maxOccurs="unbounded" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\StatusCode_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Long_Type.xsd"/>
+  <xsd:simpleType name="StatusCode_Type">
+    <xsd:restriction base="Long_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\ServerStatusCode_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="ServerStatusCode_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Severity_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="NC.xsd"/>
+  <xsd:simpleType name="Severity_Type">
+    <xsd:restriction base="NC"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\NC.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="NC">
+    <xsd:annotation>
+      <xsd:documentation>Elements of type Narrow Character are elements of
+				character data type with the additional restriction that
+				the only allowable characters are those contained within
+				the ISO Latin-1 character set.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\StatusDesc_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="StatusDesc_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="2048"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\AdditionalStatus_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="StatusCode_Type.xsd"/>
+  <xsd:include schemaLocation="StatusDesc_Type.xsd"/>
+  <xsd:include schemaLocation="ServerStatusCode_Type.xsd"/>
+  <xsd:include schemaLocation="Severity_Type.xsd"/>
+  <xsd:complexType name="AdditionalStatus_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="statusCode" type="StatusCode_Type"/>
+      <xsd:element minOccurs="0" name="serverStatusCode" type="ServerStatusCode_Type"/>
+      <xsd:element name="severity" type="Severity_Type"/>
+      <xsd:element minOccurs="0" name="statusDesc" type="StatusDesc_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\AcctId_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="AcctId_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="36"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\AcctType_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="AcctType_Type">
+    <xsd:restriction base="OpenEnum_Type">
+      <xsd:maxLength value="36"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\AcctSubType_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="AcctSubType_Type">
+    <xsd:restriction base="OpenEnum_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\PaidCurAmt_Type.xsd</con:url><con:content>&lt;xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  &lt;xsd:include schemaLocation="CurrencyAmount_Type.xsd"/>
+  &lt;xsd:element name="PaidCurAmt" type="CurrencyAmount_Type"/>
+&lt;/xsd:schema></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CurrencyAmount_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Amt_Type.xsd"/>
+  <xsd:include schemaLocation="CurCode_Type.xsd"/>
+  <xsd:include schemaLocation="CurRate_Type.xsd"/>
+  <xsd:include schemaLocation="CurConvertRule_Type.xsd"/>
+  <xsd:complexType name="CurrencyAmount_Type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="amt" type="Amt_Type"/>
+      <xsd:element minOccurs="0" name="curCode" type="CurCode_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Amt_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Decimal_Type.xsd"/>
+  <xsd:simpleType name="Amt_Type">
+    <xsd:restriction base="Decimal_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Decimal_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="Decimal_Type">
+    <xsd:annotation>
+      <xsd:documentation>Decimal indicates a numeric value that meets the
+				following rules:</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:decimal"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CurCode_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="CurCode_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CurRate_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="Decimal_Type.xsd"/>
+  <xsd:simpleType name="CurRate_Type">
+    <xsd:restriction base="Decimal_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CurConvertRule_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="ClosedEnum_Type.xsd"/>
+  <xsd:simpleType name="CurConvertRule_Type">
+    <xsd:restriction base="ClosedEnum_Type">
+      <xsd:enumeration value="Direct"/>
+      <xsd:enumeration value="Indirect"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\ClosedEnum_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="ClosedEnum_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="80"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\TrnCategory_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="NC.xsd"/>
+  <xsd:simpleType name="TrnCategory_Type">
+    <xsd:restriction base="NC"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="TrnCategory" type="TrnCategory_Type"/>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Desc_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="Desc_Type">
+    <xsd:restriction base="C">
+      <xsd:maxLength value="250"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="Desc" type="Desc_Type"/>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\ReferenceInfo_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="ReferenceID_Type.xsd"/>
+  <xsd:include schemaLocation="Reference_Type.xsd"/>
+  <xsd:complexType name="ReferenceInfo_Type">
+    <xsd:sequence>
+      <xsd:element name="referenceID" type="ReferenceID_Type"/>
+      <xsd:element name="reference" type="Reference_Type" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\ReferenceID_Type.xsd</con:url><con:content>&lt;xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  &lt;xsd:simpleType name="ReferenceID_Type">
+    &lt;xsd:restriction base="xsd:string"/>
+  &lt;/xsd:simpleType>
+&lt;/xsd:schema></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\Reference_Type.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://itau.com.co/commoncannonical/v2/schemas">
+  <xsd:include schemaLocation="OpenEnum_Type.xsd"/>
+  <xsd:simpleType name="Reference_Type">
+    <xsd:restriction base="OpenEnum_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\AddInfo_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="C.xsd"/>
+  <xsd:simpleType name="AddInfo_Type">
+    <xsd:restriction base="C"></xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="AddInfo" type="AddInfo_Type"/>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\EffDt_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="DateTime_Type.xsd"/>
+  <xsd:simpleType name="EffDt_Type">
+    <xsd:restriction base="DateTime_Type"/>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\D:\git-repo\temp_diego\wsdl\CreditAccountPS_HTTP_wsdl\CreatedDt_Type.xsd</con:url><con:content><![CDATA[<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://itau.com.co/commoncannonical/v2/schemas" xmlns="http://itau.com.co/commoncannonical/v2/schemas" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="DateTime_Type.xsd"/>
+  <xsd:simpleType name="CreateDt_Type">
+    <xsd:restriction base="DateTime_Type"></xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://DESKTOP-TE4CH89:8088/mockCreditAccountBinding</con:endpoint><con:endpoint>http://wldosb12cserver2:24200/services/account/CreditAccount</con:endpoint></con:endpoints><con:operation id="acfd7454-76b4-4f70-8f21-9263180154b7" isOneWay="false" action="doCreditAccount" name="doCreditAccount" bindingOperationName="doCreditAccount" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="e8b7237d-7b23-4fd3-bc25-d5d575c49c19" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://wldosb12cserver2:24200/services/account/CreditAccount</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <sch:doCreditAccountRq>\r
+         <sch:HeaderRequest>\r
+            <!--Optional:-->\r
+            <sch1:MessageHeader>\r
+               <!--Optional:-->\r
+               <sch1:MessageKey>\r
+                  <!--Optional:-->\r
+                  <sch1:integrationId>?</sch1:integrationId>\r
+                  <!--Optional:-->\r
+                  <sch1:requestVersion>?</sch1:requestVersion>\r
+                  <sch1:requestUUID>?</sch1:requestUUID>\r
+               </sch1:MessageKey>\r
+               <!--Optional:-->\r
+               <sch1:MessageInfo>\r
+                  <sch1:dateTime>?</sch1:dateTime>\r
+                  <sch1:systemId>?</sch1:systemId>\r
+                  <!--Optional:-->\r
+                  <sch1:originatorName>?</sch1:originatorName>\r
+                  <sch1:originatorType>?</sch1:originatorType>\r
+                  <sch1:terminalId>?</sch1:terminalId>\r
+                  <!--Optional:-->\r
+                  <sch1:terminalType>?</sch1:terminalType>\r
+                  <!--Optional:-->\r
+                  <sch1:bankIdType>?</sch1:bankIdType>\r
+                  <!--Optional:-->\r
+                  <sch1:bankId>?</sch1:bankId>\r
+                  <!--Optional:-->\r
+                  <sch1:trnType>?</sch1:trnType>\r
+               </sch1:MessageInfo>\r
+               <!--Optional:-->\r
+               <sch1:TrnInfoList>\r
+                  <!--Zero or more repetitions:-->\r
+                  <sch1:TrnInfo>\r
+                     <!--Optional:-->\r
+                     <sch1:trnCode>?</sch1:trnCode>\r
+                     <!--Optional:-->\r
+                     <sch1:trnSrc>?</sch1:trnSrc>\r
+                  </sch1:TrnInfo>\r
+               </sch1:TrnInfoList>\r
+            </sch1:MessageHeader>\r
+            <!--Optional:-->\r
+            <sch1:User>\r
+               <!--Optional:-->\r
+               <sch1:userName>?</sch1:userName>\r
+               <!--Optional:-->\r
+               <sch1:userToken>?</sch1:userToken>\r
+               <!--Optional:-->\r
+               <sch1:employeeIdentlNum>?</sch1:employeeIdentlNum>\r
+            </sch1:User>\r
+         </sch:HeaderRequest>\r
+         <sch:AccounRecord>\r
+            <!--Optional:-->\r
+            <sch:createDt>?</sch:createDt>\r
+            <!--Optional:-->\r
+            <sch:effDt>?</sch:effDt>\r
+            <!--Optional:-->\r
+            <sch:acctType>?</sch:acctType>\r
+            <!--Optional:-->\r
+            <sch:acctSubType>?</sch:acctSubType>\r
+            <!--Optional:-->\r
+            <sch:acctId>?</sch:acctId>\r
+            <!--Optional:-->\r
+            <sch:PaidCurAmt>\r
+               <!--Optional:-->\r
+               <sch1:amt>?</sch1:amt>\r
+               <!--Optional:-->\r
+               <sch1:curCode>?</sch1:curCode>\r
+            </sch:PaidCurAmt>\r
+            <!--Optional:-->\r
+            <sch:chargeCode>?</sch:chargeCode>\r
+            <!--Optional:-->\r
+            <sch:trnCategory>?</sch:trnCategory>\r
+            <!--Optional:-->\r
+            <sch:desc>?</sch:desc>\r
+            <!--Optional:-->\r
+            <sch:branchId>?</sch:branchId>\r
+            <!--Optional:-->\r
+            <sch:acctInfo>?</sch:acctInfo>\r
+            <!--Optional:-->\r
+            <sch:reference>?</sch:reference>\r
+            <!--Optional:-->\r
+            <sch:causalMultiCash>?</sch:causalMultiCash>\r
+            <!--Optional:-->\r
+            <sch:NitMultiCash>?</sch:NitMultiCash>\r
+         </sch:AccounRecord>\r
+      </sch:doCreditAccountRq>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="doCreditAccount"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="a0e26f85-b9d1-4fd9-b386-ba2670c14c4d" isOneWay="false" action="doCreditAccountRev" name="doCreditAccountRev" bindingOperationName="doCreditAccountRev" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="39595ed9-e05b-46c1-a4f3-2afe1247bbc5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://DESKTOP-TE4CH89:8088/mockCreditAccountBinding</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <sch:doCreditAccountRevRq>\r
+         <sch:HeaderRequest>\r
+            <!--Optional:-->\r
+            <sch1:MessageHeader>\r
+               <!--Optional:-->\r
+               <sch1:MessageKey>\r
+                  <!--Optional:-->\r
+                  <sch1:integrationId>?</sch1:integrationId>\r
+                  <!--Optional:-->\r
+                  <sch1:requestVersion>?</sch1:requestVersion>\r
+                  <sch1:requestUUID>?</sch1:requestUUID>\r
+               </sch1:MessageKey>\r
+               <!--Optional:-->\r
+               <sch1:MessageInfo>\r
+                  <sch1:dateTime>?</sch1:dateTime>\r
+                  <sch1:systemId>?</sch1:systemId>\r
+                  <!--Optional:-->\r
+                  <sch1:originatorName>?</sch1:originatorName>\r
+                  <sch1:originatorType>?</sch1:originatorType>\r
+                  <sch1:terminalId>?</sch1:terminalId>\r
+                  <!--Optional:-->\r
+                  <sch1:terminalType>?</sch1:terminalType>\r
+                  <!--Optional:-->\r
+                  <sch1:bankIdType>?</sch1:bankIdType>\r
+                  <!--Optional:-->\r
+                  <sch1:bankId>?</sch1:bankId>\r
+                  <!--Optional:-->\r
+                  <sch1:trnType>?</sch1:trnType>\r
+               </sch1:MessageInfo>\r
+               <!--Optional:-->\r
+               <sch1:TrnInfoList>\r
+                  <!--Zero or more repetitions:-->\r
+                  <sch1:TrnInfo>\r
+                     <!--Optional:-->\r
+                     <sch1:trnCode>?</sch1:trnCode>\r
+                     <!--Optional:-->\r
+                     <sch1:trnSrc>?</sch1:trnSrc>\r
+                  </sch1:TrnInfo>\r
+               </sch1:TrnInfoList>\r
+            </sch1:MessageHeader>\r
+            <!--Optional:-->\r
+            <sch1:User>\r
+               <!--Optional:-->\r
+               <sch1:userName>?</sch1:userName>\r
+               <!--Optional:-->\r
+               <sch1:userToken>?</sch1:userToken>\r
+               <!--Optional:-->\r
+               <sch1:employeeIdentlNum>?</sch1:employeeIdentlNum>\r
+            </sch1:User>\r
+         </sch:HeaderRequest>\r
+         <sch:AccounRecordRev>\r
+            <!--Optional:-->\r
+            <sch:createDt>?</sch:createDt>\r
+            <!--Optional:-->\r
+            <sch:effDt>?</sch:effDt>\r
+            <!--Optional:-->\r
+            <sch:acctType>?</sch:acctType>\r
+            <!--Optional:-->\r
+            <sch:acctSubType>?</sch:acctSubType>\r
+            <!--Optional:-->\r
+            <sch:acctId>?</sch:acctId>\r
+            <!--Optional:-->\r
+            <sch:PaidCurAmt>\r
+               <!--Optional:-->\r
+               <sch1:amt>?</sch1:amt>\r
+               <!--Optional:-->\r
+               <sch1:curCode>?</sch1:curCode>\r
+            </sch:PaidCurAmt>\r
+            <!--Optional:-->\r
+            <sch:branchId>?</sch:branchId>\r
+         </sch:AccounRecordRev>\r
+      </sch:doCreditAccountRevRq>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="doCreditAccountRev"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="c457a7fe-2833-4250-b8e3-79bca8d554d1" port="8088" path="/mockCreditAccountBinding" host="DESKTOP-TE4CH89" name="CreditAccountBinding MockService"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="doCreditAccountRev" id="03245bc2-0827-425d-bd63-035ce724465c" interface="CreditAccountBinding" operation="doCreditAccountRev"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="ac8531d1-78dd-4a4b-999c-2af978207f12" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/accounts/creditaccount/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sch:doCreditAccountRevRs>
+         <sch:HeaderResponse>
+            <!--Optional:-->
+            <sch1:MessageHeader>
+               <!--Optional:-->
+               <sch1:MessageKey>
+                  <!--Optional:-->
+                  <sch1:integrationId>1</sch1:integrationId>
+                  <!--Optional:-->
+                  <sch1:requestVersion>1</sch1:requestVersion>
+                  <sch1:requestUUID>68f1950f-a92b-4f03-b831-cabe7f88f214</sch1:requestUUID>
+               </sch1:MessageKey>
+               <!--Optional:-->
+               <sch1:MessageInfo>
+                  <sch1:dateTime>2020-01-23T12:27:29</sch1:dateTime>
+                  <sch1:systemId>ITAU</sch1:systemId>
+                  <!--Optional:-->
+                  <sch1:originatorName>App Unica</sch1:originatorName>
+                  <sch1:originatorType>141</sch1:originatorType>
+                  <sch1:terminalId>172.22.153.80</sch1:terminalId>
+                  <!--Optional:-->
+                  <sch1:terminalType>1</sch1:terminalType>
+                  <!--Optional:-->
+                  <sch1:bankIdType>1</sch1:bankIdType>
+                  <!--Optional:-->
+                  <sch1:bankId>1</sch1:bankId>
+                  <!--Optional:-->
+                  <sch1:trnType>1</sch1:trnType>
+               </sch1:MessageInfo>
+               <!--Optional:-->
+               <sch1:TrnInfoList>
+                  <!--Zero or more repetitions:-->
+                  <sch1:TrnInfo>
+                     <!--Optional:-->
+                     <sch1:trnCode>1431476517</sch1:trnCode>
+                     <!--Optional:-->
+                     <sch1:trnSrc>0020_TrnCode</sch1:trnSrc>
+                  </sch1:TrnInfo>
+               </sch1:TrnInfoList>
+            </sch1:MessageHeader>
+            <!--Optional:-->
+            <sch1:Status>
+               <sch1:statusCode>000</sch1:statusCode>
+               <!--Optional:-->
+               <sch1:serverStatusCode>0</sch1:serverStatusCode>
+               <sch1:severity>Info</sch1:severity>
+               <!--Optional:-->
+               <sch1:statusDesc>0</sch1:statusDesc>
+               <!--Zero or more repetitions:-->
+               <sch1:AdditionalStatus>
+                  <!--Optional:-->
+                  <sch1:statusCode>1</sch1:statusCode>
+                  <!--Optional:-->
+                  <sch1:serverStatusCode>1</sch1:serverStatusCode>
+                  <sch1:severity>1</sch1:severity>
+                  <!--Optional:-->
+                  <sch1:statusDesc>1</sch1:statusDesc>
+               </sch1:AdditionalStatus>
+            </sch1:Status>
+         </sch:HeaderResponse>
+      </sch:doCreditAccountRevRs>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="doCreditAccountRev"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
