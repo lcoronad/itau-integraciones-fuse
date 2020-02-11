@@ -1,4 +1,4 @@
-package com.itau.esb.creditnote.model;
+package com.itau.esb.debitnotereverse.model;
 
 import java.util.List;
 

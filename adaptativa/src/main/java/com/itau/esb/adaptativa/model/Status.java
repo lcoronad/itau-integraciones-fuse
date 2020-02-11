@@ -1,12 +1,9 @@
-package com.itau.esb.creditnote.model;
+package com.itau.esb.adaptativa.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_NULL)
 public class Status {
 	private String statusCode;
 	private String serverStatusCode;

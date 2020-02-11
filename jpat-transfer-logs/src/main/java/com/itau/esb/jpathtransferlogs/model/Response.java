@@ -1,15 +1,27 @@
 package com.itau.esb.jpathtransferlogs.model;
 
-public class Response {
-	private TrnInfoList trnInfoList;
-	private Status status;
-	private AdditionalStatus additionalStatus;
+import java.util.List;
 
-	public TrnInfoList getTrnInfoList() {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
+public class Response {
+	
+	@JsonProperty("TrnInfoList")
+	private List<TrnInfoList> trnInfoList;
+	
+	@JsonProperty("Status")
+	private Status status;
+
+	public List<TrnInfoList> getTrnInfoList() {
 		return trnInfoList;
 	}
 
-	public void setTrnInfoList(TrnInfoList trnInfoList) {
+	public void setTrnInfoList(List<TrnInfoList> trnInfoList) {
 		this.trnInfoList = trnInfoList;
 	}
 
@@ -21,17 +33,9 @@ public class Response {
 		this.status = status;
 	}
 
-	public AdditionalStatus getAdditionalStatus() {
-		return additionalStatus;
-	}
-
-	public void setAdditionalStatus(AdditionalStatus additionalStatus) {
-		this.additionalStatus = additionalStatus;
-	}
-
 	@Override
 	public String toString() {
-		return "Response [trnInfoList=" + trnInfoList + ", status=" + status + ", additionalStatus=" + additionalStatus
-				+ "]";
+		return "Response [trnInfoList=" + trnInfoList + ", status=" + status + "]";
 	}
+
 }

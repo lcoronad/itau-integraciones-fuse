@@ -93,6 +93,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.to("direct:loadInfo")
 			.to("velocity:templates/request.vm")

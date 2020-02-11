@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse.exceptions;
+package com.itau.esb.debitnotereverse.exceptions;
 
 public class CustomException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

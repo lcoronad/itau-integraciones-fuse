@@ -137,6 +137,11 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -147,7 +152,6 @@
 				<includes>
 					<include>application.properties</include>
 					<include>templates/evRiesgoRq.vm</include>
-					<include>templates/response.vm</include>
 					<include>templates/AuthClientTrxRq.vm</include>
 				</includes>
 			</resource>

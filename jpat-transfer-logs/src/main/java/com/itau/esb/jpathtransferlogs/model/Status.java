@@ -1,10 +1,20 @@
 package com.itau.esb.jpathtransferlogs.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class Status {
 	private String statusCode;
 	private String serverStatusCode;
 	private String severity;
 	private String statusDesc;
+
+	@JsonProperty("AdditionalStatus")
+	private List<AdditionalStatus> additionalStatus;
 
 	public String getStatusCode() {
 		return statusCode;
@@ -38,10 +48,18 @@ public class Status {
 		this.statusDesc = statusDesc;
 	}
 
+	public List<AdditionalStatus> getAdditionalStatus() {
+		return additionalStatus;
+	}
+
+	public void setAdditionalStatus(List<AdditionalStatus> additionalStatus) {
+		this.additionalStatus = additionalStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "Status [statusCode=" + statusCode + ", serverStatusCode=" + serverStatusCode + ", severity=" + severity
-				+ ", statusDesc=" + statusDesc + "]";
+				+ ", statusDesc=" + statusDesc + ", additionalStatus=" + additionalStatus + "]";
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse.model;
+package com.itau.esb.adaptativa.model;
 
 public class AdditionalStatus {
 	private String statusCode;

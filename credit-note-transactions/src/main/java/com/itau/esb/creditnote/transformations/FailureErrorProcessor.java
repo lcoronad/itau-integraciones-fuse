@@ -15,6 +15,9 @@
  */
 package com.itau.esb.creditnote.transformations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.http.HttpStatus;
@@ -23,42 +26,36 @@ import com.itau.esb.creditnote.interfaces.Headers;
 import com.itau.esb.creditnote.model.AdditionalStatus;
 import com.itau.esb.creditnote.model.Response;
 import com.itau.esb.creditnote.model.Status;
-import com.itau.esb.creditnote.model.TrnInfoList;
-
-import java.util.Arrays;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
-		Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-		Status status = new Status();
-		status.setServerStatusCode("");
-		status.setSeverity("");
-		status.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		status.setStatusDesc(e.getMessage());
-
-		TrnInfoList list = new TrnInfoList();
-		list.setTrnCode("");
-		list.setTrnSrc("");
+Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 		
+		Status status = new Status();
+		status.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		status.setServerStatusCode("");
+		status.setSeverity("Error");
+		status.setStatusDesc("Error Tecnico");
+
+		List<AdditionalStatus> asList = new ArrayList<>();
 		AdditionalStatus as = new AdditionalStatus();
 		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null
 				? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class)
 				: "");
 		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null
 				? ex.getProperty(Headers.AD_SEVERITY, String.class)
-				: "");
+				: "Error");
 		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null
 				? ex.getProperty(Headers.AD_STATUS_CODE, String.class)
-				: "");
+				: ""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null
 				? ex.getProperty(Headers.AD_STATUS_DESC, String.class)
-				: "");
+				: e.getMessage());
 
+		status.setAdditionalStatus(asList);
+		asList.add(as);
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(Arrays.asList(list));
-		res.setAdditionalStatus(as);
 		ex.getIn().setBody(res);
-
 	}
 }

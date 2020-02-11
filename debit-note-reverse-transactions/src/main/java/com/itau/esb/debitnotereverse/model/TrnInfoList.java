@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse.model;
+package com.itau.esb.debitnotereverse.model;
 
 public class TrnInfoList {
 	private String trnCode;

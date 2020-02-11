@@ -13,19 +13,20 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.creditnotereverse.transformations;
+package com.itau.esb.debitnotereverse.transformations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.http.HttpStatus;
 
-import com.itau.esb.creditnotereverse.interfaces.Headers;
-import com.itau.esb.creditnotereverse.model.AdditionalStatus;
-import com.itau.esb.creditnotereverse.model.Response;
-import com.itau.esb.creditnotereverse.model.Status;
-import com.itau.esb.creditnotereverse.model.TrnInfoList;
-
-import java.util.Arrays;
+import com.itau.esb.debitnotereverse.interfaces.Headers;
+import com.itau.esb.debitnotereverse.model.AdditionalStatus;
+import com.itau.esb.debitnotereverse.model.Response;
+import com.itau.esb.debitnotereverse.model.Status;
+import com.itau.esb.debitnotereverse.model.TrnInfoList;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
@@ -35,6 +36,8 @@ public class FailureErrorProcessor implements Processor {
 		status.setSeverity("");
 		status.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		status.setStatusDesc(e.getMessage());
+		List<AdditionalStatus> asList = new ArrayList<>();
+		List<TrnInfoList> lista = new ArrayList<>();
 
 		TrnInfoList list = new TrnInfoList();
 		list.setTrnCode("");
@@ -54,10 +57,12 @@ public class FailureErrorProcessor implements Processor {
 				? ex.getProperty(Headers.AD_STATUS_DESC, String.class)
 				: "");
 
+		asList.add(as);
+		lista.add(list);
+		status.setAdditionalStatus(asList);
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(Arrays.asList(list));
-		res.setAdditionalStatus(as);
+		res.setTrnInfoList(lista);
 		ex.getIn().setBody(res);
 
 	}

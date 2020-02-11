@@ -95,6 +95,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("modcustomer_transformation").streamCaching()
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.process(e -> {
 				String idData = e.getIn().getHeader("id_data", String.class);
 				if(idData.split("_").length == 2) {					

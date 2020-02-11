@@ -15,7 +15,7 @@
  * 
  * 
  */
-package com.itau.esb.creditnotereverse.configurator;
+package com.itau.esb.debitnotereverse.configurator;
 
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;

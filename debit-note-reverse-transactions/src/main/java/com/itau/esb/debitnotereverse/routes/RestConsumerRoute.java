@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.creditnotereverse.routes;
+package com.itau.esb.debitnotereverse.routes;
 
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -24,10 +24,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.creditnotereverse.configurator.ConfigurationRoute;
-import com.itau.esb.creditnotereverse.model.Response;
-import com.itau.esb.creditnotereverse.properties.RestConsumer;
-import com.itau.esb.creditnotereverse.transformations.FailureErrorProcessor;
+import com.itau.esb.debitnotereverse.configurator.ConfigurationRoute;
+import com.itau.esb.debitnotereverse.model.Response;
+import com.itau.esb.debitnotereverse.properties.RestConsumer;
+import com.itau.esb.debitnotereverse.transformations.FailureErrorProcessor;
 
 
 @Component

@@ -90,6 +90,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("creditnotetransactions_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.setHeader("acctType").jsonpath("$.AccounRecord.acctType")
 			.setHeader("amt").jsonpath("$.AccounRecord.PaidCurAmt.amt")

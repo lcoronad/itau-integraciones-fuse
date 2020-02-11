@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.creditnotereverse.routes;
+package com.itau.esb.debitnotereverse.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
@@ -29,12 +29,12 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.creditnotereverse.configurator.ConfigurationRoute;
-import com.itau.esb.creditnotereverse.exceptions.CustomException;
-import com.itau.esb.creditnotereverse.interfaces.Headers;
-import com.itau.esb.creditnotereverse.model.Response;
-import com.itau.esb.creditnotereverse.properties.RestConsumer;
-import com.itau.esb.creditnotereverse.transformations.FailureErrorProcessor;
+import com.itau.esb.debitnotereverse.configurator.ConfigurationRoute;
+import com.itau.esb.debitnotereverse.exceptions.CustomException;
+import com.itau.esb.debitnotereverse.interfaces.Headers;
+import com.itau.esb.debitnotereverse.model.Response;
+import com.itau.esb.debitnotereverse.properties.RestConsumer;
+import com.itau.esb.debitnotereverse.transformations.FailureErrorProcessor;
 
 @Component
 public class TransformationRoute extends ConfigurationRoute {
@@ -89,6 +89,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("debitnoterevers_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.setHeader("acctType").jsonpath("$.AccounRecordRev.acctType")
 //			.setHeader("trnSrc", constant("0020_TrnCode"))

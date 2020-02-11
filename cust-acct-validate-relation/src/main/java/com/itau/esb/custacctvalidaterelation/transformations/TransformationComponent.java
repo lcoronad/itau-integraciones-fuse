@@ -15,6 +15,9 @@
  */
 package com.itau.esb.custacctvalidaterelation.transformations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -42,22 +45,18 @@ public class TransformationComponent {
 		status.setStatusCode(ex.getProperty(Headers.STATUS_CODE, String.class));
 		status.setStatusDesc(ex.getProperty(Headers.STATUS_DESC, String.class));
 
+		List<TrnInfoList> lista = new ArrayList<>();
 		TrnInfoList list = new TrnInfoList();
 		list.setTrnCode(ex.getProperty(Headers.TRN_CODE, String.class));
 		list.setTrnSrc(ex.getProperty(Headers.TRN_SRC, String.class));
 
 		AcctKey key = new AcctKey();
 		key.setAcctType(ex.getIn().getHeader("acctType", String.class));
-//		AdditionalStatus as = new AdditionalStatus();
-//		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) : "");
-//		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null ? ex.getProperty(Headers.AD_SEVERITY, String.class) : "");
-//		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_STATUS_CODE, String.class) : "");
-//		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null ? ex.getProperty(Headers.AD_STATUS_DESC, String.class) : "");
 
+		lista.add(list);
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(list);
-//		res.setAdditionalStatus(as);
+		res.setTrnInfoList(lista);
 		ex.getIn().setBody(res);
 		setResponseStatusCode(ex, status);
 		if(ex.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).equals(200)) {

@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse.interfaces;
+package com.itau.esb.debitnotereverse.interfaces;
 
 public class Headers {
 	public static final String TRN_CODE = "trnCode";

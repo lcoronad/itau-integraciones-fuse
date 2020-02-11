@@ -1,4 +1,4 @@
-package com.itau.esb.creditnotereverse;
+package com.itau.esb.debitnotereverse;
 
 import static org.junit.Assert.assertTrue;
 
