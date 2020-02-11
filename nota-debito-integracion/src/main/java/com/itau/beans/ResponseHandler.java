@@ -1,5 +1,7 @@
 package com.itau.beans;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.camel.Exchange;
 import org.apache.camel.Handler;
 import org.springframework.stereotype.Component;
@@ -33,5 +35,15 @@ public class ResponseHandler {
 		return dto;
 	}
 
+	public ObjectNode responseError120150(Exchange e) throws Exception {
+		Response dto = new Response();
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode obj = null;
+		dto.status = mapper.readTree(e.getProperty(Constants.RESPONSE_STATUS, String.class));
+		dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
+		obj = mapper.valueToTree(dto);
+		obj.remove("TrnInfoList");
+		return obj;
+	}
 
 }
