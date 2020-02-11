@@ -71,7 +71,7 @@ public class TestResponseData {
     	ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
     	Exchange r = producerTemplate.request(Constants.ROUTE_CONSULTA_DATOS, (p)->{p.getIn().setHeader("id_cedula", "1_2345");});
     	logger.info("Objeto obtenido:{}" , r.getIn().getBody(String.class));
-		assertThat(r.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE)).isEqualTo(400);
+		assertThat(r.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE)).isEqualTo(500);
     	
     	
 	}

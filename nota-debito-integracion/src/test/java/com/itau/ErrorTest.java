@@ -82,7 +82,7 @@ public class ErrorTest {
 		HttpEntity<Request> httpEntity = new HttpEntity<Request>(dto, httpHeaders);
 		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/accounts/v1/accounts/651016053/debit_transactions", HttpMethod.POST,httpEntity,String.class);
 		logger.info("Respuesta:{}",r.getBody());
-		assertThat(r.getStatusCodeValue()).isEqualTo(400);
+		assertThat(r.getStatusCodeValue()).isEqualTo(500);
 	}
 	
 	@Test

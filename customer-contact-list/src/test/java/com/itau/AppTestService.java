@@ -45,7 +45,7 @@ public class AppTestService {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	private final String URL = "http://localhost:8088/";
+	private final String URL = "http://localhost:";
 
 	@Test
 	public void aatestGet400() throws Exception {
@@ -70,7 +70,7 @@ public class AppTestService {
 
 		HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
 		ResponseEntity<String> response = restTemplate.exchange(
-				URL + "GET/1_123124/customers/v1/customers/getCustomerContactList?issuedIdentType=1&issuedIdentValue=1056",
+				URL + serverPort+"/GET/1_123124/customers/v1/customers/getCustomerContactList?issuedIdentType=1&issuedIdentValue=1056",
 				HttpMethod.GET, httpEntity, String.class);
 		logger.info("Response:{}", response.getBody());
 

@@ -11,6 +11,7 @@ public class Constants {
 	public static final String ROUTE_CONSUMO_SOAP = "direct:route-consulta-SOAP";
 	public static final String ROUTE_VALIDATOR_STATUS = "direct:route-consulta-validator";
 	public static final String ROUTE_EXCEPTION_STATUS = "direct:route-exception-status";
+	public static final String ROUTE_ERROR_120_150 = "direct:route-error-status";
 	public static final String RESPONSE_STATUS = "responseStatus";
 	public static final String RESPONSE_TRNINFOLIST = "responseTnrInfoList";
 	public static final String ACCID = "acctId";
