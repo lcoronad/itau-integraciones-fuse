@@ -1,13 +1,22 @@
 package com.itau.esb.adaptativa.model;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@XmlRootElement(name = "evaluarRiesgoTransaccionReturn", namespace = "http://ws.autenticacionadaptativa.intersoft.com.co")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class EvaluarRiesgoTransaccionReturn {
+
 	private String OTP;
 	private String deviceCookie;
 	private String estadoCliente;
 	private GenericResponse genericResponse;
-	private List<Pregunta> preguntas;
+	private Preguntas preguntas;
 	private String recomendedActionAA;
 	private String sessionId;
 	private String transactionId;
@@ -36,6 +45,7 @@ public class EvaluarRiesgoTransaccionReturn {
 		this.estadoCliente = estadoCliente;
 	}
 
+	@XmlElement
 	public GenericResponse getGenericResponse() {
 		return genericResponse;
 	}
@@ -44,11 +54,12 @@ public class EvaluarRiesgoTransaccionReturn {
 		this.genericResponse = genericResponse;
 	}
 
-	public List<Pregunta> getPreguntas() {
+	@XmlElement
+	public Preguntas getPreguntas() {
 		return preguntas;
 	}
 
-	public void setPreguntas(List<Pregunta> preguntas) {
+	public void setPreguntas(Preguntas preguntas) {
 		this.preguntas = preguntas;
 	}
 

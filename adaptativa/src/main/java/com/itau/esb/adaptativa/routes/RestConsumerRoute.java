@@ -53,7 +53,7 @@ public class RestConsumerRoute extends ConfigurationRoute {
 			.handled(true)
 	       .setHeader("CamelHttpResponseCode", constant(HttpStatus.SC_OK))
 	       .process(new FailureErrorProcessor())
-	       .marshal(response)
+//	       .marshal(response)
 	       .log("Error capturado: " + exceptionMessage());
 	   
         restConfiguration()
