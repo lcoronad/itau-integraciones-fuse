@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.itau.dto.Response;
 import com.itau.dto.ResponseList;
 import com.itau.exception.MyException;
@@ -19,7 +20,7 @@ public class ResponseHandler {
 	@Handler
 	@ApiModelProperty(notes = "Parametro De Salida")
 	public Response handler(Exchange e) throws MyException {
-		
+
 		Response dto = new Response();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -29,12 +30,30 @@ public class ResponseHandler {
 		} catch (Exception e2) {
 			throw new MyException(e2);
 		}
-		
-		
+
 		return dto;
 	}
-	
-	public ResponseList responseOK(Exchange e)  throws MyException {
+
+	public ObjectNode responseError120150(Exchange e) throws MyException {
+
+		Response dto = new Response();
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode obj = null;
+		try {
+			dto.status = mapper.readTree(e.getProperty(Constant.RESPONSE_STATUS, String.class));
+			dto.trnInfoList = mapper.readTree(e.getProperty(Constant.RESPONSE_TRNINFOLIST, String.class));
+			dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
+			obj = mapper.valueToTree(dto);
+			obj.remove("TrnInfoList");
+			
+		} catch (Exception e2) {
+			throw new MyException(e2);
+		}
+
+		return obj;
+	}
+
+	public ResponseList responseOK(Exchange e) throws MyException {
 		ResponseList dto = new ResponseList();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -45,7 +64,7 @@ public class ResponseHandler {
 		} catch (Exception e2) {
 			throw new MyException(e2);
 		}
-	
+
 		return dto;
 	}
 }

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.itau.dto.Response;
-
 import com.itau.exception.JsonMapperException;
 import com.itau.util.Constants;
 
@@ -33,26 +33,20 @@ public class ResponseHandler {
 		return dto;
 	}
 
-	public Response error(Exchange e) throws JsonMapperException {		
-		Response dto = new Response();
+	public ObjectNode error(Exchange e) throws JsonMapperException {		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		String status = "\"Status\": {\r\n" + 
-				"    \"statusCode\": \"000\",\r\n" + 
-				"    \"serverStatusCode\": \"0\",\r\n" + 
-				"    \"severity\": \"Info\",\r\n" + 
-				"    \"statusDesc\": \"0\"    \r\n" + 
-				"}";
-		
+		Response dto = new Response();
+		ObjectNode obj = null;
 		try {
-			dto.status = mapper.readTree(e.getProperty(Constants.RESPONSE_STATUS, String.class));
-			dto.trnInfoList = mapper.readTree(e.getProperty(Constants.RESPONSE_TRNINFOLIST, String.class));
-			dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
+			 dto.status = mapper.readTree(e.getProperty(Constants.RESPONSE_STATUS, String.class));
+			 dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
+			 obj = mapper.valueToTree(dto);
+			 obj.remove("TrnInfoList");
 		} catch (Exception e2) {
 			throw new JsonMapperException(e2);
 		}
 
-		return dto;
+		return obj;
 	}
 
 }
