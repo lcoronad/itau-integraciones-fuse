@@ -1,4 +1,4 @@
-package com.itau.esb.jpathtransferlogs.model;
+package com.itau.esb.jpattransferlogs.model;
 
 public class AdditionalStatus {
 	private String statusCode;

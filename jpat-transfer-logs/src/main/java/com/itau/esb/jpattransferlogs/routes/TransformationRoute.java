@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.jpathtransferlogs.routes;
+package com.itau.esb.jpattransferlogs.routes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
@@ -30,12 +30,12 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.itau.esb.jpathtransferlogs.configurator.ConfigurationRoute;
-import com.itau.esb.jpathtransferlogs.exceptions.CustomException;
-import com.itau.esb.jpathtransferlogs.interfaces.Headers;
-import com.itau.esb.jpathtransferlogs.model.Response;
-import com.itau.esb.jpathtransferlogs.properties.RestConsumer;
-import com.itau.esb.jpathtransferlogs.transformations.FailureErrorProcessor;
+import com.itau.esb.jpattransferlogs.configurator.ConfigurationRoute;
+import com.itau.esb.jpattransferlogs.exceptions.CustomException;
+import com.itau.esb.jpattransferlogs.interfaces.Headers;
+import com.itau.esb.jpattransferlogs.model.Response;
+import com.itau.esb.jpattransferlogs.properties.RestConsumer;
+import com.itau.esb.jpattransferlogs.transformations.FailureErrorProcessor;
 
 @Component
 public class TransformationRoute extends ConfigurationRoute {
@@ -56,14 +56,14 @@ public class TransformationRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -71,7 +71,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -79,7 +79,7 @@ public class TransformationRoute extends ConfigurationRoute {
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -87,7 +87,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());

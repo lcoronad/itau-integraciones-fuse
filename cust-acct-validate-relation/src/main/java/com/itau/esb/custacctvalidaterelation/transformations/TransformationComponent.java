@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itau.esb.custacctvalidaterelation.interfaces.Headers;
 import com.itau.esb.custacctvalidaterelation.model.AcctKey;
+import com.itau.esb.custacctvalidaterelation.model.AdditionalStatus;
 import com.itau.esb.custacctvalidaterelation.model.Response;
 import com.itau.esb.custacctvalidaterelation.model.Status;
 import com.itau.esb.custacctvalidaterelation.model.TrnInfoList;
@@ -66,20 +67,40 @@ public class TransformationComponent {
 	
 	private void setResponseStatusCode(Exchange ex, Status status) {
 		// Set the response code according to response data
-		if (status.getStatusCode().equals("000")) {
-			if (status.getSeverity().equalsIgnoreCase("Info")) {
-				// 200 ok
-				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_OK);
-			} else if (status.getSeverity().equalsIgnoreCase("Warning")) {
-				// 422
-				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_UNPROCESSABLE_ENTITY);
-			}
-		} else if (status.getStatusCode().equals("120")) {
-			// 400
-			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
-		} else if (status.getStatusCode().equals("150")) {
-			// 500
-			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		}
+				AdditionalStatus as = new AdditionalStatus();
+				as.setServerStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class));
+				as.setSeverity(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class));
+				as.setStatusCode(ex.getProperty(Headers.AD_SEVERITY, String.class));
+				as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class));
+				List<AdditionalStatus> listAS = new ArrayList<>();
+				listAS.add(as);
+
+				if (status.getStatusCode().equals("000")) {
+					if (status.getSeverity().equalsIgnoreCase("Info")) {
+						// 200 ok
+						ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_OK);
+					} else if (status.getSeverity().equalsIgnoreCase("Warning")) {
+						// 422
+						ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_UNPROCESSABLE_ENTITY);
+					}
+				} else if (status.getStatusCode().equals("120")) {
+					// 400
+					Response res = ex.getIn().getBody(Response.class);
+					Status st = res.getStatus();
+					st.setAdditionalStatus(listAS);
+					res.setStatus(st);
+					res.setTrnInfoList(null);
+					ex.getIn().setBody(res);
+					ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
+				} else if (status.getStatusCode().equals("150")) {
+					// 500
+					Response res = ex.getIn().getBody(Response.class);
+					Status st = res.getStatus();
+					st.setAdditionalStatus(listAS);
+					res.setStatus(st);
+					res.setTrnInfoList(null);
+					ex.getIn().setBody(res);
+					ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
+				}
 	}
 }

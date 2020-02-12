@@ -1,4 +1,4 @@
-package com.itau.esb.jpathtransferlogs.model;
+package com.itau.esb.jpattransferlogs.model;
 
 import java.util.List;
 

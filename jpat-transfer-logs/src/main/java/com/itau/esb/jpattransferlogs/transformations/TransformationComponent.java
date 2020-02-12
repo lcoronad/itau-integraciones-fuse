@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.itau.esb.jpathtransferlogs.transformations;
+package com.itau.esb.jpattransferlogs.transformations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +23,11 @@ import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itau.esb.jpathtransferlogs.interfaces.Headers;
-import com.itau.esb.jpathtransferlogs.model.AdditionalStatus;
-import com.itau.esb.jpathtransferlogs.model.Response;
-import com.itau.esb.jpathtransferlogs.model.Status;
-import com.itau.esb.jpathtransferlogs.model.TrnInfoList;
+import com.itau.esb.jpattransferlogs.interfaces.Headers;
+import com.itau.esb.jpattransferlogs.model.AdditionalStatus;
+import com.itau.esb.jpattransferlogs.model.Response;
+import com.itau.esb.jpattransferlogs.model.Status;
+import com.itau.esb.jpattransferlogs.model.TrnInfoList;
 
 @Component("transformationComponent")
 public class TransformationComponent {
@@ -59,7 +59,14 @@ public class TransformationComponent {
 	}
 
 	private void setResponseStatusCode(Exchange ex, Status status) {
-		// Set the response code according to response data
+		AdditionalStatus as = new AdditionalStatus();
+		as.setServerStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class));
+		as.setSeverity(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class));
+		as.setStatusCode(ex.getProperty(Headers.AD_SEVERITY, String.class));
+		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class));
+		List<AdditionalStatus> listAS = new ArrayList<>();
+		listAS.add(as);
+
 		if (status.getStatusCode().equals("000")) {
 			if (status.getSeverity().equalsIgnoreCase("Info")) {
 				// 200 ok
@@ -70,9 +77,21 @@ public class TransformationComponent {
 			}
 		} else if (status.getStatusCode().equals("120")) {
 			// 400
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
 			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
 		} else if (status.getStatusCode().equals("150")) {
 			// 500
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
 			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 	}

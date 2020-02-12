@@ -1,4 +1,4 @@
-package com.itau.esb.jpathtransferlogs.exceptions;
+package com.itau.esb.jpattransferlogs.exceptions;
 
 public class CustomException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

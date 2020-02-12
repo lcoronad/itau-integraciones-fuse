@@ -1,4 +1,4 @@
-package com.itau.esb.jpathtransferlogs.interfaces;
+package com.itau.esb.jpattransferlogs.interfaces;
 
 public class Headers {
 	public static final String TRN_CODE = "trnCode";
