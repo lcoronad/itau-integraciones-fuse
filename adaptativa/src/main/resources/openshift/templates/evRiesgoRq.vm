@@ -1,0 +1,29 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.autenticacionadaptativa.intersoft.com.co">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:evaluarRiesgoTransaccion>
+         <ws:idClientType>$!{headers.idClientType}</ws:idClientType>
+         <ws:idClient>$!{headers.idClient}</ws:idClient>
+         <ws:chanellId>$!{headers.chanellId}</ws:chanellId>
+         <ws:dateTx>$!{headers.dateTx}</ws:dateTx>
+         <ws:ip>$!{headers.ip}</ws:ip>
+         <ws:devicePrint>$!{headers.devicePrint}</ws:devicePrint>
+         <ws:deviceCookie>$!{headers.deviceCookie}</ws:deviceCookie>
+         <ws:idTx>$!{headers.idTx}</ws:idTx>
+         <ws:referer>$!{headers.referer}</ws:referer>
+         <ws:myAccountNumber>$!{headers.myAccountNumber}</ws:myAccountNumber>
+         <ws:currency>$!{headers.currency}</ws:currency>
+         <ws:otherAccountType>$!{headers.otherAccountType}</ws:otherAccountType>
+         <ws:otherAccountBankType>$!{headers.otherAccountBankType}</ws:otherAccountBankType>
+         <ws:transferMediumType>$!{headers.transferMediumType}</ws:transferMediumType>
+         <ws:otherAccountOwnershipType>$!{headers.otherAccountOwnershipType}</ws:otherAccountOwnershipType>
+         <ws:schedule>$!{headers.schedule}</ws:schedule>
+         <ws:executionSpeed>$!{headers.executionSpeed}</ws:executionSpeed>
+         <ws:otherAccountRoutingCode>$!{headers.otherAccountRoutingCode}</ws:otherAccountRoutingCode>
+         <ws:otherAccountNumber>$!{headers.otherAccountNumber}</ws:otherAccountNumber>
+         <ws:otherAccountCountry>$!{headers.otherAccountCountry}</ws:otherAccountCountry>
+         <ws:otherAccountReferenceCode>$!{headers.otherAccountReferenceCode}</ws:otherAccountReferenceCode>
+         <ws:idioma>$!{headers.idioma}</ws:idioma>
+      </ws:evaluarRiesgoTransaccion>
+   </soapenv:Body>
+</soapenv:Envelope>

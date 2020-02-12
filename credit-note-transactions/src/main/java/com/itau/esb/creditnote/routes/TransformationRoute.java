@@ -52,14 +52,14 @@ public class TransformationRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -67,7 +67,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -76,7 +76,7 @@ public class TransformationRoute extends ConfigurationRoute {
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -84,12 +84,13 @@ public class TransformationRoute extends ConfigurationRoute {
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("creditnotetransactions_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.setHeader("acctType").jsonpath("$.AccounRecord.acctType")
 			.setHeader("amt").jsonpath("$.AccounRecord.PaidCurAmt.amt")

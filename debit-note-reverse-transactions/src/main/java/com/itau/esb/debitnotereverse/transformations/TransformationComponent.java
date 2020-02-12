@@ -1,0 +1,98 @@
+/*
+ * Copyright 2005-2016 Red Hat, Inc.
+ *
+ * Red Hat licenses this file to you under the Apache License, version
+ * 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+package com.itau.esb.debitnotereverse.transformations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.camel.Exchange;
+import org.apache.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itau.esb.debitnotereverse.interfaces.Headers;
+import com.itau.esb.debitnotereverse.model.AdditionalStatus;
+import com.itau.esb.debitnotereverse.model.Response;
+import com.itau.esb.debitnotereverse.model.Status;
+import com.itau.esb.debitnotereverse.model.TrnInfoList;
+
+@Component("transformationComponent")
+public class TransformationComponent {
+
+	ObjectMapper mapper = new ObjectMapper();
+
+	public static String transformation(String body) {
+		return body;
+	}
+
+	public void mappingSuccessResponse(Exchange ex) {
+		Status status = new Status();
+		status.setServerStatusCode(ex.getProperty(Headers.SERVER_STATUS_CODE, String.class));
+		status.setSeverity(ex.getProperty(Headers.SEVERITY, String.class));
+		status.setStatusCode(ex.getProperty(Headers.STATUS_CODE, String.class));
+		status.setStatusDesc(ex.getProperty(Headers.STATUS_DESC, String.class));
+		List<TrnInfoList> lista = new ArrayList<>();
+
+		TrnInfoList list = new TrnInfoList();
+		list.setTrnCode(ex.getProperty(Headers.TRN_CODE, String.class));
+		list.setTrnSrc(ex.getProperty(Headers.TRN_SRC, String.class));
+		lista.add(list);
+		Response res = new Response();
+		res.setStatus(status);
+		res.setTrnInfoList(lista);
+		ex.getIn().setBody(res);
+		setResponseStatusCode(ex, status);
+	}
+
+	private void setResponseStatusCode(Exchange ex, Status status) {
+		// Set the response code according to response data
+		AdditionalStatus as = new AdditionalStatus();
+		as.setServerStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class));
+		as.setSeverity(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class));
+		as.setStatusCode(ex.getProperty(Headers.AD_SEVERITY, String.class));
+		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class));
+		List<AdditionalStatus> listAS = new ArrayList<>();
+		listAS.add(as);
+		
+		if (status.getStatusCode().equals("000")) {
+			if (status.getSeverity().equalsIgnoreCase("Info")) {
+				// 200 ok
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_OK);
+			} else if (status.getSeverity().equalsIgnoreCase("Warning")) {
+				// 422
+				ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_UNPROCESSABLE_ENTITY);
+			}
+		} else if (status.getStatusCode().equals("120")) {
+			// 400
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
+		} else if (status.getStatusCode().equals("150")) {
+			// 500
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
+			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		}
+	}
+}

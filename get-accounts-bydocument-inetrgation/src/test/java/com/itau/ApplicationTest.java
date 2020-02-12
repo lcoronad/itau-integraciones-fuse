@@ -54,7 +54,7 @@ public class ApplicationTest {
     }
     
     @Test
-	public void testResponse422(){
+	public void testResponseTimeout(){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
 		headers.add("requestUUID", "123456");
@@ -65,7 +65,7 @@ public class ApplicationTest {
     	HttpEntity<String> entity = new HttpEntity<>(headers); 	
     	ResponseEntity<String> response = restTemplate.exchange(URL + serverPort + path, HttpMethod.GET	,entity, String.class);
     	logger.info("Respuesta:{}", response.getBody());
-    	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(422);
+    	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(500);
 	}
 
  

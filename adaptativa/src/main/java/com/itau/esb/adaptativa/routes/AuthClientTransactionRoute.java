@@ -25,7 +25,6 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -48,9 +47,6 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 
 	@Autowired
 	private RestConsumer restConfig;
-	
-	@Autowired
-	private Environment env;
 
 	@Override
 	public void configure() throws Exception {
@@ -58,14 +54,14 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 				
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
@@ -73,28 +69,27 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 		
 		onException(JsonParseException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
-	        .marshal(response)
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 
 		 onException(JsonMappingException.class)
 	        .handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
-	        .marshal(response)
 	        .removeHeaders("*")
 	        .to("log:ERROR-CAPTURADO");
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:authClientTransactionRoute").routeId("ACT_act_adaptativa_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.to("direct:loadInfo")
 			.setHeader("respuestasWS").jsonpath("$.respuestasWS")
@@ -127,20 +122,12 @@ public class AuthClientTransactionRoute extends ConfigurationRoute {
 			.setHeader("fechaTx").jsonpath("$.fechaTx")
 			.setHeader("ip").jsonpath("$.ip")
 			.setHeader("deviceCookie").jsonpath("$.deviceCookie")
-//			
-//			.setHeader("codigo").jsonpath("$.respuestasWS.codigo")
-//			.setHeader("respuesta").jsonpath("$.respuestasWS.respuesta")
-//			.setHeader("texto").jsonpath("$.respuestasWS.texto")
-//			.setHeader("tipo").jsonpath("$.respuestasWS.tipo")
-			// --------------------------
 			.setHeader("OTP").jsonpath("$.OTP")
 			.setHeader("telefono").jsonpath("$.telefono")
 			.setHeader("movil").jsonpath("$.movil")
 			.setHeader("sessionId").jsonpath("$.sessionId")
 			.setHeader("transactionId").jsonpath("$.transactionId")
-		.end();
-		
-		
+		.end();		
 		
 		from("direct:manageSuccessResponse").routeId("ACT_ROUTE_SUCCESS_RESPONSE")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Carga de datos a propiedades del exchange (Success Response)")

@@ -58,38 +58,38 @@ public class EvalRiskRoute extends ConfigurationRoute {
 		
 		onException(HttpHostConnectException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-//		
+		
 		onException(CustomException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .marshal(response)
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-//		
-//		onException(JsonParseException.class)
-//			.handled(true)
-//	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
-//	        .process(new FailureErrorProcessor())
-//	        .marshal(response)
-//	        .removeHeaders("*")
-//	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
-//
-//		 onException(JsonMappingException.class)
-//	        .handled(true)
-//	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
-//	        .process(new FailureErrorProcessor())
-//	        .marshal(response)
-//	        .removeHeaders("*")
-//	        .to("log:ERROR-CAPTURADO");
-//		 
+		
+		onException(JsonParseException.class)
+			.handled(true)
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
+	        .process(new FailureErrorProcessor())
+	        .marshal(response)
+	        .removeHeaders("*")
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
+
+		 onException(JsonMappingException.class)
+	        .handled(true)
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
+	        .process(new FailureErrorProcessor())
+	        .marshal(response)
+	        .removeHeaders("*")
+	        .to("log:ERROR-CAPTURADO");
+	 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_OK))
+	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
@@ -105,13 +105,9 @@ public class EvalRiskRoute extends ConfigurationRoute {
 			.setHeader("SOAPAction", constant(""))
 			.setHeader(Exchange.CONTENT_TYPE, constant(restConfig.getOSBEvaluarRiesgoTransaccionContentType()))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
-//			.to("http4://SOAPService?throwExceptionOnFailure=false")
-			.to("velocity:templates/response.vm")
-			.setHeader("CamelHttpResponseCode", constant(200))
+			.to("http4://SOAPService?throwExceptionOnFailure=false")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
-			// Modificar segun respuesta
 			.setProperty("ERTR").xpath("//*[local-name()='evaluarRiesgoTransaccionReturn']", ns)
-			.setProperty("Preguntas").xpath("(//*[local-name()='preguntas'])[1]", ns)   // /*/*/*/*/*/*    //*[local-name()='preguntas']
 			.to("direct:manageSuccessResponseER")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: End process")
 		.end();
@@ -149,7 +145,5 @@ public class EvalRiskRoute extends ConfigurationRoute {
 			.removeHeaders("*")
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
 		.end();
-		
-		
 	}
 }

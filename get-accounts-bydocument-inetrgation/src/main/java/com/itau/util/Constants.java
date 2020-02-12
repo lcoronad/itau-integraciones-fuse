@@ -15,8 +15,10 @@ public class Constants {
 	public static final String ROUTE_VALIDATOR_STATUS = "direct:validator-data";
 	public static final String RESPONSE_STATUS = "responseStatus";
 	public static final String ROUTE_EXCEPTION_STATUS = "direct:route-exception-status";
+	public static final String ROUTE_EXCEPTION_STATUS_ERROR_BUS = "direct:route-exception-status-error-bus";
 	public static final String RESPONSE_TRNINFOLIST = "responseTrnInfoList";
 	public static final String RESPONSE_ACCOUNTS_CONTAC = "responseAccountsContact";
+	public static final String MESSAGE = "message";
 	
 	
 	

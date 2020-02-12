@@ -15,17 +15,38 @@
  */
 package com.itau.esb.adaptativa.transformations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.http.HttpStatus;
 
-import com.itau.esb.adaptativa.model.Response;
+import com.itau.esb.adaptativa.model.AdditionalStatus;
+import com.itau.esb.adaptativa.model.ResponseError;
+import com.itau.esb.adaptativa.model.Status;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
 		Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-		Response res = new Response();
-		// Por definir
+		ResponseError res = new ResponseError();
+		Status status = new Status();
+		AdditionalStatus as = new AdditionalStatus();
+		List<AdditionalStatus> asList = new ArrayList<>();
+		
+		status.setServerStatusCode("");
+		status.setSeverity("Error");
+		status.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		status.setStatusDesc("Error Técnico");
+		status.setAdditionalStatus(asList);
+		
+		as.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		as.setSeverity("Error");
+		as.setServerStatusCode("");
+		as.setStatusDesc(e.getMessage());
+		
+		asList.add(as);
+		res.setStatus(status);		
 		ex.getIn().setBody(res);
-
 	}
 }

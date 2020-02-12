@@ -7,45 +7,17 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 public class TestXML {
 
 	@Test
 	public void Test1() throws JsonParseException, JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		String str = "{ \"Contact\":[ { \"contactType\":\"1\", \"contactIdent\":\"1\", \"PhoneNum\":{ \"phone\":\"3145612101\", \"phoneType\":\"Mobile\" } }, { \"contactType\":\"2\", \"contactIdent\":\"2\", \"Email\":{ \"emailAddr\":\"asdadasd\" } } ] }";
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-//		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
-
-		JacksonXmlModule module = new JacksonXmlModule();
-		module.setDefaultUseWrapper(false);
-		ObjectMapper objectMapper = new XmlMapper(module);
-
-//		String xml = objectMapper.writeValueAsString(cl);
 		assertTrue(true);
 	}
 
 	@Test
 	public void Test2() throws JsonParseException, JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		String str = "{ \"Contact\":[ { \"contactType\":\"1\", \"contactIdent\":\"1\", \"PhoneNum\":{ \"phone\":\"3145612101\", \"phoneType\":\"Mobile\" } }, { \"contactType\":\"2\", \"contactIdent\":\"2\", \"Email\":{ \"emailAddr\":\"asdadasd\" } } ] }";
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-//		ContactList cl = mapper.readValue(str.getBytes(), ContactList.class);
-
-		JacksonXmlModule module = new JacksonXmlModule();
-		module.setDefaultUseWrapper(false);
-		ObjectMapper objectMapper = new XmlMapper(module);
-
-//		String xml = objectMapper.writeValueAsString(cl);
 		assertTrue(true);
 	}
 

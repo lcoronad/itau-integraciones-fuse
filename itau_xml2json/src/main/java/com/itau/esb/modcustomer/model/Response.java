@@ -1,18 +1,27 @@
 package com.itau.esb.modcustomer.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 public class Response {
-	private TrnInfoList trnInfoList;
+	
+	@JsonProperty("TrnInfoList")
+	private List<TrnInfoList> trnInfoList;
+	
+	@JsonProperty("Status")
 	private Status status;
-	private AdditionalStatus additionalStatus;
 
-	public TrnInfoList getTrnInfoList() {
+	public List<TrnInfoList> getTrnInfoList() {
 		return trnInfoList;
 	}
 
-	public void setTrnInfoList(TrnInfoList trnInfoList) {
+	public void setTrnInfoList(List<TrnInfoList> trnInfoList) {
 		this.trnInfoList = trnInfoList;
 	}
 
@@ -24,18 +33,9 @@ public class Response {
 		this.status = status;
 	}
 
-	public AdditionalStatus getAdditionalStatus() {
-		return additionalStatus;
-	}
-
-	public void setAdditionalStatus(AdditionalStatus additionalStatus) {
-		this.additionalStatus = additionalStatus;
-	}
-
 	@Override
 	public String toString() {
-		return "Response [trnInfoList=" + trnInfoList + ", status=" + status + ", additionalStatus=" + additionalStatus
-				+ "]";
+		return "Response [trnInfoList=" + trnInfoList + ", status=" + status + "]";
 	}
 
 }

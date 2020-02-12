@@ -85,7 +85,7 @@ public class ApplicationTest {
     }
     
     @Test
-    public void cerror422() throws Exception {
+    public void cerrorTimeOut() throws Exception {
     	HttpHeaders httpHeaders = new HttpHeaders();
     	httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     	httpHeaders.add("requestUUID", "123456");
@@ -97,7 +97,7 @@ public class ApplicationTest {
     	logger.info("path: {}",URL +serverPort+ "/GET/customers/v1/customers/getCustomerContactList?issuedIdentType=1&issuedIdentValue=1056");
     	ResponseEntity<String> response = restTemplate.exchange(URL + serverPort + "/GET/1_2345/customers/v1/customers/getCustomerContactList?issuedIdentType=1&issuedIdentValue=1056", HttpMethod.GET, httpEntity, String.class);
     	logger.info("Response 422:{}", response.getBody());
-    	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(422);
+    	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(500);
     }
     
     @Test
@@ -124,6 +124,32 @@ public class ApplicationTest {
     	logger.info("Response:{}", response.getBody());
 
     	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(422);
+    }
+    
+    @Test
+    public void errorCode150() throws Exception {
+    	HttpHeaders httpHeaders = new HttpHeaders();
+    	httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    	httpHeaders.add("requestUUID", "123456");
+    	httpHeaders.add("dateTime", "2019-12-30T18:33:12");
+    	httpHeaders.add("originatorName", "BancaMovil - APP PN");
+    	httpHeaders.add("originatorType", "47");
+    	httpHeaders.add("terminalId", "127.0.0.1");
+    	camelContext2.getRouteDefinition("ROUTE_GET_DATA").adviceWith(camelContext2, new AdviceWithRouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+              // send the outgoing message to mock
+          	//Ok, funcionan los dos.
+//              weaveByToUri("direct:test-route").replace().inOut("mock:routeB").setBody(simple("{{api.wallet.descripcion}}"));
+              interceptSendToEndpoint(Constant.ROUTE_CONSUMO_SOAP).skipSendToOriginalEndpoint().removeHeaders("*").to("velocity:templates/responseError150.vm");
+            }
+        });
+
+    	HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
+    	ResponseEntity<String> response = restTemplate.exchange(URL + serverPort + "/GET/1_2345/customers/v1/customers/getCustomerContactList?issuedIdentType=1&issuedIdentValue=1056", HttpMethod.GET, httpEntity, String.class);
+    	logger.info("Response:{}", response.getBody());
+
+    	assertThat(response.getStatusCodeValue()).isEqualByComparingTo(500);
     }
   
 

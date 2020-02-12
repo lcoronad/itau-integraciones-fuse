@@ -29,7 +29,7 @@
                </cmm2:TrnInfoList>
             </cmm2:MessageHeader>
             <cmm2:Status xmlns:cmm2="http://itau.com.co/commoncannonical/v2/schemas">
-               <cmm2:statusCode>150</cmm2:statusCode>
+               <cmm2:statusCode>120</cmm2:statusCode>
                <cmm2:serverStatusCode />
                <cmm2:severity>Error</cmm2:severity>
                <cmm2:statusDesc>Error General en OSB</cmm2:statusDesc>

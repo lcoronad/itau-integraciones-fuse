@@ -26,7 +26,9 @@ import com.itau.esb.creditnote.model.Response;
 import com.itau.esb.creditnote.model.Status;
 import com.itau.esb.creditnote.model.TrnInfoList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component("transformationComponent")
 public class TransformationComponent {
@@ -43,27 +45,28 @@ public class TransformationComponent {
 		status.setSeverity(ex.getProperty(Headers.SEVERITY, String.class));
 		status.setStatusCode(ex.getProperty(Headers.STATUS_CODE, String.class));
 		status.setStatusDesc(ex.getProperty(Headers.STATUS_DESC, String.class));
-
+		List<TrnInfoList> lista = new ArrayList<>();
+		
 		TrnInfoList list = new TrnInfoList();
 		list.setTrnCode(ex.getProperty(Headers.TRN_CODE, String.class));
 		list.setTrnSrc(ex.getProperty(Headers.TRN_SRC, String.class));
-		
-		AdditionalStatus as = new AdditionalStatus();
-		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) : "");
-		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null ? ex.getProperty(Headers.AD_SEVERITY, String.class) : "");
-		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null ? ex.getProperty(Headers.AD_STATUS_CODE, String.class) : "");
-		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null ? ex.getProperty(Headers.AD_STATUS_DESC, String.class) : "");
-
+		lista.add(list);
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(Arrays.asList(list));
-		res.setAdditionalStatus(as);
+		res.setTrnInfoList(lista);
 		ex.getIn().setBody(res);
 		setResponseStatusCode(ex, status);
 	}
 	
 	private void setResponseStatusCode(Exchange ex, Status status) {
-		// Set the response code according to response data
+		AdditionalStatus as = new AdditionalStatus();
+		as.setServerStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class));
+		as.setSeverity(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class));
+		as.setStatusCode(ex.getProperty(Headers.AD_SEVERITY, String.class));
+		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class));
+		List<AdditionalStatus> listAS = new ArrayList<>();
+		listAS.add(as);
+
 		if (status.getStatusCode().equals("000")) {
 			if (status.getSeverity().equalsIgnoreCase("Info")) {
 				// 200 ok
@@ -74,9 +77,21 @@ public class TransformationComponent {
 			}
 		} else if (status.getStatusCode().equals("120")) {
 			// 400
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
 			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_BAD_REQUEST);
 		} else if (status.getStatusCode().equals("150")) {
 			// 500
+			Response res = ex.getIn().getBody(Response.class);
+			Status st = res.getStatus();
+			st.setAdditionalStatus(listAS);
+			res.setStatus(st);
+			res.setTrnInfoList(null);
+			ex.getIn().setBody(res);
 			ex.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -65,7 +65,6 @@ public class TransformationRoute extends ConfigurationRoute {
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
-//	        .marshal(response)
 	        .removeHeaders("*")
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
@@ -93,6 +92,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("custacctvalidaterelation_transformation")
+			.setProperty("procesoId", simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio de operacion")
 			.process(e -> {
 				String idData = e.getIn().getHeader("customer_id", String.class);
@@ -131,10 +131,10 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.SEVERITY).xpath("/*/*/*/*/*/sch1:severity/text()", String.class, sch1)
 			.setProperty(Headers.STATUS_DESC).xpath("/*/*/*/*/*/sch1:statusDesc/text()", String.class, sch1)
 			// Aditional Status
-//			.setProperty(Headers.AD_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusCode/text()", String.class, sch1)
-//			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:serverStatusCode/text()", String.class, sch1)
-//			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:severity/text()", String.class, sch1)
-//			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch1)
+			.setProperty(Headers.AD_STATUS_CODE).xpath("/*/*/*/*/*/sch1:AdditionalStatus/sch1:statusCode/text()", String.class, sch1)
+			.setProperty(Headers.AD_SERVER_STATUS_CODE).xpath("/*/*/*/*/*/sch1:AdditionalStatus/sch1:serverStatusCode/text()", String.class, sch1)
+			.setProperty(Headers.AD_SEVERITY).xpath("/*/*/*/*/*/sch1:AdditionalStatus/sch1:severity/text()", String.class, sch1)
+			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch1:AdditionalStatus/sch1:statusDesc/text()", String.class, sch1)
 			.removeHeaders("*", "acctType|CamelHttpResponseCode")
 			.bean("transformationComponent", "mappingSuccessResponse")
 			.marshal(response)
