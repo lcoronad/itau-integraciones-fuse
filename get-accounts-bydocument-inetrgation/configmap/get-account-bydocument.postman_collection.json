@@ -1,0 +1,32 @@
+{
+	"info": {
+		"_postman_id": "4c30c7d5-c479-4dc1-a60c-e70fce467776",
+		"name": "get-account-bydocument",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-cuentas QA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-cuentas ocp dev",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

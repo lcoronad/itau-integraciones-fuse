@@ -181,7 +181,7 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 422")
 			.removeHeaders("*")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
-			.inOnly(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS)
+			.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
 		.endChoice()	
 		.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("120")))
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
@@ -202,7 +202,9 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getAccountsDetailByDocumentResponse.*.Status")
 			.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getAccountsDetailByDocumentResponse.*.*.TrnInfoList.TrnInfo")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")		
-			.throwException(DataException.class, "Error en info")
+			.bean(ResponseHandler.class)
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+			.marshal().json(JsonLibrary.Jackson)
 			.end()
 		
 		.end();
