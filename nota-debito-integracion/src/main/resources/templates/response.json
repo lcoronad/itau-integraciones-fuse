@@ -9,7 +9,7 @@
         "statusCode":"500",
         "serverStatusCode":null,
         "severity":"Error",
-        "statusDesc":"${header.error}"
+        "statusDesc":"${headers.error}"
       }
     ]
   }

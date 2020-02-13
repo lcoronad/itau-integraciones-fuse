@@ -40,7 +40,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 		
 		onException(Exception.class)
 			.handled(true)
-			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica >>>>> fuera de ruta= ${exception.message}")
 			.setBody(simple("{\"Status\":{\"statusCode\": \"500\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"${exception.message}\"} }"))
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))

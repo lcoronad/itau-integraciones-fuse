@@ -181,7 +181,7 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 422")
 			.removeHeaders("*")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
-			.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
+			.inOnly(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS)
 		.endChoice()	
 		.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("120")))
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
@@ -198,7 +198,7 @@ public class ConsultaServicioRoute extends RouteBuilder{
 	.end();
 		
 		from(Constants.ROUTE_EXCEPTION_STATUS).routeId("EXCEPTION-STATUS").streamCaching()
-			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
+			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio 1 - ${body}")
 			.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getAccountsDetailByDocumentResponse.*.Status")
 			.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getAccountsDetailByDocumentResponse.*.*.TrnInfoList.TrnInfo")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")		
@@ -208,7 +208,7 @@ public class ConsultaServicioRoute extends RouteBuilder{
 		.end();
 		
 		from(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS).routeId("EXCEPTION-STATUS-ERROR-BUS").streamCaching()
-			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
+			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio 2 - ${body}")
 			.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getAccountsDetailByDocumentResponse.*.Status")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")		
 			.bean(ResponseHandler.class,"error")

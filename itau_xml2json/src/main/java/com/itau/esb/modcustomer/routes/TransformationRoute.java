@@ -15,6 +15,8 @@
  */
 package com.itau.esb.modcustomer.routes;
 
+import java.nio.charset.StandardCharsets;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
 import org.apache.camel.LoggingLevel;
@@ -102,7 +104,7 @@ public class TransformationRoute extends ConfigurationRoute {
 					e.getIn().setHeader("issuedIdentValue", idData.split("_")[0]);
 					e.getIn().setHeader("issuedIdentType", idData.split("_")[1]);
 				} else {
-					throw new CustomException(env.getProperty("msgBasicDataError"));
+					throw new CustomException(new String(env.getProperty("msgBasicDataError").getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8));
 				}
 			})
 			.setHeader("contacts").jsonpath("$.ContactList")
