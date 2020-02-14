@@ -108,6 +108,13 @@
             <sch1:branchId/>
          </sch:Acct>
          <!--Optional:-->
+         <sch:BankInfo>
+            <sch1:bankId>$!{headers.bkInfoBankId}</sch1:bankId>
+            <sch1:name>$!{headers.bankName}</sch1:name>
+            <sch1:country>$!{headers.bankCountry}</sch1:country>
+            <sch1:city>$!{headers.bankCity}</sch1:city>
+         </sch:BankInfo>
+         <!--Optional:-->
          <sch:FromPhoneNum>
             <!--Optional:-->
             <sch1:phoneType/>

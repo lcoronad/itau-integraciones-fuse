@@ -20,7 +20,9 @@ import org.apache.camel.ExpressionEvaluationException;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.component.jackson.JacksonDataFormat;
+import org.apache.camel.http.common.HttpOperationFailedException;
 import org.apache.http.HttpStatus;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +58,7 @@ public class EvalRiskRoute extends ConfigurationRoute {
 		response.setInclude("NON_NULL");
 		response.disableFeature(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		
-		onException(HttpHostConnectException.class)
+		onException(HttpHostConnectException.class, HttpOperationFailedException.class , HttpHostConnectException.class, ConnectTimeoutException.class)
 			.handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
@@ -105,7 +107,7 @@ public class EvalRiskRoute extends ConfigurationRoute {
 			.setHeader("SOAPAction", constant(""))
 			.setHeader(Exchange.CONTENT_TYPE, constant(restConfig.getOSBEvaluarRiesgoTransaccionContentType()))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Invoking ITAU SOAP ws")
-			.to("http4://SOAPService?throwExceptionOnFailure=false")
+			.to("http4://SOAPService??httpClient.connectTimeout={{servicio.connection.timeout}}&httpClient.socketTimeout={{servicio.connection.timeout}}&throwExceptionOnFailure=true")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: WS Consumido, status code: ${headers.CamelHttpResponseCode} - body: ${body}")
 			.setProperty("ERTR").xpath("//*[local-name()='evaluarRiesgoTransaccionReturn']", ns)
 			.to("direct:manageSuccessResponseER")

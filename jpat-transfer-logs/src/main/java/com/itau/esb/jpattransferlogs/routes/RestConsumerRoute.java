@@ -79,5 +79,8 @@ public class RestConsumerRoute extends ConfigurationRoute {
             
         	.post(restConfig.getServiceName())
             	.to("direct:transformationRoute");
+        
+//        	.get(restConfig.getServiceName())
+//        		.to("direct:transactionRoute");
     }
 }

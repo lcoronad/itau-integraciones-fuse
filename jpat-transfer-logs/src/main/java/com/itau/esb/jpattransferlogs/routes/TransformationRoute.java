@@ -86,10 +86,7 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .to("log:ERROR-CAPTURADO");
 		 
 		 onException(ExpressionEvaluationException.class)
-			.handled(true)
-	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
-	        .process(new FailureErrorProcessor())
-	        .removeHeaders("*")
+		 	.continued(true)
 	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		
 		from("direct:transformationRoute").routeId("jpathtransferlogs_transformation")
@@ -123,7 +120,7 @@ public class TransformationRoute extends ConfigurationRoute {
 		    .setHeader("custType").jsonpath("$.CustId.custType")
 		    .setHeader("fullName").jsonpath("$.BenefitName.fullName")
 		    .setHeader("acctId").jsonpath("$.Acct.acctId")
-		    .setHeader("acctType").jsonpath("$.Acct.acctType")
+		    .setHeader("acctType").jsonpath("$.Acct.acctType")		    
 		    .setHeader("fromPhoneType").jsonpath("$.FromPhoneNum.phoneType")
 		    .setHeader("fromPhone").jsonpath("$.FromPhoneNum.phone")
 		    .setHeader("toPhoneType").jsonpath("$.ToPhoneNum.phoneType")
@@ -139,6 +136,11 @@ public class TransformationRoute extends ConfigurationRoute {
 		    .setHeader("carrierName").jsonpath("$.Device.carrierName")
 		    .setHeader("userName", constant(env.getProperty("vm.userName")))
 		    .setHeader("employeeIdentlNum", constant(env.getProperty("vm.employeeIdentlNum")))
+		    
+		    .setHeader("bkInfoBankId").jsonpath("$.BankInfo.bankId")
+		    .setHeader("bankName").jsonpath("$.BankInfo.bankName")
+		    .setHeader("bankCountry").jsonpath("$.BankInfo.bankCountry")
+		    .setHeader("bankCity").jsonpath("$.BankInfo.bankCity")
 		.end();
 		
 		from("direct:manageSuccessResponse").routeId("ROUTE_SUCCESS_RESPONSE")
@@ -156,7 +158,11 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
 			.removeHeaders("*")
 			.bean("transformationComponent", "mappingSuccessResponse")
-			.marshal(response)
+			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: ${body}")
+			.choice()
+				.when(simple("${headers.CamelHttpResponseCode} != 200"))
+					.marshal(response)
+			.end()
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Fin de mapeo de los datos... retornando respuesta")
 		.end();
 		
