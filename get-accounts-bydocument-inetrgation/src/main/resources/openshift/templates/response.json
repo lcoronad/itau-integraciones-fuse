@@ -3,7 +3,7 @@
       "statusCode":"500",
       "serverStatusCode":null,
       "severity":"Error",
-      "statusDesc":"Error Técnico",
+      "statusDesc":"Error Tecnico",
       "AdditionalStatus":[
          {
             "statusCode":"500",
