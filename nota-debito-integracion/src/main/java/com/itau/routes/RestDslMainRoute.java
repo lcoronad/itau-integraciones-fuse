@@ -62,9 +62,12 @@ public class RestDslMainRoute extends RouteBuilder {
         onException(Exception.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, "RestDslMain", "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
-                .setHeader("error", simple("${exception.message}"))
-                .to("velocity:templates/response.json")
-			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
+			.setHeader("error", simple("${exception.message}", String.class))
+			.process(x->{
+				String e = x.getIn().getHeader("error", String.class);
+				x.getIn().setHeader("error", e.replaceAll("\"", "'"));
+			})
+			.to("velocity:templates/response.json")			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
      

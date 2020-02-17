@@ -15,6 +15,8 @@
  */
 package com.itau.esb.custacctvalidaterelation.routes;
 
+import java.nio.charset.StandardCharsets;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ExpressionEvaluationException;
 import org.apache.camel.LoggingLevel;
