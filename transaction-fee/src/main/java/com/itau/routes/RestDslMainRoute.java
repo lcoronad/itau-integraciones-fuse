@@ -55,7 +55,7 @@ public class RestDslMainRoute extends RouteBuilder {
             .responseMessage().code(200).message("All users successfully returned").endResponseMessage()
             .route().setBody(constant("OK")).endRest()
         .post(env.getProperty("endpoint.transaction.fee")).description(env.getProperty("api.description.service")).type(Request.class)
-             .description(env.getProperty("endpoint.nota.debito.description.service")).outType(Response.class)
+             .description(env.getProperty("endpoint.transaction.fee.description.service")).outType(Response.class)
              .responseMessage().code(200).message("All users successfully created").endResponseMessage()
              .to(Constants.ROUTE_REQUEST_TRANSACTION_FEE);
         
