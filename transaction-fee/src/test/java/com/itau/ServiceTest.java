@@ -63,11 +63,7 @@ public class ServiceTest {
 		camelContext.getRouteDefinition("ROUTE_REQUEST_TRANSACTION_FEE").adviceWith(camelContext, new AdviceWithRouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-				// send the outgoing message to mock
-				// Ok, funcionan los dos.
-//	              weaveByToUri(Constant.ROUTE_CONSUMO_SOAP).replace().inOut("mock:routeB").removeHeaders("*").to("velocity:templates/response1.vm");
 				interceptSendToEndpoint(Constants.ROUTE_CONSUMO_SOAP).skipSendToOriginalEndpoint()
-						.log("-----------------------------------------> SKIP ORIGINAL ENDPOINT")
 						.setBody(constant("ok")).removeHeaders("*").to("velocity:templates/responseOK.vm");
 			}
 		});

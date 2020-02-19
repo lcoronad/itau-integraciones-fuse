@@ -56,27 +56,38 @@ public class ErrorWarningTests {
         httpHeaders.add("originatorType", "141");
         httpHeaders.add("terminalId", "127.0.0.1");
 
-        camelContext.getRouteDefinition("ROUTE_CONSULTA_DATOS").adviceWith(camelContext, new AdviceWithRouteBuilder() {
+        camelContext.getRouteDefinition("ROUTE_REQUEST_TRANSACTION_FEE").adviceWith(camelContext, new AdviceWithRouteBuilder() {
             @Override
             public void configure() throws Exception {
-                // send the outgoing message to mock
-                // Ok, funcionan los dos.
-//	              weaveByToUri(Constant.ROUTE_CONSUMO_SOAP).replace().inOut("mock:routeB").removeHeaders("*").to("velocity:templates/response1.vm");
                 interceptSendToEndpoint(Constants.ROUTE_CONSUMO_SOAP).skipSendToOriginalEndpoint()
                         .setBody(constant("ok")).removeHeaders("*").to("velocity:templates/responseErrorWarning.vm");
             }
         });
 
         Request dto = new Request();
-        /*dto.accounRecord.acctType = "AHO";
-        dto.accounRecord.branchId = "-1";
-        dto.accounRecord.chargeCode = "633";
-        dto.accounRecord.trnCategory = "892";
-        dto.accounRecord.desc = "Nota Debito";
-        dto.accounRecord.publiCurAmt.amt = new BigDecimal(10);
-        dto.accounRecord.publiCurAmt.curCode = "CUP";*/
+        dto.ownerInd = true;
+        dto.trnCategory = "0";
+        dto.trnCode = "850";
+        dto.referenceInfo.reference = "TRANSFER-850";
+        dto.fromAcct.accKeys.acctId = "731029642";
+        dto.fromAcct.accKeys.acctType = "AHO";
+        dto.fromAcct.accKeys.acctSubType = "211";
+        dto.fromAcct.custID.custPermId = "79805128";
+        dto.fromAcct.custID.custType = "1";
+        dto.fromAcct.addInfo = "";
+        dto.toAcct.accKeys.acctId = "731029642";
+        dto.toAcct.accKeys.acctType = "AHO";
+        dto.toAcct.accKeys.acctSubType = "211";
+        dto.toAcct.custID.custPermId = "79805128";
+        dto.toAcct.custID.custType = "1";
+        dto.toAcct.addInfo = "";
+        dto.bankId = "014";
+        dto.curAmt.amt = 1000L;
+        dto.curAmt.curCode = "COP";
+        dto.effDt = "2020-02-07T20:36:19.970";
+        dto.terminalType = "Cajero Propio";
         HttpEntity<Request> httpEntity = new HttpEntity<Request>(dto, httpHeaders);
-        ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/accounts/v1/accounts/651016053/debit_transactions", HttpMethod.POST,httpEntity,String.class);
+        ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transaction_fee", HttpMethod.POST,httpEntity,String.class);
         logger.info("Respuesta:{}",r.getBody());
         assertThat(r.getStatusCodeValue()).isEqualTo(422);
 

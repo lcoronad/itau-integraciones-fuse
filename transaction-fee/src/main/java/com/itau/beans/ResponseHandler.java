@@ -30,12 +30,15 @@ public class ResponseHandler {
 			dto.status = mapper.readTree(e.getProperty(Constants.RESPONSE_STATUS, String.class));
 			dto.trnInfoList = mapper.readTree(e.getProperty(Constants.RESPONSE_TRNINFOLIST, String.class));
 			dto.status = dto.status.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.status.get(0);
-			dto.transactionFee = mapper.readTree(e.getProperty(Constants.RESPONSE_TRANSACTIONFEE, String.class));
-			dto.transactionFee = dto.transactionFee.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.transactionFee.get(0);
+			if (Objects.nonNull(e.getProperty(Constants.RESPONSE_TRANSACTIONFEE, String.class))) {
+				dto.transactionFee = mapper.readTree(e.getProperty(Constants.RESPONSE_TRANSACTIONFEE, String.class));
+				dto.transactionFee = dto.transactionFee.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.transactionFee.get(0);
+			} else {
+				dto.transactionFee = null;
+			}
 		} catch (Exception e2) {
 			throw new JsonMapperException(e2);
 		}
-
 		return dto;
 	}
 
