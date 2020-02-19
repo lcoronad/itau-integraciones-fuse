@@ -1,4 +1,4 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/support/transfertransactionlog/v1/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">
+   <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sch="http://itau.com.co/services/accounts/transactionfee/v1/definitions/schemas" xmlns:sch1="http://itau.com.co/commoncannonical/v2/schemas">
    <soapenv:Header/>
    <soapenv:Body>
       <sch:modTransferTransactionLogRq>
@@ -52,11 +52,14 @@
             </sch1:User>
          </sch:HeaderRequest>
          <!--Optional:-->
-         <sch:trnDt>$!{headers.trnDt}</sch:trnDt>
+         <sch:ownerInd>$!{ownerInd}</sch:ownerInd>
+         <sch:trnCategory>$!{ownerInd}</sch:trnCategory>
+         <sch:trnCode>$!{ownerInd}</sch:trnCode>
          <!--Optional:-->
-         <sch:Trn>
+         <sch:ReferenceInfo>
             <!--Optional:-->
-            <sch:trnId>$!{headers.trnId}</sch:trnId>
+            <sch:referenceID
+            >$!{headers.trnId}</sch:referenceID>
             <!--Optional:-->
             <sch:trnType>$!{headers.trnType}</sch:trnType>
             <!--Optional:-->
@@ -73,7 +76,7 @@
             </sch:TrnStatus>
             <!--Optional:-->
             <sch:effDt>$!{headers.effDt}</sch:effDt>
-         </sch:Trn>
+         </sch:ReferenceInfo>
          <sch:CustId>
             <!--Optional:-->
             <sch1:SPName/>
