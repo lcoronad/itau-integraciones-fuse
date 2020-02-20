@@ -4,18 +4,19 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import io.swagger.annotations.ApiModel;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
-@JsonAutoDetect
-@JsonSerialize
+
+@JacksonXmlRootElement
 @ApiModel(description = "Request DTO Object")
 public class Request {
 	
 	@JsonProperty("ownerInd")
-	@JacksonXmlProperty(localName = "sch:acctType")
+	@JacksonXmlProperty(localName = "sch:ownerInd")
 	public Boolean ownerInd;
 
 	@JsonProperty
@@ -50,19 +51,19 @@ public class Request {
 	@JacksonXmlProperty(localName = "sch:effDt")
 	public String effDt;
 
-	@JsonProperty
+	/*@JsonProperty
 	@JacksonXmlProperty(localName = "sch:terminalType")
-	public String terminalType;
+	public String terminalType;*/
 	
 	public class ReferenceInfo {
 		public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
 		@JsonProperty(value = "referenceID")
-		@JacksonXmlProperty(localName = "sch:referenceID")
+		@JacksonXmlProperty(localName = "sch1:referenceID")
 		public String referenceID;
 
 		@JsonProperty(value = "reference")
-		@JacksonXmlProperty(localName = "sch:reference")
+		@JacksonXmlProperty(localName = "sch1:reference")
 		public String reference;
 	}
 
@@ -85,15 +86,15 @@ public class Request {
 			public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
 			@JsonProperty("acctId")
-			@JacksonXmlProperty(localName = "sch:acctId")
+			@JacksonXmlProperty(localName = "sch1:acctId")
 			public String acctId  = "";
 
 			@JsonProperty
-			@JacksonXmlProperty(localName = "sch:acctType")
+			@JacksonXmlProperty(localName = "sch1:acctType")
 			public String acctType = "";
 
 			@JsonProperty
-			@JacksonXmlProperty(localName = "sch:acctSubType")
+			@JacksonXmlProperty(localName = "sch1:acctSubType")
 			public String acctSubType = "";
 		}
 
@@ -101,11 +102,11 @@ public class Request {
 			public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
 			@JsonProperty
-			@JacksonXmlProperty(localName = "sch:custPermId")
+			@JacksonXmlProperty(localName = "sch1:custPermId")
 			public String custPermId;
 
 			@JsonProperty
-			@JacksonXmlProperty(localName = "sch:custType")
+			@JacksonXmlProperty(localName = "sch1:custType")
 			public String custType;
 
 		}
@@ -116,11 +117,11 @@ public class Request {
 		public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
 		@JsonProperty
-		@JacksonXmlProperty(localName = "sch:amt")
+		@JacksonXmlProperty(localName = "sch1:amt")
 		public Long amt;
 
 		@JsonProperty
-		@JacksonXmlProperty(localName = "sch:curCode")
+		@JacksonXmlProperty(localName = "sch1:curCode")
 		public String curCode = "";
 	}
 

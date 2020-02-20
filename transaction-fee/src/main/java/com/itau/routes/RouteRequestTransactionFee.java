@@ -100,7 +100,6 @@ public class RouteRequestTransactionFee extends RouteBuilder{
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end()
-				.log("------------------------------------> inicia servicio")
 			.setProperty(Constants.PROCESO_ID, simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta principal")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos del cliente ${headers.id_cedula}")
@@ -109,13 +108,14 @@ public class RouteRequestTransactionFee extends RouteBuilder{
 		        Map<String, String> otherNamespaces = new HashMap<>();
 		        otherNamespaces.put("ns4", "http://itau.com.co/commoncannonical/v2/schemas");
 		        otherNamespaces.put("ns3", "http://itau.com.co/commoncannonical/v3/schemas");
-		        logger.info("---------------------------------> pARSE BODY");
-				Request dto = x.getIn().getBody(Request.class);
+		        Request dto = x.getIn().getBody(Request.class);
 				//dto.Acct.CustID = x.getIn().getHeader(Constants.ACCID,String.class);
 
 				XmlMapper mapper = new XmlMapper(new NamespaceXmlFactory(defaultNamespace, otherNamespaces));
 				mapper.enable(SerializationFeature.INDENT_OUTPUT);
 				String xml = mapper.writeValueAsString(dto);
+				xml = xml.replaceAll("<Request>", "");
+				xml = xml.replaceAll("</Request>", "");		
 				logger.info("Resultado:{}", xml);
 				x.getIn().setBody(xml);
 				
@@ -149,6 +149,7 @@ public class RouteRequestTransactionFee extends RouteBuilder{
 			.removeHeader("CamelHttpQuery")
 			.setHeader(Exchange.HTTP_URI, simple("{{servicio.url}}"))
 			.setHeader(Exchange.HTTP_METHOD, constant(HttpMethod.POST))
+			.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 			.to("http4:dummy?httpClient.connectTimeout={{servicio.connection.timeout}}&httpClient.socketTimeout={{servicio.connection.timeout}}&throwExceptionOnFailure=true")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Status respuesta de servicio  SOAP  ${headers.CamelHttpResponseCode}")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Finalizo consumo de servicio  SOAP  ${body}")
