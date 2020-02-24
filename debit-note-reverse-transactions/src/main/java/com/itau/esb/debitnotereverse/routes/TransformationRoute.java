@@ -77,9 +77,8 @@ public class TransformationRoute extends ConfigurationRoute {
 	        .handled(true)
 	        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.SC_INTERNAL_SERVER_ERROR))
 	        .process(new FailureErrorProcessor())
-	        .marshal(response)
 	        .removeHeaders("*")
-	        .to("log:ERROR-CAPTURADO");
+	        .log(LoggingLevel.ERROR, logger, ERROR_LABEL + exceptionMessage());
 		 
 		 onException(ExpressionEvaluationException.class)
 			.handled(true)
@@ -122,7 +121,10 @@ public class TransformationRoute extends ConfigurationRoute {
 			.setProperty(Headers.AD_STATUS_DESC).xpath("/*/*/*/*/*/sch:AdditionalStatus/sch:statusDesc/text()", String.class, sch)
 			.removeHeaders("*")
 			.bean("transformationComponent", "mappingSuccessResponse")
-			.marshal(response)
+			.choice()
+			.when(simple("${headers.CamelHttpResponseCode} != 200"))
+				.marshal(response)
+			.end()
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Fin de mapeo de los datos... retornando respuesta")
 		.end();
 		

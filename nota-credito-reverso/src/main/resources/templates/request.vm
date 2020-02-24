@@ -17,7 +17,7 @@
 					</sch1:MessageInfo>
 					<sch1:TrnInfoList>
 						<sch1:TrnInfo>
-							<sch1:trnCode>$!{headers.trnCode}</sch1:trnCode>
+							<sch1:trnCode>$!{headers.transaction_id}</sch1:trnCode>
 							<sch1:trnSrc>$!{headers.trnSrc}</sch1:trnSrc>
 						</sch1:TrnInfo>
 					</sch1:TrnInfoList>
