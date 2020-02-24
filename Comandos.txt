@@ -1,0 +1,80 @@
+http://10.91.250.20:8083/
+
+http://10.91.250.20:8083/
+https://maven.repository.redhat.com
+
+-Dhttp.proxyUsername=OPX05360 -Dhttp.proxyPassword=Detox1012*
+
+git config --global http.proxy http://OPX05360:Detox1012*@10.91.250.20:8080
+
+https://github.com/efrozo23/customer-contact-list.git
+
+-c http.sslVerify=false
+
+http://colabhmll001.itauco.col:12300/Jboss-Fuse/accounts.git
+
+http://10.186.28.134:12300:OER00362/Jboss-Fuse/customers.git
+
+http://10.186.28.134:12300/Jboss-Fuse/customers.git
+
+http://OER00362:Sena@105610.186.28.134:12300/Jboss-Fuse/customers.git
+
+http://colabhmll001.itauco.col:12300/Jboss-Fuse/customers.git
+
+http://10.186.28.134:12300/Jboss-Fuse/customers
+
+
+
+#GIT
+git -c http.sslVerify=false http.proxy http://OPX05360:Detox1012*@10.91.250.20:8080 push assert Developer
+git -c http.sslVerify=false push
+git -c http.sslVerify=false pull
+
+C:\Users\OXP05360\Documents\Tools\OC\oc
+C:\Users\OXP05360\Documents\Tools\OC\oc 
+
+mvn clean fabric8:deploy -Popenshift -Dfabric8.namespace=itau-co-transferenciasya -DskipTests
+#path oc
+set PATH=%PATH%;C:\Users\OXP05360\Documents\Tools\OC
+#DESPLIEGUE
+oc login --insecure-skip-tls-verify --server=https://ocpdev.itauco.col -u OXP05360
+mvn clean fabric8:deploy -Popenshift -Dfabric8.namespace=itau-co-transferenciasya -DskipTests
+
+#OTROS
+C:\Users\OXP05360\Documents\Tools\OC\oc 
+
+setx /M path "%path%;C:\Users\OXP05360\Documents\Tools\OC\"
+
+git -c http.sslVerify=false push assert Developer
+git -c http.sslVerify=false pull assert Developer
+
+git -c http.sslVerify=false push redhat Developer
+git -c http.sslVerify=false pull redhat Developer
+
+git clone -c http.sslVerify=false
+
+git config --global --unset core.gitproxy
+git config --global --unset credential.helper
+feature/er-co-getcontactlist
+
+git config --global http.sslVerify false
+
+git config --system http.sslCAPath /path/to/cacerts
+
+https://ocpqa.itauco.col/
+admin	ITAU2019*
+
+
+
+$ git remote -v
+assert  https://github.com/efrozo23/customer-contact-list.git (fetch)
+assert  https://github.com/efrozo23/customer-contact-list.git (push)
+origin  http://10.186.28.134:12300/Jboss-Fuse/customers.git (fetch)
+origin  http://10.186.28.134:12300/Jboss-Fuse/customers.git (push)
+
+oer00362
+Sena@1056
+
+
+
+2bf20b6d24744b178ff834c9a9afd0af
