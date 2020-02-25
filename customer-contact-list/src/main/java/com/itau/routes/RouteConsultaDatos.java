@@ -91,13 +91,13 @@ public class RouteConsultaDatos extends RouteBuilder{
 			.end()
 		 	.setProperty(Constant.PROCESO_ID, simple("${exchangeId}"))
 		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta de Consulta de datos")
-		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos recividos ${headers.id_cedula}")
+		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos recibidos ${headers.id_cedula}")
 		 	.process(e->{
 		 		String[] dataClient = e.getIn().getHeader("id_cedula", String.class).split("_");
 		 		e.getIn().setHeader("issuedIdentType", dataClient[1]);
 		 		e.getIn().setHeader("issuedIdentValue", dataClient[0]);
 		 	})
-		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Headers recividos  ${headers}")
+		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Headers recibidos  ${headers}")
 		 	.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio a cargar el template")
 		 	.to("velocity:templates/request.vm?propertiesFile=velocity.properties")
 		 	.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Plantilla cargada de request \n ${body}")
@@ -116,8 +116,6 @@ public class RouteConsultaDatos extends RouteBuilder{
 					String jsondto = objectMapper.writeValueAsString(dto);
 					x.getIn().setBody(jsondto);
 					logger.info("Proceso:{} | Mensaje: Resultado:{}" ,x.getProperty(Constant.PROCESO_ID), jsondto);
-					
-					
 		 	})
 		 	.to(Constant.ROUTE_VALIDATOR_STATUS)
 		 	.end();
@@ -157,7 +155,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 					.log(LoggingLevel.DEBUG, logger, "Response Code: 422")
 					.removeHeaders("*")
 					.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
-					.inOnly(Constant.ROUTE_EXCEPTION_STATUS)
+					.inOnly(Constant.ROUTE_ERROR)
 				.endChoice()	
 				.when(PredicateBuilder.or(exchangeProperty(Constant.STATUS).convertToString().isEqualTo("120")))
 					.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
@@ -183,16 +181,52 @@ public class RouteConsultaDatos extends RouteBuilder{
 		.end()
 			.end();
 		
+		from(Constant.ROUTE_ERROR).routeId("EXCEPTION-STATUS-000-WARNING").streamCaching()
+			.setProperty(Constant.SERVER_STATUS_CODE).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.serverStatusCode")
+			.setProperty(Constant.SEVERITY).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.severity")
+			.setProperty(Constant.STATUS_CODE).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.statusCode")
+			.setProperty(Constant.STATUS_DESC).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.statusDesc")
+			.setProperty(Constant.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.MessageHeader.TrnInfoList.TrnInfo")
+			.bean(ResponseHandler.class,"responseError120150")
+			.marshal().json(JsonLibrary.Jackson)
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+		.end();
+		
+		
 		from(Constant.ROUTE_EXCEPTION_STATUS_ERROR_BUS).routeId("EXCEPTION-STATUS-120").streamCaching()
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio para codigo 120 y 150")
 			.setProperty(Constant.RESPONSE_STATUS).jsonpath("$.Body.getCustomerContactListRs.*.Status")
 			.setProperty(Constant.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getCustomerContactListRs.*.*.TrnInfoList.TrnInfo")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")
+			
+			
+			.setProperty(Constant.ADDITIONAL_STATUS).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.AdditionalStatus")
+			.setProperty(Constant.SERVER_STATUS_CODE).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.AdditionalStatus.serverStatusCode")
+			.setProperty(Constant.SEVERITY).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.AdditionalStatus.severity")
+			.setProperty(Constant.STATUS_CODE).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.AdditionalStatus.statusCode")
+			.setProperty(Constant.STATUS_DESC).jsonpath("$.Body.getCustomerContactListRs.HeaderResponse.Status.AdditionalStatus.statusDesc")
+			.log("Fin seteo de datos")
 			.bean(ResponseHandler.class,"responseError120150")
 			.marshal().json(JsonLibrary.Jackson)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
+		
+			from(Constant.ROUTE_ERROR_120_150).routeId("ROUTE_ERROR_120_150").streamCaching()
+		        .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
+		        .setProperty(Constant.RESPONSE_STATUS).jsonpath("$.Body.doDebitAccountRs.*.Status")
+		        .setProperty(Constant.STATUS_CODE).jsonpath("$.Body.doDebitAccountRs.HeaderResponse.Status.statusCode")
+		        .setProperty(Constant.SERVER_STATUS_CODE).jsonpath("$.Body.doDebitAccountRs.HeaderResponse.Status.serverStatusCode")
+		        .setProperty(Constant.SEVERITY).jsonpath("$.Body.doDebitAccountRs.HeaderResponse.Status.severity")
+		        .setProperty(Constant.STATUS_DESC).jsonpath("$.Body.doDebitAccountRs.HeaderResponse.Status.statusDesc")
+		        .setProperty(Constant.ADDITIONAL_STATUS).jsonpath("$.Body.doDebitAccountRs.*.*.AdditionalStatus")
+		        .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus} | ADITIONAL status ${exchangeProperty.AdditionalStatus}")
+		        .bean(ResponseHandler.class, "responseError120150")
+		        .marshal().json(JsonLibrary.Jackson)
+		        .log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+		        .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+	        .end();
 		
 	}
 

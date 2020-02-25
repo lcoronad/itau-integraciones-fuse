@@ -26,43 +26,36 @@ import com.itau.esb.debitnotereverse.interfaces.Headers;
 import com.itau.esb.debitnotereverse.model.AdditionalStatus;
 import com.itau.esb.debitnotereverse.model.Response;
 import com.itau.esb.debitnotereverse.model.Status;
-import com.itau.esb.debitnotereverse.model.TrnInfoList;
 
 public class FailureErrorProcessor implements Processor {
 	public void process(Exchange ex) throws Exception {
 		Exception e = ex.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-		Status status = new Status();
-		status.setServerStatusCode("");
-		status.setSeverity("");
-		status.setStatusCode(""+HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		status.setStatusDesc(e.getMessage());
-		List<AdditionalStatus> asList = new ArrayList<>();
-		List<TrnInfoList> lista = new ArrayList<>();
 
-		TrnInfoList list = new TrnInfoList();
-		list.setTrnCode("");
-		list.setTrnSrc("");
-		
+		Status status = new Status();
+		status.setStatusCode("" + HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		status.setServerStatusCode("");
+		status.setSeverity("Error");
+		status.setStatusDesc("Error Tecnico");
+
+		List<AdditionalStatus> asList = new ArrayList<>();
 		AdditionalStatus as = new AdditionalStatus();
 		as.setServerStatusCode(ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class) != null
 				? ex.getProperty(Headers.AD_SERVER_STATUS_CODE, String.class)
 				: "");
 		as.setSeverity(ex.getProperty(Headers.AD_SEVERITY, String.class) != null
 				? ex.getProperty(Headers.AD_SEVERITY, String.class)
-				: "");
+				: "Error");
 		as.setStatusCode(ex.getProperty(Headers.AD_STATUS_CODE, String.class) != null
 				? ex.getProperty(Headers.AD_STATUS_CODE, String.class)
-				: "");
+				: "" + HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		as.setStatusDesc(ex.getProperty(Headers.AD_STATUS_DESC, String.class) != null
 				? ex.getProperty(Headers.AD_STATUS_DESC, String.class)
-				: "");
+				: e.getMessage());
 
-		asList.add(as);
-		lista.add(list);
 		status.setAdditionalStatus(asList);
+		asList.add(as);
 		Response res = new Response();
 		res.setStatus(status);
-		res.setTrnInfoList(lista);
 		ex.getIn().setBody(res);
 
 	}

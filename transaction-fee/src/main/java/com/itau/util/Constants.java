@@ -16,5 +16,10 @@ public class Constants {
 	public static final String RESPONSE_TRNINFOLIST = "responseTnrInfoList";
 	public static final String RESPONSE_TRANSACTIONFEE = "transactionFee";
 	public static final String ACCID = "acctId";
+	public static final String STATUS_CODE = "statusCode";
+	public static final String SERVER_STATUS_CODE = "serverStatusCode";
+	public static final String SEVERITY = "severity";
+	public static final String STATUS_DESC = "statusDesc";
+	public static final String ADDITIONAL_STATUS = "AdditionalStatus";
 
 }

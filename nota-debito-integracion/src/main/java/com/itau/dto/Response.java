@@ -29,11 +29,11 @@ public class Response implements Serializable {
     private static final long serialVersionUID = -6104876573750302537L;
 
     @JsonProperty(value = "Status")
-    @ApiModelProperty(dataType = "Object")
-    public transient JsonNode status = JsonNodeFactory.instance.objectNode();
+    public Status status;
     
     @JsonProperty(value = "TrnInfoList")
     @ApiModelProperty(dataType = "Object")
     public transient JsonNode trnInfoList = JsonNodeFactory.instance.objectNode();
 
+    
 }

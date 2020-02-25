@@ -16,9 +16,15 @@ public class Constants {
 	public static final String RESPONSE_STATUS = "responseStatus";
 	public static final String ROUTE_EXCEPTION_STATUS = "direct:route-exception-status";
 	public static final String ROUTE_EXCEPTION_STATUS_ERROR_BUS = "direct:route-exception-status-error-bus";
+	public static final String ROUTE_ERROR = "direct:route-error";
 	public static final String RESPONSE_TRNINFOLIST = "responseTrnInfoList";
 	public static final String RESPONSE_ACCOUNTS_CONTAC = "responseAccountsContact";
 	public static final String MESSAGE = "message";
+	public static final String ADDITIONAL_STATUS = "AdditionalStatus";
+	public static final String SERVER_STATUS_CODE = "serverStatusCode";
+	public static final String SEVERITY = "severity";
+	public static final String STATUS_CODE = "statusCode";
+	public static final String STATUS_DESC = "statusDesc";
 	
 	
 	

@@ -3,18 +3,32 @@ package com.itau.dto;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlAnnotationIntrospector;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
 @JacksonXmlRootElement
 @ApiModel(description = "Request DTO Object")
 public class Request {
+	@Retention(RetentionPolicy.RUNTIME)
+    public static @interface JsonOnly {
+    }
 	
+	public static class XmlAnnotationIntrospector extends JacksonXmlAnnotationIntrospector {
+        @Override
+        public boolean hasIgnoreMarker(AnnotatedMember m) {
+            return m.hasAnnotation(JsonOnly.class) || super.hasIgnoreMarker(m);
+        }
+    }
+
 	@JsonProperty("ownerInd")
 	@JacksonXmlProperty(localName = "sch:ownerInd")
 	public Boolean ownerInd;
@@ -51,10 +65,9 @@ public class Request {
 	@JacksonXmlProperty(localName = "sch:effDt")
 	public String effDt;
 
-	/*@JsonProperty
-	@JacksonXmlProperty(localName = "sch:terminalType")
-	public String terminalType;*/
-	
+	@JsonOnly
+	public String terminalType;
+
 	public class ReferenceInfo {
 		public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
@@ -67,7 +80,7 @@ public class Request {
 		public String reference;
 	}
 
-	public class Acct{
+	public class Acct {
 		public static final String DEF_NMS = "http://itau.com.co/commoncannonical/v2/schemas";
 
 		@JsonProperty("AcctKeys")
@@ -87,7 +100,7 @@ public class Request {
 
 			@JsonProperty("acctId")
 			@JacksonXmlProperty(localName = "sch1:acctId")
-			public String acctId  = "";
+			public String acctId = "";
 
 			@JsonProperty
 			@JacksonXmlProperty(localName = "sch1:acctType")
@@ -124,6 +137,5 @@ public class Request {
 		@JacksonXmlProperty(localName = "sch1:curCode")
 		public String curCode = "";
 	}
-
 
 }

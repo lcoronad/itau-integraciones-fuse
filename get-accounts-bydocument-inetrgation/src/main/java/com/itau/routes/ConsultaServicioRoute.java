@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.itau.beans.ResponseHandler;
@@ -187,13 +188,13 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
 			.removeHeaders("*")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-			.inOnly(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS)
+			.inOnly(Constants.ROUTE_ERROR)
 		.endChoice()	
 		.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("150")))
 			.log(LoggingLevel.DEBUG, logger, "Response Code: 500")
 			.removeHeaders("*")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
-			.inOnly(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS)
+			.inOnly(Constants.ROUTE_ERROR)
 		.endChoice()	
 	.end();
 		
@@ -207,6 +208,21 @@ public class ConsultaServicioRoute extends RouteBuilder{
 			.marshal().json(JsonLibrary.Jackson)
 			.end()
 		
+		.end();
+		
+		from(Constants.ROUTE_ERROR).routeId("EXCEPTION-ERROR-ROUTE").streamCaching()
+			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio 2 - ${body}")
+			.setProperty(Constants.ADDITIONAL_STATUS).jsonpath("$.Body.getAccountsDetailByDocumentResponse.HeaderResponse.Status.AdditionalStatus")
+			
+			.setProperty(Constants.STATUS_CODE).jsonpath("$.Body.getAccountsDetailByDocumentResponse.HeaderResponse.Status.statusCode")
+			.setProperty(Constants.SERVER_STATUS_CODE).jsonpath("$.Body.getAccountsDetailByDocumentResponse.HeaderResponse.Status.serverStatusCode")
+			.setProperty(Constants.SEVERITY).jsonpath("$.Body.getAccountsDetailByDocumentResponse.HeaderResponse.Status.severity")
+			.setProperty(Constants.STATUS_DESC).jsonpath("$.Body.getAccountsDetailByDocumentResponse.HeaderResponse.Status.statusDesc")
+			
+			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")		
+			.bean(ResponseHandler.class,"errorManager")
+			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
+			.marshal().json(JsonLibrary.Jackson)
 		.end();
 		
 		from(Constants.ROUTE_EXCEPTION_STATUS_ERROR_BUS).routeId("EXCEPTION-STATUS-ERROR-BUS").streamCaching()
