@@ -40,8 +40,13 @@ public class RouteConsultaDatos extends RouteBuilder{
 		
 		onException(Exception.class)
 			.handled(true)
-			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica >>>>> fuera de ruta= ${exception.message}")
-			.setBody(simple("{\"Status\":{\"statusCode\": \"500\",\"serverStatusCode\": null,\"severity\": \"Error\",\"statusDesc\": \"${exception.message}\"} }"))
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
+			.setHeader("error", simple("${exception.message}"))
+			.process(x->{
+				String e = x.getIn().getHeader("error", String.class);
+				x.getIn().setHeader("error", e.replaceAll("\"", "'"));
+			})
+			.to("velocity:templates/response.json")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
@@ -171,8 +176,8 @@ public class RouteConsultaDatos extends RouteBuilder{
 				.bean(ResponseHandler.class)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
-				.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Finalizo el proceso")					
-			.endChoice()	
+				.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Finalizo el proceso")
+			.endChoice()
 			.when(PredicateBuilder.and(exchangeProperty("status").isEqualTo("000"), exchangeProperty("severity").isEqualTo("Warning")))
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 422")
 				.removeHeaders("*")
