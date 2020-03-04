@@ -1,0 +1,38 @@
+<soapenv:Envelope 	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<Header 	xmlns="http://schemas.xmlsoap.org/soap/envelope/"/>
+	<Body 	xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+	<ns2:getTransactionFeeRs 	xmlns:ns2="http://itau.com.co/services/accounts/transactionfee/v1/definitions/schemas">
+		<ns2:HeaderResponse>
+			<sch:MessageHeader 	xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
+				<sch:MessageKey>
+					<sch:requestUUID>d6522f55-267e-4ecf-9a92-21a5cf0d224a</sch:requestUUID>
+				</sch:MessageKey>
+				<sch:MessageInfo>
+					<sch:dateTime>2020-02-07T20:36:19.970</sch:dateTime>
+					<sch:systemId/>
+					<sch:originatorName>APP Unica</sch:originatorName>
+					<sch:originatorType>141</sch:originatorType>
+					<sch:terminalId>10.38.222.1</sch:terminalId>
+					<sch:terminalType>Cajero Propio</sch:terminalType>
+				</sch:MessageInfo>
+				<sch:TrnInfoList>
+					<sch:TrnInfo>
+						<sch:trnCode/>
+						<sch:trnSrc>0020</sch:trnSrc>
+					</sch:TrnInfo>
+				</sch:TrnInfoList>
+			</sch:MessageHeader>
+			<sch:Status 	xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
+				<sch:statusCode>000</sch:statusCode>
+				<sch:serverStatusCode>0</sch:serverStatusCode>
+				<sch:severity>Info</sch:severity>
+				<sch:statusDesc>Transacción Exitosa</sch:statusDesc>
+			</sch:Status>
+		</ns2:HeaderResponse>
+		<ns2:TransactionFee>
+			<sch:amt 	xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">0</sch:amt>
+			<sch:curCode 	xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">COP</sch:curCode>
+		</ns2:TransactionFee>
+	</ns2:getTransactionFeeRs>
+	</Body>
+</soapenv:Envelope>

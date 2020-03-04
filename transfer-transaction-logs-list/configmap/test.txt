@@ -1,0 +1,39 @@
+{
+   "ownerInd":true,
+   "trnCategory":"0",
+   "trnCode":"850",
+   "ReferenceInfo":{
+      "referenceID":null,
+      "reference":"TRANSFER-850"
+   },
+   "FromAcct":{
+      "AcctKeys":{
+         "acctId":"731029642",
+         "acctType":"AHO",
+         "acctSubType":"211"
+      },
+      "CustID":{
+         "custPermId":"79805128",
+         "custType":"1"
+      },
+      "addInfo":""
+   },
+   "ToAcct":{
+      "AcctKeys":{
+         "acctId":"032907495",
+         "acctType":"CRP",
+         "acctSubType":"122"
+      },
+      "CustID":[
+
+      ],
+      "addInfo":""
+   },
+   "bankId":"014",
+   "CurAmt":{
+      "amt":1000,
+      "curCode":"COP"
+   },
+   "effDt":"2020-02-07T20:36:19.970",
+   "terminalType":"Cajero Propio"
+}

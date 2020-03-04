@@ -28,6 +28,5 @@ public class Request {
     public void setParam(String param) {
         this.param = param;
     } 
-    
 
 }
