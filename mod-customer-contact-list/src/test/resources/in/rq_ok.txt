@@ -1,0 +1,19 @@
+{
+	"ContactList": [
+		{
+			"contactType": "1",
+			"contactIdent": "1",
+			"PhoneNum": {
+				"phone":"3145612101",
+				"phoneType": "Mobile"
+			}
+		},
+		{
+			"contactType":"1",
+			"contactIdent":"2",
+			"Email": {
+				"emailAddr":"a@a.com"
+			}
+		}
+	]
+}

@@ -1,0 +1,52 @@
+{
+   "trnDt":"2020-01-27T11:49:45",
+   "Trn":{
+      "trnId":"8f6efc1f-da60-41c6-a630-baea997c5b7f",
+      "trnType":"Debito",
+      "trnSubType":"Enviar",
+      "trnCode":"15660012",
+      "trnCodeRev":"",
+      "TrnStatus":{
+         "trnStatusCode":"0",
+         "trnStatusDesc":"Transacción exitosa en ACH",
+         "trnStatusReason":""
+      },
+      "effDt":"2020-01-27T12:49:45"
+   },
+   "CustId":{
+      "custPermId":"79000444",
+      "custType":"1"
+   },
+   "BenefitName":{
+      "fullName":"Usuario destino"
+   },
+   "Acct":{
+      "acctId":"12345999",
+      "acctType":"AHO"
+   },
+   "BankInfo":{
+      "bankId": "",
+      "bankName": "BBVA",
+      "bankCountry": "CO",
+      "bankCity": "BOG"
+   },
+   "FromPhoneNum":{
+      "phoneType":"Mobile",
+      "phone":"3105552211"
+   },
+   "ToPhoneNum":{
+      "phoneType":"Mobile",
+      "phone":"3214441212"
+   },
+   "amt":15000,
+   "Device":{
+      "hash":"26fff5af6441f8e15a71e8d62c361714484b1b308c99e8eb68ca85e2a7e0dc58",
+      "brand":"Huawei",
+      "country":"CO",
+      "city":"Bogota",
+      "model":"P30 Pro",
+      "imsi":"76999874563210001233",
+      "geolocation":"CO",
+      "carrierName":"Movistar"
+   }
+}

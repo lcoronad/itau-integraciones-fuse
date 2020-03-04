@@ -1,0 +1,1 @@
+{"TrnInfoList":[{"trnCode":"-9999","trnSrc":"0020"}],"Status":{"statusCode":"000","serverStatusCode":"-108898","severity":"Warning","statusDesc":"El cliente no existe en el sistema. O no Activo"}}

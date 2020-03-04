@@ -1,0 +1,14 @@
+{
+    "TrnInfoList": [
+        {
+            "trnCode": "",
+            "trnSrc": "0020"
+        }
+    ],
+    "Status": {
+        "statusCode": "000",
+        "serverStatusCode": "0",
+        "severity": "Info",
+        "statusDesc": "REGISTRO EXITOSO"
+    }
+}

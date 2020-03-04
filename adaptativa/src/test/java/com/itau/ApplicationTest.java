@@ -13,10 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.itau.dto.ResponseSOAP;
-import com.itau.dto.ResponseSOAP.Body;
-
 /**
  * 
  * @author Red Hat
@@ -27,28 +23,24 @@ import com.itau.dto.ResponseSOAP.Body;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ApplicationTest {
 
-	@Value("${server.port}")
-	private String serverPort;
+    @Value("${server.port}")
+    private String serverPort;
+    
+    final String URL = "http://localhost:8088/healtcheck";
 
-	final String URL = "http://localhost:8088/healtcheck";
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-	@Autowired
-	private TestRestTemplate restTemplate;
+    @Test
+    public void testHealtcheck() throws Exception {
 
-	@Test
-	public void testHealtcheck() throws Exception {
+        // Call the REST API
+        ResponseEntity<String> response = restTemplate.getForEntity(URL,
+                String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().contains("Hello"));
+    }
 
-		// Call the REST API
-		ResponseEntity<String> response = restTemplate.getForEntity(URL, String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody().contains("Hello"));
-	}
-
-	@Test
-	public void testDTO() {
-		ResponseSOAP a = new ResponseSOAP();
-		a.bodyObject = (Body) new Object();
-		a.header = (JsonNode) new Object();
-	}
+   
 
 }
