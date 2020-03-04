@@ -1,0 +1,39 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <Header xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/soap/envelope/"></Header>
+   <soapenv:Body>
+      <ns1:getTransactionFeeRs xmlns:ns1="http://itau.com.co/services/accounts/debitaccount/v1/schemas">
+         <ns1:HeaderResponse>
+            <sch:MessageHeader xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
+               <sch:MessageKey>
+                  <sch:requestUUID>fdeb335c-b074-4be4-9aa2-7b7f7674df72</sch:requestUUID>
+               </sch:MessageKey>
+               <sch:MessageInfo>
+                  <sch:dateTime>2020-01-23T11:37:14</sch:dateTime>
+                  <sch:systemId/>
+                  <sch:originatorName>App Unica</sch:originatorName>
+                  <sch:originatorType>141</sch:originatorType>
+                  <sch:terminalId>172.22.244.83</sch:terminalId>
+               </sch:MessageInfo>
+               <sch:TrnInfoList>
+                  <sch:TrnInfo>
+                     <sch:trnCode>-9999</sch:trnCode>
+                     <sch:trnSrc>0020</sch:trnSrc>
+                  </sch:TrnInfo>
+               </sch:TrnInfoList>
+            </sch:MessageHeader>
+            <sch:Status xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
+               <sch:statusCode>150</sch:statusCode>
+               <sch:serverStatusCode/>
+               <sch:severity>Error</sch:severity>
+               <sch:statusDesc>Error No Identificado</sch:statusDesc>
+               <sch:AdditionalStatus>
+                  <sch:statusCode>150</sch:statusCode>
+                  <sch:serverStatusCode>OSB-382505</sch:serverStatusCode>
+                  <sch:severity>Error</sch:severity>
+                  <sch:statusDesc>REASON: OSB Validate action failed validation - DEATIL: Expected elements 'amt@http://itau.com.co/commoncannonical/v2/schemas curCode@http://itau.com.co/commoncannonical/v2/schemas' instead of 'amt@ht</sch:statusDesc>
+               </sch:AdditionalStatus>
+            </sch:Status>
+         </ns1:HeaderResponse>
+      </ns1:getTransactionFeeRs>
+   </soapenv:Body>
+</soapenv:Envelope>
