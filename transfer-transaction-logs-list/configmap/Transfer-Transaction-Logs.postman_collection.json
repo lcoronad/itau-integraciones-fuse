@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "1feb39c9-eb62-4c6f-8ade-91742490991b",
+		"name": "Transfer-Transaction-Logs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get localhost",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "requestUUID",
+						"value": "fdeb335c-b074-4be4-9aa2-7b7f7674df72",
+						"type": "text"
+					},
+					{
+						"key": "dateTime",
+						"value": "2020-01-23T11:37:14",
+						"type": "text"
+					},
+					{
+						"key": "originatorName",
+						"value": "App Unica",
+						"type": "text"
+					},
+					{
+						"key": "originatorType",
+						"value": "141",
+						"type": "text"
+					},
+					{
+						"key": "terminalId",
+						"value": "127.0.0.1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"support",
+						"v1",
+						"transfer_transaction_log"
+					],
+					"query": [
+						{
+							"key": "phone",
+							"value": "3105552211"
+						},
+						{
+							"key": "trnSubType",
+							"value": "Enviar"
+						},
+						{
+							"key": "maxRec",
+							"value": "3"
+						},
+						{
+							"key": "phoneType",
+							"value": "123456",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dev",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "requestUUID",
+						"value": "fdeb335c-b074-4be4-9aa2-7b7f7674df72",
+						"type": "text"
+					},
+					{
+						"key": "dateTime",
+						"value": "2020-01-23T11:37:14",
+						"type": "text"
+					},
+					{
+						"key": "originatorName",
+						"value": "App Unica",
+						"type": "text"
+					},
+					{
+						"key": "originatorType",
+						"value": "141",
+						"type": "text"
+					},
+					{
+						"key": "terminalId",
+						"value": "127.0.0.1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsdev.itauco.col/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"protocol": "http",
+					"host": [
+						"transfer-transaction-log-itau-co-transferenciasya",
+						"appsdev",
+						"itauco",
+						"col"
+					],
+					"path": [
+						"support",
+						"v1",
+						"transfer_transaction_log"
+					],
+					"query": [
+						{
+							"key": "phone",
+							"value": "3105552211"
+						},
+						{
+							"key": "trnSubType",
+							"value": "Enviar"
+						},
+						{
+							"key": "maxRec",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QA",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "requestUUID",
+						"value": "fdeb335c-b074-4be4-9aa2-7b7f7674df72",
+						"type": "text"
+					},
+					{
+						"key": "dateTime",
+						"value": "2020-01-23T11:37:14",
+						"type": "text"
+					},
+					{
+						"key": "originatorName",
+						"value": "App Unica",
+						"type": "text"
+					},
+					{
+						"key": "originatorType",
+						"value": "141",
+						"type": "text"
+					},
+					{
+						"key": "terminalId",
+						"value": "127.0.0.1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsqa.itauco.col/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"protocol": "http",
+					"host": [
+						"transfer-transaction-log-itau-co-transferenciasya",
+						"appsqa",
+						"itauco",
+						"col"
+					],
+					"path": [
+						"support",
+						"v1",
+						"transfer_transaction_log"
+					],
+					"query": [
+						{
+							"key": "phone",
+							"value": "3105552211"
+						},
+						{
+							"key": "trnSubType",
+							"value": "Enviar"
+						},
+						{
+							"key": "maxRec",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

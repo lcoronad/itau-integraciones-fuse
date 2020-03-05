@@ -6,10 +6,10 @@ spec:
             - name: SPRING_APPLICATION_JSON
               value: '{"server":{"undertow":{"io-threads":10, "worker-threads":20 }}}'
             - name: JAVA_OPTIONS
-              value: '-Xms512m -Xmx1024m'
+              value: '-Xms512m -Xmx512m'
           envFrom:
             - configMapRef:
-                name: transaction-fee-configmap
+                name: transfer-transaction-logs
 
           readinessProbe:
             httpGet:
