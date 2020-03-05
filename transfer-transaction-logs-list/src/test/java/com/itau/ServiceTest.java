@@ -2,7 +2,6 @@ package com.itau;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 
 import org.apache.camel.BeanInject;
@@ -60,39 +59,16 @@ public class ServiceTest {
 		httpHeaders.add("originatorType", "141");
 		httpHeaders.add("terminalId", "127.0.0.1");
 
-		camelContext.getRouteDefinition("ROUTE_REQUEST_TRANSACTION_FEE").adviceWith(camelContext, new AdviceWithRouteBuilder() {
+		camelContext.getRouteDefinition("ROUTE_REQUEST_TRANSACTION_LOGS").adviceWith(camelContext, new AdviceWithRouteBuilder() {
 			@Override
 			public void configure() throws Exception {
 				interceptSendToEndpoint(Constants.ROUTE_CONSUMO_SOAP).skipSendToOriginalEndpoint()
 						.setBody(constant("ok")).removeHeaders("*").to("velocity:templates/responseOK.vm");
 			}
 		});
-
-		Request dto = new Request();
-		dto.ownerInd = true;
-		dto.trnCategory = "0";
-		dto.trnCode = "850";
-		dto.referenceInfo.reference = "TRANSFER-850";
-		dto.fromAcct.accKeys.acctId = "731029642";
-		dto.fromAcct.accKeys.acctType = "AHO";
-		dto.fromAcct.accKeys.acctSubType = "211";
-		dto.fromAcct.custID.custPermId = "79805128";
-		dto.fromAcct.custID.custType = "1";
-		dto.fromAcct.addInfo = "";
-		dto.toAcct.accKeys.acctId = "731029642";
-		dto.toAcct.accKeys.acctType = "AHO";
-		dto.toAcct.accKeys.acctSubType = "211";
-		dto.toAcct.custID.custPermId = "79805128";
-		dto.toAcct.custID.custType = "1";
-		dto.toAcct.addInfo = "";
-		dto.bankId = "014";
-		dto.curAmt.amt = 1000L;
-		dto.curAmt.curCode = "COP";
-		dto.effDt = "2020-02-07T20:36:19.970";
-		//dto.terminalType = "Cajero Propio";
-
-		HttpEntity<Request> httpEntity = new HttpEntity<Request>(dto, httpHeaders);
-		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transaction_fee", HttpMethod.POST,httpEntity,String.class);
+	
+		HttpEntity<Request> httpEntity = new HttpEntity<Request>(httpHeaders);
+		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3", HttpMethod.GET,httpEntity,String.class);
 		logger.info("Respuesta:{}",r.getBody());
 		assertThat(r.getStatusCodeValue()).isEqualTo(200);
 	}

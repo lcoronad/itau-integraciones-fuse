@@ -54,18 +54,24 @@ public class RestDslMainRoute extends RouteBuilder {
         .get(env.getProperty("endpoint.healtcheck")).description(env.getProperty("endpoint.description.service")).outType(String.class)
             .responseMessage().code(200).message("All users successfully returned").endResponseMessage()
             .route().setBody(constant("OK")).endRest()
-        .post(env.getProperty("endpoint.transfer.transaction.log")).description(env.getProperty("api.description.service")).type(Request.class)
+        .get(env.getProperty("endpoint.transfer.transaction.log")).description(env.getProperty("api.description")).type(Request.class)
              .description(env.getProperty("endpoint.transfer.transaction.log.description.service")).outType(Response.class)
              .responseMessage().code(200).message("All users successfully created").endResponseMessage()
+             .param().name("phone").defaultValue("0")
+             .endParam()
+             .param().name("trnSubType").defaultValue("0")
+             .endParam()
+             .param().name("maxRec").defaultValue("0")
+             .endParam()
              .to(Constants.ROUTE_REQUEST_TRANSACTION_FEE);
         
         onException(Exception.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, "RestDslMain", "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
-			.setHeader("error", simple("${exception.message}"))
+			.setHeader(Constants.ERROR, simple("${exception.message}"))
 			.process(x->{
 				String e = x.getIn().getHeader("error", String.class);
-				x.getIn().setHeader("error", e.replaceAll("\"", "'"));
+				x.getIn().setHeader(Constants.ERROR, e.replaceAll("\"", "'"));
 			})
 			.to("velocity:templates/response.json")
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))

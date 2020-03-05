@@ -15,16 +15,16 @@ public class ResponseSOAP {
 
 	public static class Body {
 
-		@JsonProperty(value = "getTransactionFeeRs")
-		public GetTransactionFeeRs getTransactionFeeRs = new GetTransactionFeeRs();
+		@JsonProperty(value = "getTransferTransactionLogListRs")
+		public GetTransferTransactionLogListRs getTransactionFeeRs = new GetTransferTransactionLogListRs();
 	}
 
-	public static class GetTransactionFeeRs {
+	public static class GetTransferTransactionLogListRs {
 
 		@JsonProperty(value = "HeaderResponse")
 		public JsonNode headerResponse = JsonNodeFactory.instance.objectNode();
 
-		@JsonProperty(value = "TransactionFee")
+		@JsonProperty(value = "TransferTransctionInfoList")
 		public JsonNode transactionFee = JsonNodeFactory.instance.objectNode();
 	}
 

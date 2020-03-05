@@ -1,8 +1,6 @@
 package com.itau.routes;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
@@ -20,30 +18,38 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.itau.beans.ResponseHandler;
-import com.itau.dto.Request;
-import com.itau.dto.Request.XmlAnnotationIntrospector;
 import com.itau.dto.ResponseSOAP;
 import com.itau.exception.DataException;
 import com.itau.exception.JsonMapperException;
 import com.itau.util.Constants;
-import com.itau.util.NamespaceXmlFactory;
 
 @Component
 public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 
 	private Logger logger = LoggerFactory.getLogger(RouteRequestTransferTransactionLogs.class);
+	
+	private static final String STATUS = "$.Body.getTransferTransactionLogListRs.*.Status";
+	private static final String TRNINFO = "$.Body.getTransferTransactionLogListRs.*.*.TrnInfoList.TrnInfo";
+	private static final String STATUS_CODE = "$.Body.getTransferTransactionLogListRs.HeaderResponse.Status.statusCode";
+	private static final String SERVER_STATUS_CODE = "$.Body.getTransferTransactionLogListRs.HeaderResponse.Status.serverStatusCode";
+	private static final String SEVERITY = "$.Body.getTransferTransactionLogListRs.HeaderResponse.Status.severity";
+	private static final String STATUSDESC = "$.Body.getTransferTransactionLogListRs.HeaderResponse.Status.statusDesc";
+	private static final String EXCEPTION_MESSAGE = "${exception.message}";
+	private static final String LOAD_TEMPLATE = "velocity:templates/response.json";
+	private static final String STATUS_VALIDATOR = "status";
+	private static final String SEVERITY_VALIDATOR = "severity";
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void configure() throws Exception {
 		
 		onException(Exception.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception generica fuera de ruta= ${exception.message}")
-			.setHeader("error", simple("${exception.message}"))
-			.to("velocity:templates/response.json")
+			.setHeader(Constants.ERROR, simple(EXCEPTION_MESSAGE))
+			.to(LOAD_TEMPLATE)
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
@@ -53,26 +59,26 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception general 1: ${exception.message}")
 			.bean(ResponseHandler.class)
 			.marshal().json(JsonLibrary.Jackson)
-			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo.. \n ${body}")
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
 	
 		onException(JsonMapperException.class)
 			.handled(true)
 			.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Se presento una exception en mapeo json= ${exception.message}")
-			.setHeader("error", simple("${exception.message}"))
-			.to("velocity:templates/response.json")
+			.setHeader(Constants.ERROR, simple(EXCEPTION_MESSAGE))
+			.to(LOAD_TEMPLATE)
 			.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 			.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end();
 		
-		from(Constants.ROUTE_REQUEST_TRANSACTION_FEE).routeId("ROUTE_REQUEST_TRANSACTION_FEE").streamCaching()
+		from(Constants.ROUTE_REQUEST_TRANSACTION_FEE).routeId("ROUTE_REQUEST_TRANSACTION_LOGS").streamCaching()
 			.onException(HttpOperationFailedException.class , HttpHostConnectException.class, ConnectTimeoutException.class)
 				.handled(true)
 				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
-				.setHeader("error", simple("${exception.message}"))
-				.to("velocity:templates/response.json")
-				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
+				.setHeader(Constants.ERROR, simple(EXCEPTION_MESSAGE))
+				.to(LOAD_TEMPLATE)
+				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end()
 			.onException(NullPointerException.class)
@@ -80,7 +86,7 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una my exception general: ${exception.message}")
 		 		.bean(ResponseHandler.class)
 		 		.marshal().json(JsonLibrary.Jackson)
-		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo \n ${body}")
+		 		.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Filanizo..... \n ${body}")
 		 		.removeHeaders("*")
 		 		.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
@@ -95,33 +101,15 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 		 	.end()
 		 	.onException(Exception.class)
 				.handled(true)
-				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception HttpException: ${exception.message}")
-				.setHeader("error", simple("${exception.message}"))
-				.to("velocity:templates/response.json")
+				.log(LoggingLevel.ERROR, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Encontro una exception General: ${exception.message}")
+				.setHeader(Constants.ERROR, simple(EXCEPTION_MESSAGE))
+				.to(LOAD_TEMPLATE)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 			.end()
 			.setProperty(Constants.PROCESO_ID, simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta principal")
-			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos del cliente ${headers.id_cedula}")
-			.setHeader("terminalType").jsonpath("$.terminalType")
-			.process(x->{
-				String defaultNamespace = "";
-		        Map<String, String> otherNamespaces = new HashMap<>();
-		        otherNamespaces.put("ns4", "http://itau.com.co/commoncannonical/v2/schemas");
-		        otherNamespaces.put("ns3", "http://itau.com.co/commoncannonical/v3/schemas");
-		        Request dto = x.getIn().getBody(Request.class);
-				//dto.Acct.CustID = x.getIn().getHeader(Constants.ACCID,String.class);
 
-				XmlMapper mapper = new XmlMapper(new NamespaceXmlFactory(defaultNamespace, otherNamespaces));
-				mapper.enable(SerializationFeature.INDENT_OUTPUT);
-				String xml = mapper.writeValueAsString(dto);
-				xml = xml.replaceAll("<Request>", "");
-				xml = xml.replaceAll("</Request>", "");
-				logger.info("Resultado:{}", xml);
-				x.getIn().setBody(xml);
-				
-			})
 			.to("velocity:templates/request.vm?propertiesFile=templates/velocity.properties")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Cargo la platilla \n ${body}")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio a consumir el servicio  SOAP")
@@ -161,53 +149,58 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 		.errorHandler(noErrorHandler())
 		.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Validando Data del servicio")
 		 
-		.setProperty("status").jsonpath("$.Body.getTransactionFeeRs.*.Status.statusCode")
-		.setProperty("severity").jsonpath("$.Body.getTransactionFeeRs.*.Status.severity")
-
+		.setProperty(STATUS_VALIDATOR).jsonpath("$.Body.getTransferTransactionLogListRs.*.Status.statusCode")
+		.setProperty(SEVERITY_VALIDATOR).jsonpath("$.Body.getTransferTransactionLogListRs.*.Status.severity")
+		.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Capturo status y severity")
 		.choice()				
-			.when(PredicateBuilder.and(exchangeProperty("status").isEqualTo("000"), exchangeProperty("severity").isEqualTo("Info")))
+			.when(PredicateBuilder.and(exchangeProperty(STATUS_VALIDATOR).isEqualTo("000"), exchangeProperty(SEVERITY_VALIDATOR).isEqualTo("Info")))
 				.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: No se encontro cÃ³digo de error")
-				.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getTransactionFeeRs.*.*.TrnInfoList.TrnInfo")
-				.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getTransactionFeeRs.*.Status")
-				.setProperty(Constants.RESPONSE_TRANSACTIONFEE).jsonpath("$.Body.*.TransactionFee")
-				.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getTransactionFeeRs.*.*.TrnInfoList.TrnInfo")
-				.setProperty(Constants.STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusCode")
-	            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.serverStatusCode")
-	            .setProperty(Constants.SEVERITY).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.severity")
-	            .setProperty(Constants.STATUS_DESC).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusDesc")
+				.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath(TRNINFO)
+				.setProperty(Constants.RESPONSE_STATUS).jsonpath(STATUS)
+				.setProperty(Constants.TRANSFERTRANSACTIONINFO).jsonpath("$.Body.getTransferTransactionLogListRs.TransferTransctionInfoList.TransferTransactionInfo")
+				.setProperty(Constants.BENEFITNAME).jsonpath("$.Body.getTransferTransactionLogListRs.*.*.BenefitName")
+				.setProperty(Constants.FROMPHONENUM).jsonpath("$.Body.getTransferTransactionLogListRs.*.*.FromPhoneNum")
+				.setProperty(Constants.TOPHONENUM).jsonpath("$.Body.getTransferTransactionLogListRs.*.*.ToPhoneNum")
+				.setProperty(Constants.STATUS_CODE).jsonpath(STATUS_CODE)
+	            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath(SERVER_STATUS_CODE)
+	            .setProperty(Constants.SEVERITY).jsonpath(SEVERITY)
+	            .setProperty(Constants.STATUS_DESC).jsonpath(STATUSDESC)
 				.bean(ResponseHandler.class)
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
 				.setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_UTF8))
 				.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Finalizo el proceso")					
 			.endChoice()	
-			.when(PredicateBuilder.and(exchangeProperty("status").isEqualTo("000"), exchangeProperty("severity").isEqualTo("Warning")))
+			.when(PredicateBuilder.and(exchangeProperty(STATUS_VALIDATOR).isEqualTo("000"), exchangeProperty(SEVERITY_VALIDATOR).isEqualTo("Warning")))
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 422")
 				.removeHeaders("*")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
 				.inOnly(Constants.ROUTE_EXCEPTION_STATUS)
 			.endChoice()	
-			.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("120")))
+			.when(PredicateBuilder.or(exchangeProperty(STATUS_VALIDATOR).convertToString().isEqualTo("120")))
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 400")
 				.removeHeaders("*")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
 				.inOnly(Constants.ROUTE_ERROR_120_150)
 			.endChoice()	
-			.when(PredicateBuilder.or(exchangeProperty("status").convertToString().isEqualTo("150")))
+			.when(PredicateBuilder.or(exchangeProperty(STATUS_VALIDATOR).convertToString().isEqualTo("150")))
 				.log(LoggingLevel.DEBUG, logger, "Response Code: 500")
 				.removeHeaders("*")
 				.setHeader(Exchange.HTTP_RESPONSE_CODE, constant(500))
 				.inOnly(Constants.ROUTE_ERROR_120_150)
-			.endChoice()	
+			.endChoice()
+			.otherwise()
+				.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: No ingreso por ningun choice")
+				.throwException(Exception.class, "No se encontro data")
 		.end();
 		
 		from(Constants.ROUTE_EXCEPTION_STATUS).routeId("EXCEPTION-STATUS").streamCaching()
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
-			.setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getTransactionFeeRs.*.Status")
-			.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath("$.Body.getTransactionFeeRs.*.*.TrnInfoList.TrnInfo")
-			.setProperty(Constants.STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusCode")
-            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.serverStatusCode")
-            .setProperty(Constants.SEVERITY).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.severity")
-            .setProperty(Constants.STATUS_DESC).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusDesc")
+			.setProperty(Constants.RESPONSE_STATUS).jsonpath(STATUS)
+			.setProperty(Constants.RESPONSE_TRNINFOLIST).jsonpath(TRNINFO)
+			.setProperty(Constants.STATUS_CODE).jsonpath(STATUS_CODE)
+            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath(SERVER_STATUS_CODE)
+            .setProperty(Constants.SEVERITY).jsonpath(SEVERITY)
+            .setProperty(Constants.STATUS_DESC).jsonpath(STATUSDESC)
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")				
 			.throwException(DataException.class, "Error en info")
 		.end()
@@ -215,12 +208,12 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 
         from(Constants.ROUTE_ERROR_120_150).routeId("ROUTE_ERROR_120_150").streamCaching()
             .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Error en el servicio ")
-            .setProperty(Constants.RESPONSE_STATUS).jsonpath("$.Body.getTransactionFeeRs.*.Status")
-            .setProperty(Constants.STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusCode")
-            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.serverStatusCode")
-            .setProperty(Constants.SEVERITY).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.severity")
-            .setProperty(Constants.STATUS_DESC).jsonpath("$.Body.getTransactionFeeRs.HeaderResponse.Status.statusDesc")
-            .setProperty(Constants.ADDITIONAL_STATUS).jsonpath("$.Body.getTransactionFeeRs.*.*.AdditionalStatus")
+            .setProperty(Constants.RESPONSE_STATUS).jsonpath(STATUS)
+            .setProperty(Constants.STATUS_CODE).jsonpath(STATUS_CODE)
+            .setProperty(Constants.SERVER_STATUS_CODE).jsonpath(SERVER_STATUS_CODE)
+            .setProperty(Constants.SEVERITY).jsonpath(SEVERITY)
+            .setProperty(Constants.STATUS_DESC).jsonpath(STATUSDESC)
+            .setProperty(Constants.ADDITIONAL_STATUS).jsonpath("$.Body.getTransferTransactionLogListRs.*.*.AdditionalStatus")
             .log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Busqueda ${exchangeProperty.responseStatus}")
             .bean(ResponseHandler.class, "responseError120150")
             .marshal().json(JsonLibrary.Jackson)

@@ -1,7 +1,7 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
    <Header xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/soap/envelope/"></Header>
    <soapenv:Body>
-      <ns1:getTransactionFeeRs xmlns:ns1="http://itau.com.co/services/accounts/debitaccount/v1/schemas">
+      <ns1:getTransferTransactionLogListRs xmlns:ns1="http://itau.com.co/services/accounts/debitaccount/v1/schemas">
          <ns1:HeaderResponse>
             <sch:MessageHeader xmlns:sch="http://itau.com.co/commoncannonical/v2/schemas">
                <sch:MessageKey>
@@ -34,6 +34,6 @@
                </sch:AdditionalStatus>
             </sch:Status>
          </ns1:HeaderResponse>
-      </ns1:getTransactionFeeRs>
+      </ns1:getTransferTransactionLogListRs>
    </soapenv:Body>
 </soapenv:Envelope>

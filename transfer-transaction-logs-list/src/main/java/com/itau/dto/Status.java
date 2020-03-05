@@ -11,17 +11,21 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonInclude(Include.NON_NULL)
 public class Status {
 	
+	@JsonProperty
 	public String statusCode;
 	
+	@JsonProperty
 	public String serverStatusCode;
 	
+	@JsonProperty
 	public String severity;
 	
+	@JsonProperty
 	public String statusDesc;
 	
 	@JsonProperty(value = "AdditionalStatus")
     @ApiModelProperty(dataType = "Object")
-    public transient JsonNode AdditionalStatus = JsonNodeFactory.instance.objectNode();
+    public  JsonNode additionalStatus = JsonNodeFactory.instance.objectNode();
 	
 	
 	

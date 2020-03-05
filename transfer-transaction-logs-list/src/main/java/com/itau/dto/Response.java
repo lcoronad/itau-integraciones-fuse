@@ -25,21 +25,29 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonAutoDetect
 @JsonSerialize
 @ApiModel(description = "Response DTO Object")
-@JsonPropertyOrder(value = {"TrnInfoList","Status", "TransactionFee"})
+@JsonPropertyOrder(value = { "TrnInfoList", "Status", "BenefitName", "FromPhoneNum", "ToPhoneNum" })
 @JsonInclude(Include.NON_NULL)
 public class Response implements Serializable {
 
-    private static final long serialVersionUID = -6104876573750302537L;
+	private static final long serialVersionUID = -6104876573750302537L;
 
-    @JsonProperty(value = "Status")
-    public Status status;
-    
-    @JsonProperty(value = "TrnInfoList")
-    @ApiModelProperty(dataType = "Object")
-    public transient JsonNode trnInfoList = JsonNodeFactory.instance.objectNode();
+	@JsonProperty(value = "Status")
+	public transient Status status;
 
-    @JsonProperty(value = "TransactionFee")
-    @ApiModelProperty(dataType = "Object")
-    public transient JsonNode transactionFee = JsonNodeFactory.instance.objectNode();
+	@JsonProperty(value = "TrnInfoList")
+	@ApiModelProperty(dataType = "Object")
+	public transient JsonNode trnInfoList = JsonNodeFactory.instance.objectNode();
+
+	@JsonProperty(value = "BenefitName")
+	@ApiModelProperty(dataType = "Object")
+	public transient JsonNode benefitName = JsonNodeFactory.instance.objectNode();
+
+	@JsonProperty(value = "FromPhoneNum")
+	@ApiModelProperty(dataType = "Object")
+	public transient JsonNode fromPhoneNum = JsonNodeFactory.instance.objectNode();
+
+	@JsonProperty(value = "ToPhoneNum")
+	@ApiModelProperty(dataType = "Object")
+	public transient JsonNode toPhoneNum = JsonNodeFactory.instance.objectNode();
 
 }
