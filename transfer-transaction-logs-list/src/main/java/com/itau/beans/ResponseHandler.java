@@ -36,10 +36,16 @@ public class ResponseHandler {
 			if (Objects.nonNull(e.getProperty(Constants.TRANSFERTRANSACTIONINFO, String.class))) {
 				dto.benefitName = mapper.readTree(e.getProperty(Constants.BENEFITNAME, String.class));
 				dto.benefitName = dto.benefitName.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.benefitName.get(0);
-				dto.fromPhoneNum = mapper.readTree(e.getProperty(Constants.BENEFITNAME, String.class));
-				dto.fromPhoneNum = dto.benefitName.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.benefitName.get(0);
-				dto.toPhoneNum = mapper.readTree(e.getProperty(Constants.BENEFITNAME, String.class));
-				dto.toPhoneNum = dto.benefitName.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.benefitName.get(0);
+				if(!Objects.toString(e.getProperty(Constants.FROMPHONENUM,String.class)).isEmpty()){
+					dto.fromPhoneNum = mapper.readTree(e.getProperty(Constants.FROMPHONENUM, String.class));
+					dto.fromPhoneNum = dto.fromPhoneNum.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.fromPhoneNum.get(0);
+					
+				}
+				if(!Objects.toString(e.getProperty(Constants.TOPHONENUM,String.class)).isEmpty()){
+					dto.toPhoneNum = mapper.readTree(e.getProperty(Constants.TOPHONENUM, String.class));
+					dto.toPhoneNum = dto.toPhoneNum.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.toPhoneNum.get(0);
+					
+				}
 			} else {
 				dto.benefitName = null;
 				dto.fromPhoneNum = null;

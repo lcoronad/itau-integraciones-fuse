@@ -68,7 +68,7 @@ public class ServiceTest {
 		});
 	
 		HttpEntity<Request> httpEntity = new HttpEntity<Request>(httpHeaders);
-		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3", HttpMethod.GET,httpEntity,String.class);
+		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transfer_transaction_log?custPermId=79882545&trnSubType=1&maxRec=3&custType=1", HttpMethod.GET,httpEntity,String.class);
 		logger.info("Respuesta:{}",r.getBody());
 		assertThat(r.getStatusCodeValue()).isEqualTo(200);
 	}

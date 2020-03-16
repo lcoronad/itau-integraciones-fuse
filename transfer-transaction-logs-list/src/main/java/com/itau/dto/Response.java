@@ -44,10 +44,10 @@ public class Response implements Serializable {
 
 	@JsonProperty(value = "FromPhoneNum")
 	@ApiModelProperty(dataType = "Object")
-	public transient JsonNode fromPhoneNum = JsonNodeFactory.instance.objectNode();
+	public transient JsonNode fromPhoneNum = null;
 
 	@JsonProperty(value = "ToPhoneNum")
 	@ApiModelProperty(dataType = "Object")
-	public transient JsonNode toPhoneNum = JsonNodeFactory.instance.objectNode();
+	public transient JsonNode toPhoneNum = null;
 
 }

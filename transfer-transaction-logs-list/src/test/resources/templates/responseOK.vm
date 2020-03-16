@@ -48,18 +48,20 @@
                         <!--Optional:-->
                         <sch1:motherMaidenName></sch1:motherMaidenName>
                     </sch:BenefitName>
-                    <!--Optional:-->
+                    <!--Optional: -->
                     <sch:FromPhoneNum>
-                        <!--Optional:-->
+                       
                         <sch1:phoneType>1</sch1:phoneType>
                         <sch1:phone>3023253439</sch1:phone>
                     </sch:FromPhoneNum>
-                    <!--Optional:-->
+					
+                    <!--Optional: -->
                     <sch:ToPhoneNum>
-                        <!--Optional:-->
+                        
                         <sch1:phoneType>1</sch1:phoneType>
                         <sch1:phone>3023253439</sch1:phone>
                     </sch:ToPhoneNum>
+                    
                 </sch:TransferTransactionInfo>
             </sch:TransferTransctionInfoList>
         </sch:getTransferTransactionLogListRs>

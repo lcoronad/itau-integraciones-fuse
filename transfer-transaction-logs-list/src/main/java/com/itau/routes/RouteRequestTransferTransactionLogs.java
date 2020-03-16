@@ -109,7 +109,8 @@ public class RouteRequestTransferTransactionLogs extends RouteBuilder{
 			.end()
 			.setProperty(Constants.PROCESO_ID, simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta principal")
-
+			.setHeader("servicioUsername", simple("{{servicio.username}}"))
+			.setHeader("servicioPassword", simple("{{servicio.password}}"))
 			.to("velocity:templates/request.vm?propertiesFile=templates/velocity.properties")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Cargo la platilla \n ${body}")
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio a consumir el servicio  SOAP")
