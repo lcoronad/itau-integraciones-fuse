@@ -63,6 +63,23 @@
                     </sch:ToPhoneNum>
                     
                 </sch:TransferTransactionInfo>
+                 <sch:TransferTransactionInfo>
+                    <!--Optional:-->
+                    <sch:BenefitName>
+                        <!--Optional:-->
+                        <sch1:fullName>Elkin Rozo</sch1:fullName>
+      
+                    </sch:BenefitName>
+                  
+					
+                    <!--Optional: -->
+                    <sch:ToPhoneNum>
+                        
+                        <sch1:phoneType>1</sch1:phoneType>
+                        <sch1:phone>3023253439</sch1:phone>
+                    </sch:ToPhoneNum>
+                    
+                </sch:TransferTransactionInfo>
             </sch:TransferTransctionInfoList>
         </sch:getTransferTransactionLogListRs>
     </Body>

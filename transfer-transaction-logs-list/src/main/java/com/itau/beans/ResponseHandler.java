@@ -7,7 +7,6 @@ import org.apache.camel.Handler;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.itau.dto.Response;
 import com.itau.dto.Status;
@@ -28,29 +27,27 @@ public class ResponseHandler {
 		try {
 			dto.status = new Status();
 			dto.status.additionalStatus = null;
-			dto.status.serverStatusCode = Objects.nonNull(e.getProperty(Constants.SERVER_STATUS_CODE, String.class)) ? e.getProperty(Constants.SERVER_STATUS_CODE, String.class): "";
-			dto.status.severity = Objects.nonNull(e.getProperty(Constants.SEVERITY, String.class)) ? e.getProperty(Constants.SEVERITY, String.class): "";
-			dto.status.statusCode = Objects.nonNull(e.getProperty(Constants.STATUS_CODE, String.class)) ? e.getProperty(Constants.STATUS_CODE, String.class): "";
-			dto.status.statusDesc = Objects.nonNull(e.getProperty(Constants.STATUS_DESC, String.class)) ? e.getProperty(Constants.STATUS_DESC, String.class): "";
+			dto.status.serverStatusCode = Objects.nonNull(e.getProperty(Constants.SERVER_STATUS_CODE, String.class))
+					? e.getProperty(Constants.SERVER_STATUS_CODE, String.class)
+					: "";
+			dto.status.severity = Objects.nonNull(e.getProperty(Constants.SEVERITY, String.class))
+					? e.getProperty(Constants.SEVERITY, String.class)
+					: "";
+			dto.status.statusCode = Objects.nonNull(e.getProperty(Constants.STATUS_CODE, String.class))
+					? e.getProperty(Constants.STATUS_CODE, String.class)
+					: "";
+			dto.status.statusDesc = Objects.nonNull(e.getProperty(Constants.STATUS_DESC, String.class))
+					? e.getProperty(Constants.STATUS_DESC, String.class)
+					: "";
 			dto.trnInfoList = mapper.readTree(e.getProperty(Constants.RESPONSE_TRNINFOLIST, String.class));
 			if (Objects.nonNull(e.getProperty(Constants.TRANSFERTRANSACTIONINFO, String.class))) {
-				dto.benefitName = mapper.readTree(e.getProperty(Constants.BENEFITNAME, String.class));
-				dto.benefitName = dto.benefitName.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.benefitName.get(0);
-				if(!Objects.toString(e.getProperty(Constants.FROMPHONENUM,String.class)).isEmpty()){
-					dto.fromPhoneNum = mapper.readTree(e.getProperty(Constants.FROMPHONENUM, String.class));
-					dto.fromPhoneNum = dto.fromPhoneNum.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.fromPhoneNum.get(0);
-					
-				}
-				if(!Objects.toString(e.getProperty(Constants.TOPHONENUM,String.class)).isEmpty()){
-					dto.toPhoneNum = mapper.readTree(e.getProperty(Constants.TOPHONENUM, String.class));
-					dto.toPhoneNum = dto.toPhoneNum.get(0) == null ? JsonNodeFactory.instance.objectNode() : dto.toPhoneNum.get(0);
-					
-				}
+				dto.trnList = mapper.readTree(e.getProperty(Constants.TRANSFERTRANSACTIONINFO, String.class));
+				dto.trnList = dto.trnList == null ? null : dto.trnList.get(0);
+
 			} else {
-				dto.benefitName = null;
-				dto.fromPhoneNum = null;
-				dto.toPhoneNum = null;
+				dto.trnList = null;
 			}
+
 		} catch (Exception e2) {
 			throw new JsonMapperException(e2);
 		}
@@ -58,20 +55,26 @@ public class ResponseHandler {
 	}
 
 	public ObjectNode responseError120150(Exchange e) throws JsonMapperException {
-		
+
 		Response dto = new Response();
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode obj = null;
 		try {
 			dto.status = new Status();
 			dto.status.additionalStatus = mapper.readTree(e.getProperty(Constants.ADDITIONAL_STATUS, String.class));
-			dto.status.serverStatusCode = Objects.nonNull(e.getProperty(Constants.SERVER_STATUS_CODE, String.class)) ? e.getProperty(Constants.SERVER_STATUS_CODE, String.class): "";
-			dto.status.severity = Objects.nonNull(e.getProperty(Constants.SEVERITY, String.class)) ? e.getProperty(Constants.SEVERITY, String.class): "";
-			dto.status.statusCode = Objects.nonNull(e.getProperty(Constants.STATUS_CODE, String.class)) ? e.getProperty(Constants.STATUS_CODE, String.class): "";
-			dto.status.statusDesc = Objects.nonNull(e.getProperty(Constants.STATUS_DESC, String.class)) ? e.getProperty(Constants.STATUS_DESC, String.class): "";
-			dto.benefitName = null;
-			dto.fromPhoneNum = null;
-			dto.toPhoneNum = null;
+			dto.status.serverStatusCode = Objects.nonNull(e.getProperty(Constants.SERVER_STATUS_CODE, String.class))
+					? e.getProperty(Constants.SERVER_STATUS_CODE, String.class)
+					: "";
+			dto.status.severity = Objects.nonNull(e.getProperty(Constants.SEVERITY, String.class))
+					? e.getProperty(Constants.SEVERITY, String.class)
+					: "";
+			dto.status.statusCode = Objects.nonNull(e.getProperty(Constants.STATUS_CODE, String.class))
+					? e.getProperty(Constants.STATUS_CODE, String.class)
+					: "";
+			dto.status.statusDesc = Objects.nonNull(e.getProperty(Constants.STATUS_DESC, String.class))
+					? e.getProperty(Constants.STATUS_DESC, String.class)
+					: "";
+			
 			obj = mapper.valueToTree(dto);
 			obj.remove("TrnInfoList");
 		} catch (Exception e2) {

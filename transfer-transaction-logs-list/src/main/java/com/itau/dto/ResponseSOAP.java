@@ -1,5 +1,8 @@
 package com.itau.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -23,9 +26,17 @@ public class ResponseSOAP {
 
 		@JsonProperty(value = "HeaderResponse")
 		public JsonNode headerResponse = JsonNodeFactory.instance.objectNode();
-
+		
 		@JsonProperty(value = "TransferTransctionInfoList")
-		public JsonNode transactionFee = JsonNodeFactory.instance.objectNode();
+		public TransferTransctionInfoList listTransferTransctionInfoList = new TransferTransctionInfoList();
+		
+	}
+	
+	public static class TransferTransctionInfoList{
+		
+		
+		@JsonProperty(value = "TransferTransactionInfo")
+		public List<JsonNode> transactionFee = new ArrayList<>();
 	}
 
 }

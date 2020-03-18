@@ -40,7 +40,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8090/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"raw": "http://localhost:8090/support/v1/transfer_transaction_log?custPermId=79882545&trnSubType=1&maxRec=3&custType=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -53,21 +53,20 @@
 					],
 					"query": [
 						{
-							"key": "phone",
-							"value": "3105552211"
+							"key": "custPermId",
+							"value": "79882545"
 						},
 						{
 							"key": "trnSubType",
-							"value": "Enviar"
+							"value": "1"
 						},
 						{
 							"key": "maxRec",
 							"value": "3"
 						},
 						{
-							"key": "phoneType",
-							"value": "123456",
-							"disabled": true
+							"key": "custType",
+							"value": "1"
 						}
 					]
 				}
@@ -106,7 +105,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsdev.itauco.col/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsdev.itauco.col/support/v1/transfer_transaction_log?custPermId=79882545&trnSubType=1&maxRec=3&custType=1",
 					"protocol": "http",
 					"host": [
 						"transfer-transaction-log-itau-co-transferenciasya",
@@ -121,16 +120,20 @@
 					],
 					"query": [
 						{
-							"key": "phone",
-							"value": "3105552211"
+							"key": "custPermId",
+							"value": "79882545"
 						},
 						{
 							"key": "trnSubType",
-							"value": "Enviar"
+							"value": "1"
 						},
 						{
 							"key": "maxRec",
 							"value": "3"
+						},
+						{
+							"key": "custType",
+							"value": "1"
 						}
 					]
 				}
@@ -169,7 +172,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsqa.itauco.col/support/v1/transfer_transaction_log?phone=3105552211&trnSubType=Enviar&maxRec=3",
+					"raw": "http://transfer-transaction-log-itau-co-transferenciasya.appsqa.itauco.col/support/v1/transfer_transaction_log?custPermId=79882545&trnSubType=1&maxRec=3&custType=1",
 					"protocol": "http",
 					"host": [
 						"transfer-transaction-log-itau-co-transferenciasya",
@@ -184,17 +187,89 @@
 					],
 					"query": [
 						{
-							"key": "phone",
-							"value": "3105552211"
+							"key": "custPermId",
+							"value": "79882545"
 						},
 						{
 							"key": "trnSubType",
-							"value": "Enviar"
+							"value": "1"
 						},
 						{
 							"key": "maxRec",
 							"value": "3"
+						},
+						{
+							"key": "custType",
+							"value": "1"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://10.186.11.91:24200/services/support/transfertransactionlog/v1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sch=\"http://itau.com.co/services/support/transfertransactionlog/v1/schemas\" xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <sch:getTransferTransactionLogListRq>\r\n         <sch:HeaderRequest xmlns:ns1=\"http://itau.com.co/services/common/auditory/v2/schemas\" xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sch=\"http://itau.com.co/services/support/transfertransactionlog/v1/schemas\">\r\n            <sch1:MessageHeader xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\r\n               <sch1:MessageKey>\r\n                  <sch1:integrationId/>\r\n                  <sch1:requestVersion/>\r\n                  <sch1:requestUUID>fdeb335c-b074-4be4-9aa2-7b7f7674df72</sch1:requestUUID>\r\n               </sch1:MessageKey>\r\n               <sch1:MessageInfo>\r\n                  <sch1:dateTime>2020-01-31T14:29:09</sch1:dateTime>\r\n                  <sch1:systemId/>\r\n                  <sch1:originatorName>Portal</sch1:originatorName>\r\n                  <sch1:originatorType>141</sch1:originatorType>\r\n                  <sch1:terminalId>190.242.46.190</sch1:terminalId>\r\n                  <sch1:terminalType/>\r\n                  <sch1:bankIdType/>\r\n                  <sch1:bankId/>\r\n                  <sch1:trnType>Enviar</sch1:trnType>\r\n               </sch1:MessageInfo>\r\n               <sch1:TrnInfoList>\r\n                  <!--Zero or more repetitions:-->\r\n                  <sch1:TrnInfo>\r\n                     <sch1:trnCode/>\r\n                     <sch1:trnSrc/>\r\n                  </sch1:TrnInfo>\r\n               </sch1:TrnInfoList>\r\n            </sch1:MessageHeader>\r\n            <sch1:User xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\r\n               <sch1:userName>TEST</sch1:userName>\r\n               <sch1:userToken/>\r\n               <sch1:employeeIdentlNum>2871</sch1:employeeIdentlNum>\r\n            </sch1:User>\r\n         </sch:HeaderRequest>\r\n         <sch:CustId>\r\n            <!--Optional:-->\r\n            <sch1:SPName></sch1:SPName>\r\n            <!--Optional:-->\r\n            <sch1:custPermId>79882545</sch1:custPermId>\r\n            <!--Optional:-->\r\n            <sch1:custLoginId></sch1:custLoginId>\r\n            <!--Optional:-->\r\n            <sch1:custType>1</sch1:custType>\r\n         </sch:CustId>\r\n         <sch:trnSubType>1</sch:trnSubType>\r\n         <sch:maxRec>4</sch:maxRec>\r\n      </sch:getTransferTransactionLogListRq>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://10.186.11.91:24200/services/support/transfertransactionlog/v1",
+					"protocol": "http",
+					"host": [
+						"10",
+						"186",
+						"11",
+						"91"
+					],
+					"port": "24200",
+					"path": [
+						"services",
+						"support",
+						"transfertransactionlog",
+						"v1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://172.23.48.224:24230/services/support/transfertransactionlog/v1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sch=\"http://itau.com.co/services/support/transfertransactionlog/v1/schemas\" xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\n    <soapenv:Header/>\n    <soapenv:Body>\n        <sch:getTransferTransactionLogListRq>\n            <sch:HeaderRequest xmlns:ns1=\"http://itau.com.co/services/common/auditory/v2/schemas\" xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sch=\"http://itau.com.co/services/support/transfertransactionlog/v1/schemas\">\n                <sch1:MessageHeader xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\n                    <sch1:MessageKey>\n                        <sch1:integrationId/>\n                        <sch1:requestVersion/>\n                        <sch1:requestUUID>fdeb335c-b074-4be4-9aa2-7b7f7674df72</sch1:requestUUID>\n                    </sch1:MessageKey>\n                    <sch1:MessageInfo>\n                        <sch1:dateTime>2020-01-31T14:29:09</sch1:dateTime>\n                        <sch1:systemId/>\n                        <sch1:originatorName>Portal</sch1:originatorName>\n                        <sch1:originatorType>141</sch1:originatorType>\n                        <sch1:terminalId>190.242.46.190</sch1:terminalId>\n                        <sch1:terminalType/>\n                        <sch1:bankIdType/>\n                        <sch1:bankId/>\n                        <sch1:trnType>Enviar</sch1:trnType>\n                    </sch1:MessageInfo>\n                    <sch1:TrnInfoList>\n                        <!--Zero or more repetitions:-->\n                        <sch1:TrnInfo>\n                            <sch1:trnCode/>\n                            <sch1:trnSrc/>\n                        </sch1:TrnInfo>\n                    </sch1:TrnInfoList>\n                </sch1:MessageHeader>\n                <sch1:User xmlns:sch1=\"http://itau.com.co/commoncannonical/v2/schemas\">\n                    <sch1:userName>TEST</sch1:userName>\n                    <sch1:userToken/>\n                    <sch1:employeeIdentlNum>2871</sch1:employeeIdentlNum>\n                </sch1:User>\n            </sch:HeaderRequest>\n            <sch:CustId>\n                <!--Optional:-->\n                <sch1:SPName></sch1:SPName>\n                <!--Optional:-->\n                <sch1:custPermId>79882545</sch1:custPermId>\n                <!--Optional:-->\n                <sch1:custLoginId></sch1:custLoginId>\n                <!--Optional:-->\n                <sch1:custType>1</sch1:custType>\n            </sch:CustId>\n            <sch:trnSubType>1</sch:trnSubType>\n            <sch:maxRec>4</sch:maxRec>\n        </sch:getTransferTransactionLogListRq>\n    </soapenv:Body>\n</soapenv:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.23.48.224:24230/services/support/transfertransactionlog/v1",
+					"protocol": "http",
+					"host": [
+						"172",
+						"23",
+						"48",
+						"224"
+					],
+					"port": "24230",
+					"path": [
+						"services",
+						"support",
+						"transfertransactionlog",
+						"v1"
 					]
 				}
 			},
