@@ -102,6 +102,7 @@ public class RouteConsultaDatos extends RouteBuilder{
 			.setProperty(Constants.PROCESO_ID, simple("${exchangeId}"))
 			.log(LoggingLevel.INFO, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Inicio la ruta principal")
 			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos del cliente ${headers.id_cedula}")
+			.log(LoggingLevel.DEBUG, logger, "Proceso: ${exchangeProperty.procesoId} | Mensaje: Datos del cliente ${headers.transaction_id}")
 			.setHeader("systemId", simple("{{param.header.systemId}}"))
 			.setHeader("trnCode", simple("{{param.header.trnCode}}"))
 			.setHeader("trnSrc", simple("{{param.header.trnSrc}}"))

@@ -89,7 +89,7 @@ public class ServiceTest {
 		dto.curAmt.amt = 1000L;
 		dto.curAmt.curCode = "COP";
 		dto.effDt = "2020-02-07T20:36:19.970";
-		//dto.terminalType = "Cajero Propio";
+		dto.terminalType = "Cajero Propio";
 
 		HttpEntity<Request> httpEntity = new HttpEntity<Request>(dto, httpHeaders);
 		ResponseEntity<String> r = restTemplate.exchange(URL + serverPort + "/support/v1/transaction_fee", HttpMethod.POST,httpEntity,String.class);
